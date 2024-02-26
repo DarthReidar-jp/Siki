@@ -1,0 +1,30 @@
+.header {
+    background-color: #767676;
+    color: #ffffff;
+    padding: 10px 10px;
+    text-align: center;
+  }
+
+.custom-btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    margin: 0.2rem;
+    padding: 0.2rem 0.2rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    color: #fff;
+    background-color: #3c3c3c;
+    border-color: #0b0b0b;
+  }

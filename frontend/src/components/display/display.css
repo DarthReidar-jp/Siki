@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+/* メインコンテンツのスタイル */
+.main-content {
+  padding: 20px;
+}
+
+/* カードスタイル */
+.memo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(151, 151, 151, 0.1);
+  transition: 0.3s;
+  height: 100% !important;
+  /* スコア表示のスタイル */
+}
+.memo:hover {
+  box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
+}
+.memo .memo-body {
+  flex: 1 1 auto;
+  padding: 1rem 1rem;
+}
+.memo .memo-title {
+  font-size: 1rem;
+  margin-bottom: 1rem; /* タイトルとテキストの間隔 */
+}
+.memo .memo-content {
+  font-size: 0.8rem; /* テキストのフォントサイズ */
+  color: #636363; /* テキストの色 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5; /* 表示される最大行数を5行に設定 */
+  line-height: 1.7; /* 行の高さ */
+  /* max-heightは、line-heightと-webkit-line-clampの値を掛け合わせて計算 */
+  /* ここでは、1.7 * 5 = 8.5em となりますが、適宜調整してください */
+  max-height: 7em; /* line-height * line-clamp の値 */
+  margin: 0 auto; /* 中央揃えにするためのマージン */
+}
+.memo .memo-content.score {
+  font-weight: bold;
+  color: #007bff; /* スコアの色 */
+}
+
