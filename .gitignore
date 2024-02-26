@@ -1,0 +1,46 @@
+# デフォルトのReact .gitignore内容
+/frontend/node_modules/
+/frontend/build/
+/frontend/.pnp
+/frontend/.pnp.js
+
+# Express.jsのビルド出力
+/backend/dist/
+
+# ログファイル
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 環境変数ファイル
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE設定
+.DS_Store
+/.idea
+/.vscode
+*.swp
+*.swo
+
+# その他
+/frontend/public/favicon.ico
+/frontend/public/logo192.png
+/frontend/public/logo512.png
+/frontend/public/manifest.json
+/frontend/public/robots.txt
+
+# Express.js固有の無視項目
+/backend/node_modules/
+/backend/*.log
+/backend/logs
+/backend/pids
+/backend/*.pid
+/backend/*.pid.lock
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
