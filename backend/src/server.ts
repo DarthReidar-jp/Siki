@@ -13,6 +13,8 @@ import cors from "cors";
 // インポートパスを修正する必要があります
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
+import readerRouter from  './routes/reader';
+import writerRouter from './routes/writer';
 
 const app: express.Express = express();
 
@@ -26,6 +28,8 @@ app.use(cookieParser());
 // ルーターの設定
 app.use('/api', indexRouter);
 app.use('/api/page', pageRouter);
+app.use('/api/reader', readerRouter);
+app.use('/api/writer',writerRouter);
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {

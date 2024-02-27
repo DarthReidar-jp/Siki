@@ -1,6 +1,5 @@
-// Page.tsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import './Page.css';
 
 interface Memo {
@@ -19,8 +18,7 @@ const Page: React.FC = () => {
   const { id } = useParams<Params>();
   const navigate = useNavigate();
 
-
-  const fetchMemo = useCallback(async () => { // useCallbackフックでfetchMemo関数をメモ化
+  const fetchMemo = useCallback(async () => {
     try {
       const response = await fetch(`http://localhost:8000/api/page/${id}`);
       if (!response.ok) {
@@ -31,26 +29,11 @@ const Page: React.FC = () => {
     } catch (error) {
       console.error('Failed to fetch memo:', error);
     }
-  }, [id]); // IDが変わるときだけfetchMemo関数を再作成
+  }, [id]);
 
   useEffect(() => {
     fetchMemo();
-  }, [id, fetchMemo]); // fetchMemo関数を依存配列に含める
-  
-  const handleContentEdit = async (newContent: string) => {
-    if (memo) {
-      try {
-        await fetch(`http://localhost:8000/api/page/${memo._id}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title: memo.title, content: newContent })
-        });
-        console.log('自動保存しました');
-      } catch (error) {
-        console.error('保存中のエラー:', error);
-      }
-    }
-  };
+  }, [id, fetchMemo]);
 
   const saveChanges = useCallback(async () => {
     if (memo) {
@@ -64,14 +47,21 @@ const Page: React.FC = () => {
         console.error('保存中のエラー:', error);
       }
     }
-  }, [memo]); // memoを依存配列に追加
-  
+  }, [memo]);
+
   useEffect(() => {
     return () => {
       saveChanges();
     };
-  }, [saveChanges]); // saveChangesを依存配列に追加
-  
+  }, [saveChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', saveChanges);
+
+    return () => {
+      window.removeEventListener('beforeunload', saveChanges);
+    };
+  }, [saveChanges]);
 
   const handleDelete = async () => {
     if (memo) {
@@ -100,7 +90,7 @@ const Page: React.FC = () => {
             <div
               className="content"
               contentEditable
-              onBlur={(e) => handleContentEdit(e.currentTarget.innerHTML)}
+              onBlur={(e) => setMemo({ ...memo, content: e.currentTarget.innerHTML })}
               dangerouslySetInnerHTML={{ __html: memo.content }}
             />
           </div>
