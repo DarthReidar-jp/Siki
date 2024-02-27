@@ -12,6 +12,7 @@ import cors from "cors";
 
 // インポートパスを修正する必要があります
 import indexRouter from './routes/index'; 
+import pageRouter from './routes/page';
 
 const app: express.Express = express();
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 // ルーターの設定
 app.use('/api', indexRouter);
+app.use('/api/page', pageRouter);
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {

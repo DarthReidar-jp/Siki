@@ -1,17 +1,32 @@
 // App.tsx
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/header/header';
 import Display from './components/display/display';
+import Sidebar from './components/sidebar/sidebar';
+import Page from './components/page/Page';
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <div>
-      <Header />
-      <main>
-        <Display />
-      </main>
-    </div>
+    <Router> {/* RouterでAppコンポーネントをラップ */}
+      <div className='app'>
+        <Header onSidebarToggle={handleSidebarToggle} />
+        <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <Sidebar />
+          <Routes>
+            <Route path="/:id" element={<Page />} /> {/* メモ詳細ページのルート */}
+            <Route path="/" element={<Display />} /> {/* メインコンテンツのルート */}
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 };
 
