@@ -1,11 +1,14 @@
 .header {
     background-color: #ffffff;
     padding: 5px 5px;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
   }
 
 .custom-btn {
     display: inline-block;
-    width: 3%;
+    width: 4%;
     color: #4b4b4b;
     background-color: #ffffff;
     font-weight: 400;

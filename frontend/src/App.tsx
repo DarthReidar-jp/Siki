@@ -6,6 +6,7 @@ import Header from './components/header/header';
 import Display from './components/display/display';
 import Sidebar from './components/sidebar/sidebar';
 import Page from './components/page/Page';
+import NewPage from './components/Newpage/NewPage';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,8 +22,9 @@ function App() {
         <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <Sidebar />
           <Routes>
-            <Route path="/:id" element={<Page />} /> {/* メモ詳細ページのルート */}
             <Route path="/" element={<Display />} /> {/* メインコンテンツのルート */}
+            <Route path="/:id" element={<Page />} /> {/* メモ詳細ページのルート */}
+            <Route path="/new" element={<NewPage />} /> {/* メモ詳細ページのルート */}
           </Routes>
         </main>
       </div>

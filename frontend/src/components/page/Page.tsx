@@ -1,6 +1,6 @@
 // Page.tsx
-import React, { useState, useEffect, useCallback } from 'react'; // useCallbackフックをインポート
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 
 interface Memo {
@@ -17,6 +17,8 @@ interface Params {
 const Page: React.FC = () => {
   const [memo, setMemo] = useState<Memo | null>(null);
   const { id } = useParams<Params>();
+  const navigate = useNavigate();
+
 
   const fetchMemo = useCallback(async () => { // useCallbackフックでfetchMemo関数をメモ化
     try {
@@ -50,15 +52,34 @@ const Page: React.FC = () => {
     }
   };
 
+  const saveChanges = useCallback(async () => {
+    if (memo) {
+      try {
+        await fetch(`http://localhost:8000/api/page/${memo._id}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(memo)
+        });
+      } catch (error) {
+        console.error('保存中のエラー:', error);
+      }
+    }
+  }, [memo]); // memoを依存配列に追加
+  
+  useEffect(() => {
+    return () => {
+      saveChanges();
+    };
+  }, [saveChanges]); // saveChangesを依存配列に追加
+  
+
   const handleDelete = async () => {
     if (memo) {
       try {
         await fetch(`http://localhost:8000/api/page/delete/${memo._id}`, {
           method: 'POST'
         });
-        console.log('削除しました');
-        // 削除後、ページ一覧にリダイレクト
-        window.location.href = '/';
+        navigate('/'); // リダイレクト
       } catch (error) {
         console.error('削除中のエラー:', error);
       }
@@ -70,14 +91,18 @@ const Page: React.FC = () => {
       {memo ? (
         <div className="page">
           <div className="page-body">
-            <input className="title" type="text" value={memo.title} readOnly />
+            <input
+              className="title"
+              type="text"
+              value={memo.title}
+              onChange={(e) => setMemo({ ...memo, title: e.target.value })}
+            />
             <div
               className="content"
               contentEditable
-              onBlur={(e) => handleContentEdit(e.currentTarget.textContent || '')}
-            >
-              {memo.content}
-            </div>
+              onBlur={(e) => handleContentEdit(e.currentTarget.innerHTML)}
+              dangerouslySetInnerHTML={{ __html: memo.content }}
+            />
           </div>
           <button className="custom-btn" onClick={handleDelete}>
             削除
