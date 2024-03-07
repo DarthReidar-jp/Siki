@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import { ObjectId } from 'mongodb'; // MongoDBドライバーからObjectIdをインポート
-import { Memo } from '../models/memo';
+import { Page } from '../models/page';
 import { getDBCollection } from '../utils/dbUtils'; // getDBCollectionの実装がどこにあるかに基づいて適宜パスを修正してください
-import { getMemoVector } from '../utils/openaiUtils';
+import { getPageVector } from '../utils/openaiUtils';
 
 const router = express.Router();
 
@@ -35,15 +35,15 @@ router.get('/:bookId', async (req: Request, res: Response) => {
 });
 
 // メモ作成のルーティング
-router.post('/createMemo', async (req, res) => {
+router.post('/createPage', async (req, res) => {
     try {
         const { title, content } = req.body;
-        const vector = await getMemoVector(content);
-        // Memoの型が正確には不明ですが、ここでは適切な型を持つと仮定します。
-        const memo = new Memo(title, content, vector,);
-        const collection = await getDBCollection('memos');
-        await collection.insertOne(memo);
-        console.log('memoは保存されました')
+        const vector = await getPageVector(content);
+        // Pageの型が正確には不明ですが、ここでは適切な型を持つと仮定します。
+        const page = new Page(title, content, vector,);
+        const collection = await getDBCollection('pages');
+        await collection.insertOne(page);
+        console.log('pageは保存されました')
     } catch (e) {
         if (e instanceof Error) {
             // eがErrorインスタンスである場合、そのmessageプロパティを使用

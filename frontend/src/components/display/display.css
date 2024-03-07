@@ -17,7 +17,7 @@ a {
 
 
 /* メモスタイル */
-.memo {
+.page {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -30,21 +30,21 @@ a {
   aspect-ratio: 1 / 1; /* 正方形の形状を維持 */
 }
 
-.memo:hover {
+.page:hover {
   box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
 }
 
-.memo .memo-body {
+.page .page-body {
   flex: 1 1 auto;
   padding: 0.5rem 0.9rem;
 }
 
-.memo .memo-title {
+.page .page-title {
   font-size: 0.8rem;
   margin-bottom: 0.5rem; /* タイトルとテキストの間隔 */
 }
 
-.memo .memo-content {
+.page .page-content {
   font-size: 0.5rem; /* テキストのフォントサイズ */
   color: #636363; /* テキストの色 */
   overflow: hidden;
@@ -56,7 +56,7 @@ a {
   max-height: 10em; /* line-height * line-clamp の値 */
 }
 
-.memo .memo-content.score {
+.page .page-content.score {
   font-weight: bold;
   color: #007bff; /* スコアの色 */
 }

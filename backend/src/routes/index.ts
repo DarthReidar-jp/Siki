@@ -1,12 +1,12 @@
 import express, { Request, Response } from 'express';
-import { getAllMemos } from '../utils/dataFetchUtils';
+import { getAllPages } from '../utils/dataFetchUtils';
 
 const router = express.Router();
 // 表示画面（メモ一覧）
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { memos } = await getAllMemos();
-    res.json( memos ); //メモのデータを渡す
+    const { pages } = await getAllPages();
+    res.json( pages ); //メモのデータを渡す
   } catch (e) {
     if (e instanceof Error) {
       // eがErrorインスタンスである場合、そのmessageプロパティを使用

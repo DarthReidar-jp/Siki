@@ -1,6 +1,6 @@
 import { getDBCollection } from './dbUtils';
 import { getQueryVector } from './openaiUtils';
-import { Memo } from '../models/memo'; // Memoクラスのインポート
+import { Memo } from '../models/page'; // Memoクラスのインポート
 
 
 async function findRootNode(query: string): Promise<Memo | null> {

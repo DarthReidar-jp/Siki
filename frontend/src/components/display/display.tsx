@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Linkコンポーネントをインポート
 import './display.css'; // この行を追加
 
-// Memo型の定義
-interface Memo {
+// page型の定義
+interface Page {
   _id: string;
   title: string;
   content: string;
@@ -11,36 +11,36 @@ interface Memo {
 }
 
 const Display: React.FC = () => {
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [pages, setPages] = useState<Page[]>([]);
 
   useEffect(() => {
-    fetchMemos();
+    fetchPages();
   }, []);
 
-  const fetchMemos = async () => {
+  const fetchPages = async () => {
     try {
       const response = await fetch('http://localhost:8000/api'); // APIのURLに応じて変更してください
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setMemos(data);
+      setPages(data);
     } catch (error) {
-      console.error('Failed to fetch memos:', error);
+      console.error('Failed to fetch pages:', error);
     }
   };
   return (
     <div className="main-content">
-        {memos.length ? (
-          memos.map(memo => (
-            <Link to={`/${memo._id}`} key={memo._id}>
-              <div className="memo">
-                <div className="memo-body">
-                  <h5 className="memo-title">{memo.title}</h5>
-                  <p className="memo-content">{memo.content}</p>
-                  {memo.score && (
-                    <p className="memo-content score">
-                      Score: {memo.score.toFixed(5)}
+        {pages.length ? (
+          pages.map(page => (
+            <Link to={`/${page._id}`} key={page._id}>
+              <div className="page">
+                <div className="page-body">
+                  <h5 className="page-title">{page.title}</h5>
+                  <p className="page-content">{page.content}</p>
+                  {page.score && (
+                    <p className="page-content score">
+                      Score: {page.score.toFixed(5)}
                     </p>
                   )}
                 </div>
@@ -49,7 +49,7 @@ const Display: React.FC = () => {
           ))
         ) : (
           <div className="">
-            <p>No memos found.</p>
+            <p>No pages found.</p>
           </div>
         )}
       </div>

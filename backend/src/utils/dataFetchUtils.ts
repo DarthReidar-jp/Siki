@@ -1,7 +1,7 @@
 // dataFetchUtils.ts
 import { getDBCollection } from './dbUtils';
 import { Folder } from '../models/folder'; // Folderクラスのインポート
-import { Memo } from '../models/memo'; // Memoクラスのインポート
+import { Page } from '../models/page'; // Memoクラスのインポート
 import { Book } from '../models/book'; // Memoクラスのインポート
 
 export async function getAllFolders(): Promise<{ folders: Folder[] }> {
@@ -19,11 +19,11 @@ export async function getAllFolders(): Promise<{ folders: Folder[] }> {
   }
 }
 
-export async function getAllMemos(): Promise<{ memos: Memo[] }> {
+export async function getAllPages(): Promise<{ pages: Page[] }> {
   try {
-    const memosCollection = await getDBCollection('memos');
-    const memos: Memo[] = await memosCollection.find({}).toArray();
-    return { memos };
+    const pagesCollection = await getDBCollection('pages');
+    const pages: Page[] = await pagesCollection.find({}).toArray();
+    return { pages };
   } catch (e) {
     // エラーがErrorインスタンスかどうかをチェック
     if (e instanceof Error) {
@@ -50,13 +50,13 @@ export async function getAllBooks(): Promise<{ books: Book[] }> {
 }
 
 
-export async function getAllFoldersAndMemos(): Promise<{ folders: Folder[], memos: Memo[] }> {
+export async function getAllFoldersAndPages(): Promise<{ folders: Folder[], pages: Page[] }> {
   try {
     const foldersCollection = await getDBCollection('folders');
     const folders: Folder[] = await foldersCollection.find({}).toArray();
-    const memosCollection = await getDBCollection('memos');
-    const memos: Memo[] = await memosCollection.find({}).toArray();
-    return { folders, memos };
+    const pagesCollection = await getDBCollection('pages');
+    const pages: Page[] = await pagesCollection.find({}).toArray();
+    return { folders , pages };
   } catch (e) {
     // エラーがErrorインスタンスかどうかをチェック
     if (e instanceof Error) {

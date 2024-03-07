@@ -17,7 +17,7 @@ async function connectDB(): Promise<Db> {
     await client.connect();
 
     // 接続が成功した場合、データベース名 "knowledge" を指定して dbInstance を設定
-    dbInstance = client.db("buddism-IT");
+    dbInstance = client.db("productver0");
     return dbInstance; // dbInstance を返してアプリケーション内で使用可能にする
   } catch (error) {
     // エラーハンドリング: 接続中にエラーが発生した場合

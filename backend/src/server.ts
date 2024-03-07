@@ -11,6 +11,7 @@ import logger from 'morgan';
 import cors from "cors";
 
 // インポートパスを修正する必要があります
+import authRouter from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
 import readerRouter from  './routes/reader';
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 
 // ルーターの設定
+app.use('/api/auth',authRouter);
 app.use('/api', indexRouter);
 app.use('/api/page', pageRouter);
 app.use('/api/reader', readerRouter);
