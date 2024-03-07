@@ -28,9 +28,9 @@ router.get('/:id', async (req: Request, res: Response) => {
 // routes/detail.ts の POST ルート
 router.post('/', async (req: Request, res: Response) => {
     try {
-      const { title } = req.body;
+      const { userId, title } = req.body;
       const vector : number[] = []; // contentがないので空文字列を使用
-      const page = new Page(title, '', vector);
+      const page = new Page(userId, title, '', vector); // ユーザーIDをPageコンストラクタに渡す
       const collection = await getDBCollection('pages');
       const result = await collection.insertOne(page);
       // `insertedId`を使用して、挿入されたドキュメントのIDを取得
