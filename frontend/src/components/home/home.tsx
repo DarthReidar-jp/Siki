@@ -1,13 +1,13 @@
-// src/components/Home.js
+// Home.tsx
 import React from 'react';
 
-const Home = () => {
-
+function Home({ onLogin }: { onLogin: () => void }) {
   return (
-    <div className="home">
-      <button >Googleでログイン</button>
+    <div>
+      <h1>Welcome to the App</h1>
+      <button onClick={onLogin}>Googleでログイン</button>
     </div>
   );
-};
+}
 
 export default Home;

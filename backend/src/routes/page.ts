@@ -1,13 +1,14 @@
 import express, { Request, Response } from 'express';
 import Page, { IPage } from '../models/page';
 import { getPageVector } from '../utils/openaiUtils';
+import { IUser } from '../models/user'; // 適切なパスを使用してください
 
 const router = express.Router();
 
 // メモの詳細を表示
 router.get('/:title', async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const userId = (req.user as IUser)?._id.toString(); // IUser型へのアサーションを使
     const title = req.params.title;
 
     if (!userId) {
@@ -29,7 +30,7 @@ router.get('/:title', async (req: Request, res: Response) => {
 // 新規メモの作成
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const userId = (req.user as IUser)?._id.toString(); // IUser型へのアサーションを使
     const { title } = req.body;
 
     if (!userId) {
@@ -58,7 +59,7 @@ router.post('/', async (req: Request, res: Response) => {
 // メモの編集とエンベディングの更新を処理
 router.put('/:id', async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const userId = (req.user as IUser)?._id.toString(); // IUser型へのアサーションを使
     const { title, content } = req.body;
     const pageId = req.params.id;
 
@@ -99,7 +100,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 // 削除
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const userId = (req.user as IUser)?._id.toString(); // IUser型へのアサーションを使
     const pageId = req.params.id;
 
     if (!userId) {

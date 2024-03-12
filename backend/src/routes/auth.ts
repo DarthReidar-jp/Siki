@@ -15,7 +15,7 @@ router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: 'http://localhost:3000/' }),
   (req, res) => {
     // 認証に成功したら、フロントエンドのホームページにリダイレクト
-    res.redirect('http://localhost:3000/');
+    res.redirect('http://localhost:3000');
   });
 
 export default router;

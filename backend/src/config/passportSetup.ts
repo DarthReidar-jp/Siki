@@ -1,12 +1,12 @@
 // src/config/passportSetup.ts
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import User from '../models/user';
+import User, { IUser } from '../models/user'; // IUserをインポート
 
 passport.use(new GoogleStrategy.Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID!,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  callbackURL: "/auth/google/callback"
+  callbackURL: "/api/auth/google/callback"
 },
 async (accessToken, refreshToken, profile, done) => {
   // ユーザー検索または新規作成
@@ -22,12 +22,13 @@ async (accessToken, refreshToken, profile, done) => {
   done(null, newUser);
 }));
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser((user: any, done) => {
+  done(null, user._id.toString()); // 型アサーションを使用しているため、型チェックを回避
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id).then(user => {
-    done(null, user);
+passport.deserializeUser((id: any, done) => {
+  User.findById(id).then((user: any) => {
+    done(null, user); // 型アサーションを使用しているため、型チェックを回避
   });
 });
+

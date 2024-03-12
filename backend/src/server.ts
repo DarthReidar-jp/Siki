@@ -12,12 +12,12 @@ import cors from "cors";
 import session from 'express-session';
 import passport from 'passport';
 import './config/passportSetup'; // Passport設定をインポート
+import connectDB from './db'; // ここでdb.tsからconnectDBをインポートします
 
 // インポートパスを修正する必要があります
 import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
-
 
 const app: express.Express = express();
 
@@ -35,6 +35,14 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// データベース接続
+connectDB().then(() => {
+  console.log('データベースへの接続が確立されました。');
+}).catch((error) => {
+  console.error('データベース接続に失敗しました:', error);
+  process.exit(1);
+});
 
 // ルーターの設定
 app.use('/api', indexRouter);
