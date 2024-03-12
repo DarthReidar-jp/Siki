@@ -9,9 +9,10 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from "cors";
+import session from 'express-session';
+import passport from 'passport';
 
 // インポートパスを修正する必要があります
-import authRouter from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
 import readerRouter from  './routes/reader';
@@ -25,9 +26,15 @@ app.use(logger('dev'));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'secretKey',
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ルーターの設定
-app.use('/api/auth',authRouter);
 app.use('/api', indexRouter);
 app.use('/api/page', pageRouter);
 app.use('/api/reader', readerRouter);
