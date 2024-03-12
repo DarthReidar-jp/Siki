@@ -1,9 +1,9 @@
-import connectDB  from '../db';
-import { Collection } from 'mongodb'; // MongoDBのCollection型をインポートする必要があります
+import mongoose from 'mongoose';
+import connectDB from '../db';
 
-async function getDBCollection(collectionName: string): Promise<Collection<any>> { // Collectionのジェネリクス型を適切に指定してください
-  const db = await connectDB();
-  return db.collection(collectionName);
+async function getDBCollection(collectionName: string): Promise<mongoose.Collection> {
+  const connection = await connectDB();
+  return connection.model(collectionName).collection;
 }
 
 export { getDBCollection };

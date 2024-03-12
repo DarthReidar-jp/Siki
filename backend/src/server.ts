@@ -11,12 +11,13 @@ import logger from 'morgan';
 import cors from "cors";
 import session from 'express-session';
 import passport from 'passport';
+import './config/passportSetup'; // Passport設定をインポート
 
 // インポートパスを修正する必要があります
+import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
-import readerRouter from  './routes/reader';
-import writerRouter from './routes/writer';
+
 
 const app: express.Express = express();
 
@@ -26,19 +27,19 @@ app.use(logger('dev'));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
+// セッションの設定
 app.use(session({
-  secret: 'secretKey',
-  resave: false,
-  saveUninitialized: true,
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 // ルーターの設定
 app.use('/api', indexRouter);
+app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
-app.use('/api/reader', readerRouter);
-app.use('/api/writer',writerRouter);
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {

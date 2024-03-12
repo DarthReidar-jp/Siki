@@ -14,14 +14,18 @@ function App() {
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  const handleGoogleLogin = async () => {
+    // GoogleのOAuth認証ページへリダイレクトする
+    window.location.href = `http://localhost:8000/api/auth/google`;
+  };
 
-    
   return (
     <Router> {/* RouterでAppコンポーネントをラップ */}
       <div className='app'>     
         <Header onSidebarToggle={handleSidebarToggle} />
         <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <Sidebar />
+          <button onClick={handleGoogleLogin}>Googleでログイン</button>
           <Routes>
             <Route path="/" element={<Display />} />
             <Route path="/:id" element={<Page />} />

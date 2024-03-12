@@ -6,8 +6,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "typeRoots": ["./node_modules/@types", "./@types"], // 型定義のルートディレクトリを追加
+    "types": [] // 必要に応じて、プロジェクトで使用する型定義を指定
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "@types/**/*"], // @typesディレクトリも含めるように変更
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

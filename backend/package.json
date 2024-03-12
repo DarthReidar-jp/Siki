@@ -5,7 +5,9 @@
   "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/bin/www.ts"
+    "dev": "nodemon ./src/bin/www.ts",
+    "build": "tsc",
+    "start": "node ./dist/bin/www"
   },
   "keywords": [],
   "author": "",

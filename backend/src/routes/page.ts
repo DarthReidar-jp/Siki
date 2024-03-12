@@ -1,86 +1,130 @@
-// routes/detail.ts
 import express, { Request, Response } from 'express';
-import { ObjectId } from 'mongodb';
-import { Page } from '../models/page'; // Memoモデルのインポート方法は、実際のモデルの定義によって異なる場合があります。
+import Page, { IPage } from '../models/page';
 import { getPageVector } from '../utils/openaiUtils';
-import { getDBCollection } from '../utils/dbUtils';
 
 const router = express.Router();
 
 // メモの詳細を表示
-router.get('/:id', async (req: Request, res: Response) => {
-    try {
-        const collection = await getDBCollection('pages');
-        const page = await collection.findOne({ _id: new ObjectId(req.params.id) });
-        res.json(page);
-    } catch (e) {
-        if (e instanceof Error) {
-            // eがErrorインスタンスである場合、そのmessageプロパティを使用
-            res.status(500).send(e.message);
-          } else {
-            // eがErrorインスタンスではない場合（文字列など）、toStringで変換
-            res.status(500).send(String(e));
-          }
+router.get('/:title', async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const title = req.params.title;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    const page: IPage | null = await Page.findOne({ userId, title });
+
+    if (!page) {
+      return res.status(404).json({ error: 'Page not found' });
+    }
+
+    res.json(page);
+  } catch (e) {
+    handleError(e, res);
+  }
 });
 
 // 新規メモの作成
-// routes/detail.ts の POST ルート
 router.post('/', async (req: Request, res: Response) => {
-    try {
-      const { userId, title } = req.body;
-      const vector : number[] = []; // contentがないので空文字列を使用
-      const page = new Page(userId, title, '', vector); // ユーザーIDをPageコンストラクタに渡す
-      const collection = await getDBCollection('pages');
-      const result = await collection.insertOne(page);
-      // `insertedId`を使用して、挿入されたドキュメントのIDを取得
-      const insertedPage = await collection.findOne({ _id: result.insertedId });
-      res.json(insertedPage);
-    } catch (e) {
-      // エラーハンドリング
+  try {
+    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const { title } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
-  });
-  
+    // 同じユーザーの中で重複するタイトルがないかチェック
+    let existingPage = await Page.findOne({ userId, title });
+    let newTitle = title;
+    let counter = 1;
+
+    // タイトルが重複する場合、(n)を付与する
+    while (existingPage) {
+      newTitle = `${title} (${counter})`;
+      counter++;
+      existingPage = await Page.findOne({ userId, title: newTitle });
+    }
+
+    const page = new Page({ userId, title: newTitle, content: '', vector: [] });
+    await page.save();
+    res.json(page);
+  } catch (e) {
+    handleError(e, res);
+  }
+});
 
 // メモの編集とエンベディングの更新を処理
-router.post('/:id', async (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // ログインユーザーのIDを取得する
     const { title, content } = req.body;
-    try {
-        const collection = await getDBCollection('pages');
-        const vector = await getPageVector(content);
-        await collection.updateOne(
-            { _id: new ObjectId(req.params.id) },
-            { $set: { title, content, vector } }
-        );
-        console.log("更新しました");
-    } catch (e) {
-        if (e instanceof Error) {
-            // eがErrorインスタンスである場合、そのmessageプロパティを使用
-            res.status(500).send(e.message);
-          } else {
-            // eがErrorインスタンスではない場合（文字列など）、toStringで変換
-            res.status(500).send(String(e));
-          }
+    const pageId = req.params.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    const page = await Page.findOne({ _id: pageId, userId });
+
+    if (!page) {
+      return res.status(404).json({ error: 'Page not found' });
+    }
+
+    // 同じユーザーの中で重複するタイトルがないかチェック
+    let existingPage = await Page.findOne({ userId, title, _id: { $ne: pageId } });
+
+    let newTitle = title;
+    let counter = 1;
+
+    // タイトルが重複する場合、(n)を付与する
+    while (existingPage) {
+      newTitle = `${title} (${counter})`;
+      counter++;
+      existingPage = await Page.findOne({ userId, title: newTitle, _id: { $ne: pageId } });
+    }
+
+    const vector = await getPageVector(content);
+    page.title = newTitle;
+    page.content = content;
+    page.vector = vector;
+    await page.save();
+    res.json(page);
+  } catch (e) {
+    handleError(e, res);
+  }
 });
 
 // 削除
-router.post('/delete/:id', async (req: Request, res: Response) => {
-    try {
-        console.log('削除リクエスト受信:', req.params.id);
-        const collection = await getDBCollection('pages');
-        await collection.deleteOne({ _id: new ObjectId(req.params.id) });
-        console.log("削除しました");
-    } catch (e) {
-        if (e instanceof Error) {
-            // eがErrorインスタンスである場合、そのmessageプロパティを使用
-            res.status(500).send(e.message);
-            console.error('削除中のエラー:', e);
-          } else {
-            // eがErrorインスタンスではない場合（文字列など）、toStringで変換
-            res.status(500).send(String(e));
-          }
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id; // ログインユーザーのIDを取得する
+    const pageId = req.params.id;
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    const page = await Page.findOneAndDelete({ _id: pageId, userId });
+
+    if (!page) {
+      return res.status(404).json({ error: 'Page not found' });
+    }
+
+    res.json({ message: 'Page deleted successfully' });
+  } catch (e) {
+    handleError(e, res);
+  }
 });
+
+// エラーハンドリング関数
+function handleError(error: any, res: Response) {
+  if (error instanceof Error) {
+    res.status(500).json({ error: error.message });
+  } else {
+    res.status(500).json({ error: String(error) });
+  }
+}
 
 export default router;
