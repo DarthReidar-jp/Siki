@@ -45,7 +45,7 @@ connectDB().then(() => {
 });
 
 // ルーターの設定
-app.use('/api', indexRouter);
+app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
 

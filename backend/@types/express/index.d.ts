@@ -5,7 +5,6 @@ import { IUser } from "../../src/models/user"; // IUserのパスを適切に調�
 declare global {
   namespace Express {
     export interface User extends IUser {}
-    
     export interface Request {
       user?: User;
     }

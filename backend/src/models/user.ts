@@ -18,7 +18,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   updatedAt: { type: Date, default: Date.now }
 });
 
-// 残りのコードは省略
 
 // インデックスを作成
 UserSchema.index({ email: 1 }, { unique: true });

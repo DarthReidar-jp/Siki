@@ -8,18 +8,18 @@ passport.use(new GoogleStrategy.Strategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
   callbackURL: "/api/auth/google/callback"
 },
-async (accessToken, refreshToken, profile, done) => {
-  // ユーザー検索または新規作成
-  const existingUser = await User.findOne({ googleId: profile.id });
-  if (existingUser) {
-    return done(null, existingUser);
-  }
-  const newUser = await new User({
-    googleId: profile.id,
-    name: profile.displayName,
-    email: profile.emails?.[0]?.value ?? 'デフォルトメールアドレス'
-  }).save();
-  done(null, newUser);
+  async (accessToken, refreshToken, profile, done) => {
+    // ユーザー検索または新規作成
+    const existingUser = await User.findOne({ googleId: profile.id });
+    if (existingUser) {
+      return done(null, existingUser);
+    }
+    const newUser = await new User({
+      googleId: profile.id,
+      name: profile.displayName,
+      email: profile.emails?.[0]?.value ?? 'デフォルトメールアドレス'
+    }).save();
+    done(null, newUser);
 }));
 
 passport.serializeUser((user: any, done) => {
