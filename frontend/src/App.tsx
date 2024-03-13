@@ -7,6 +7,7 @@ import Display from './components/display/display';
 import Sidebar from './components/sidebar/sidebar';
 import Home from './components/home/home';
 import NewPage from './components/page/NewPage';
+import Page from './components/page/Page';
 import AuthSuccess from './components/auth/AuthSuccess'; 
 
 function App() {
@@ -55,6 +56,12 @@ function App() {
                   <>
                     <Sidebar />
                     <NewPage />
+                  </>
+                } />
+                <Route path="/:id" element={
+                  <>
+                    <Sidebar />
+                    <Page />
                   </>
                 } />
               </>

@@ -38,7 +38,7 @@ const Display: React.FC = () => {
     <div className="main-content">
       {pages.length ? (
         pages.map(page => (
-          <Link to={`/${page.title}`} key={page._id}>
+          <Link to={`/${page._id}`} key={page._id}>
             <div className="page">
               <div className="page-body">
                 <h5 className="page-title">{page.title}</h5>

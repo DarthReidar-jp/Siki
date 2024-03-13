@@ -1,105 +1,116 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 
-interface Memo {
+// ページデータの型定義
+interface PageData {
   _id: string;
   title: string;
   content: string;
-  score?: number;
-}
-
-interface Params {
-  [key: string]: string | undefined;
 }
 
 const Page: React.FC = () => {
-  const [memo, setMemo] = useState<Memo | null>(null);
-  const { id } = useParams<Params>();
+  const [page, setPage] = useState<PageData | null>(null);
+  // 編集中のタイトルとコンテンツを保持するためのステート
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const { id } = useParams<{ id: string }>(); // 正しくパラメータを取得
   const navigate = useNavigate();
 
-  const fetchMemo = useCallback(async () => {
+  const fetchPage = useCallback(async () => {
+    if (!id) { // idがundefinedでないことを確認
+      console.error("Page ID is undefined, can't fetch.");
+      return;
+    }
     try {
-      const response = await fetch(`http://localhost:8000/api/page/${id}`);
+      const response = await fetch(`http://localhost:8000/api/page/${id}`, {
+        method: 'GET',
+        credentials: 'include',
+      });
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to fetch page');
       }
       const data = await response.json();
-      setMemo(data);
+      setPage(data);
+      setEditTitle(data.title);
+      setEditContent(data.content);
     } catch (error) {
-      console.error('Failed to fetch memo:', error);
+      console.error(error);
     }
-  }, [id]);
+  }, [id]); // titleが変更された時にfetchPageを再生成
 
   useEffect(() => {
-    fetchMemo();
-  }, [id, fetchMemo]);
+    fetchPage();
+  }, [fetchPage]); // useEffectの依存関係リストにfetchPageを追加
 
-  const saveChanges = useCallback(async () => {
-    if (memo) {
-      try {
-        await fetch(`http://localhost:8000/api/page/${memo._id}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(memo)
-        });
-      } catch (error) {
-        console.error('保存中のエラー:', error);
+  // ページの更新処理
+  const handleUpdate = async () => {
+    if (!page) {
+      console.error("Page is null, can't update.");
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:8000/api/page/${page._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: editTitle, content: editContent }),
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update page');
       }
+      const updatedPage = await response.json();
+      setPage(updatedPage);
+      // 更新成功後、適宜アクション（例：通知表示など）
+    } catch (error) {
+      console.error(error);
     }
-  }, [memo]);
+  };
 
-  useEffect(() => {
-    return () => {
-      saveChanges();
-    };
-  }, [saveChanges]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', saveChanges);
-
-    return () => {
-      window.removeEventListener('beforeunload', saveChanges);
-    };
-  }, [saveChanges]);
-
+  // ページの削除
   const handleDelete = async () => {
-    if (memo) {
-      try {
-        await fetch(`http://localhost:8000/api/page/delete/${memo._id}`, {
-          method: 'POST'
-        });
-        navigate('/'); // リダイレクト
-      } catch (error) {
-        console.error('削除中のエラー:', error);
+    try {
+      const response = await fetch(`http://localhost:8000/api/page/${page?._id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete page');
       }
+      navigate('/display'); // 削除後にdisplayページへリダイレクト
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <div className="container">
-      {memo ? (
+      {page ? (
         <div className="page">
           <div className="page-body">
             <input
               className="title"
               type="text"
-              value={memo.title}
-              onChange={(e) => setMemo({ ...memo, title: e.target.value })}
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
             />
-            <div
+            <textarea
               className="content"
-              contentEditable
-              onBlur={(e) => setMemo({ ...memo, content: e.currentTarget.innerHTML })}
-              dangerouslySetInnerHTML={{ __html: memo.content }}
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
             />
           </div>
+          <button className="custom-btn" onClick={handleUpdate}>
+            更新
+          </button>
           <button className="custom-btn" onClick={handleDelete}>
             削除
           </button>
         </div>
       ) : (
-        <div>No memo found.</div>
+        <div>No page found.</div>
       )}
     </div>
   );
