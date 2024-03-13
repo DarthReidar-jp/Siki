@@ -1,9 +1,47 @@
+//page.ts
 import express, { Request, Response } from 'express';
 import Page, { IPage } from '../models/page';
 import { getPageVector } from '../utils/openaiUtils';
-import { IUser } from '../models/user'; // 適切なパスを使用してください
+import { IUser } from '../models/user'; 
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const router = express.Router();
+
+router.post('/', async (req: Request, res: Response) => {
+  const token = req.cookies['access_token']; // クッキーからトークンを取得
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const userId = decoded.userId;
+    const { title, content } = req.body;
+
+    let existingPage = await Page.findOne({ userId, title });
+    let newTitle = title;
+    let counter = 1;
+    while (existingPage) {
+      newTitle = `${title} (${counter})`;
+      counter++;
+      existingPage = await Page.findOne({ userId, title: newTitle });
+    }
+    // 新しいページを保存
+    const newPage = new Page({
+      userId,
+      title: newTitle,
+      content,
+    });
+    await newPage.save();
+    res.status(201).json({ message: 'Page created successfully', page: newPage });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    handleError(error, req, res);
+  }
+});
 
 // メモの詳細を表示
 router.get('/:title', async (req: Request, res: Response) => {
@@ -23,38 +61,10 @@ router.get('/:title', async (req: Request, res: Response) => {
 
     res.json(page);
   } catch (e) {
-    handleError(e, res);
+    handleError(e,req, res);
   }
 });
 
-// 新規メモの作成
-router.post('/', async (req: Request, res: Response) => {
-  try {
-    const userId = (req.user as IUser)?._id.toString(); // IUser型へのアサーションを使
-    const { title } = req.body;
-
-    if (!userId) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-    // 同じユーザーの中で重複するタイトルがないかチェック
-    let existingPage = await Page.findOne({ userId, title });
-    let newTitle = title;
-    let counter = 1;
-
-    // タイトルが重複する場合、(n)を付与する
-    while (existingPage) {
-      newTitle = `${title} (${counter})`;
-      counter++;
-      existingPage = await Page.findOne({ userId, title: newTitle });
-    }
-
-    const page = new Page({ userId, title: newTitle, content: '', vector: [] });
-    await page.save();
-    res.json(page);
-  } catch (e) {
-    handleError(e, res);
-  }
-});
 
 // メモの編集とエンベディングの更新を処理
 router.put('/:id', async (req: Request, res: Response) => {
@@ -93,7 +103,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     await page.save();
     res.json(page);
   } catch (e) {
-    handleError(e, res);
+    handleError(e, req,res);
   }
 });
 
@@ -115,17 +125,31 @@ router.delete('/:id', async (req: Request, res: Response) => {
 
     res.json({ message: 'Page deleted successfully' });
   } catch (e) {
-    handleError(e, res);
+    handleError(e, req,res);
   }
 });
 
 // エラーハンドリング関数
-function handleError(error: any, res: Response) {
-  if (error instanceof Error) {
-    res.status(500).json({ error: error.message });
+function handleError(error: any, req: Request, res: Response) {
+  console.error(`Error processing request ${req.method} ${req.url}`);
+  console.error(error); // スタックトレースをログに記録
+
+  if (error instanceof jwt.JsonWebTokenError) {
+    // JWT関連のエラー詳細
+    console.error("JWT verification error:", error.message);
+    res.status(401).json({ message: 'Invalid token', error: error.message });
+  } else if (error instanceof mongoose.Error) {
+    // Mongoose (MongoDB)関連のエラー詳細
+    console.error("Database error:", error.message);
+    res.status(500).json({ message: 'Database error', error: error.message });
+  } else if (error instanceof Error) {
+    // 一般的なエラー詳細
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   } else {
-    res.status(500).json({ error: String(error) });
+    // 予期せぬエラータイプ
+    res.status(500).json({ message: 'Unexpected error', error: String(error) });
   }
 }
+
 
 export default router;

@@ -6,6 +6,7 @@ import Header from './components/header/header';
 import Display from './components/display/display';
 import Sidebar from './components/sidebar/sidebar';
 import Home from './components/home/home';
+import NewPage from './components/page/NewPage';
 import AuthSuccess from './components/auth/AuthSuccess'; 
 
 function App() {
@@ -48,6 +49,11 @@ function App() {
                   <>
                     <Sidebar />
                     <Display />
+                  </>
+                } />
+                <Route path="/new" element={
+                  <>
+                    <NewPage />
                   </>
                 } />
               </>
