@@ -1,9 +1,8 @@
-import { getDBCollection } from './dbUtils';
 import { getQueryVector } from './openaiUtils';
 
-async function performVectorSearch(query: string): Promise<any[]> {
+/*async function performVectorSearch(query: string): Promise<any[]> {
     const queryVector = await getQueryVector(query);
-    const collection = await getDBCollection('memos');
+   // const collection = await getDBCollection('memos');
     const agg = [
         {
             '$vectorSearch': {
@@ -30,7 +29,7 @@ async function performVectorSearch(query: string): Promise<any[]> {
             '$sort': { 'score': -1 }
         }
     ];
-    return await collection.aggregate<any>(agg).toArray();
-}
+    //return await collection.aggregate<any>(agg).toArray();
+}*/
 
-export { performVectorSearch };
+//export { performVectorSearch };

@@ -1,19 +1,19 @@
+//AuthSuccess.tsx
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function AuthSuccess() {
-  const navigate = useNavigate();
+interface AuthSuccessProps {
+  onLogin: (isLoggedIn: boolean) => void;
+}
 
+function AuthSuccess({ onLogin }: AuthSuccessProps) {
+  const navigate = useNavigate();
   useEffect(() => {
     checkLoginStatus().then(isLoggedIn => {
-      if (isLoggedIn) {
-        localStorage.setItem('loggedIn', 'true');
-      } else {
-        localStorage.removeItem('loggedIn');
-      }
+      onLogin(isLoggedIn);
       navigate('/');
     });
-  }, [navigate]);
+  }, [navigate, onLogin]);
 
   return <div>ログイン状態を確認中...</div>;
 }
@@ -22,7 +22,7 @@ async function checkLoginStatus() {
   try {
     const response = await fetch('http://localhost:8000/api/auth/verify', {
       method: 'GET',
-      credentials: 'include', // クッキーをリクエストに含める
+      credentials: 'include', 
     });
     if (response.ok) {
       const data = await response.json();
@@ -34,5 +34,4 @@ async function checkLoginStatus() {
     return false;
   }
 }
-
 export default AuthSuccess;
