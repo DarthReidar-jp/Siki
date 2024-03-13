@@ -53,6 +53,7 @@ function App() {
                 } />
                 <Route path="/new" element={
                   <>
+                    <Sidebar />
                     <NewPage />
                   </>
                 } />

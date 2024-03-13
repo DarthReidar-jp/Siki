@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Page.css'
 
 const CreatePage = () => {
   const [title, setTitle] = useState('');
