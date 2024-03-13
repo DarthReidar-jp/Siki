@@ -1,56 +1,50 @@
-import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/header/header';
 import Display from './components/display/display';
 import Sidebar from './components/sidebar/sidebar';
-import Page from './components/page/Page';
-import NewPage from './components/page/NewPage';
-import Home from './components/home/Home';
-
-function RoutesWithAuth() {
-  const { isLoggedIn } = useAuth(); // ログイン状態をAuthContextから取得
-
-  if (isLoggedIn) {
-    // ログインしている場合のルート
-    return (
-      <Routes>
-        <Route path="/" element={<Display />} />
-        <Route path="/:id" element={<Page />} />
-        <Route path="/new" element={<NewPage />} />
-      </Routes>
-    );
-  } else {
-    // ログインしていない場合のルート
-    return (
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    );
-  }
-}
+import Home from './components/home/home';
+import AuthSuccess from './components/auth/AuthSuccess'; 
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('loggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
   return (
-    <AuthProvider>
-      <Router>
-        <div className='app'>
-          <Header onSidebarToggle={handleSidebarToggle} />
-          <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
-            <Sidebar />
-            <RoutesWithAuth />
-          </main>
-        </div>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <div className='app'>
+        <Header onSidebarToggle={handleSidebarToggle}/>
+        <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <Routes>
+            {/* ログイン状態に基づいたルーティング */}
+            {isLoggedIn ? (
+              <>
+                <Route path="/" element={
+                  <>
+                    <Sidebar />
+                    <Display />
+                  </>
+                } />
+              </>
+            ) : (
+              <Route path="/" element={<Home />} />
+            )}
+            <Route path="/auth/success" element={<AuthSuccess />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

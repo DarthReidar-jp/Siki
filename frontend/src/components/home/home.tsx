@@ -1,22 +1,13 @@
-// Home.tsx
-import React  from 'react';
-import { useAuth } from '../../context/AuthContext';
+import React from 'react';
 
 function Home() {
-  const auth = useAuth();
-
-  const handleLogin = () => {
-    if (auth) {
-      auth.login();
-    } else {
-      // 適切なエラーハンドリング
-      console.error('Authentication context not available');
-    }
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:8000/api/auth/google';
   };
   return (
     <div>
       <h1>Welcome to the App</h1>
-      <button onClick={handleLogin}>Googleでログイン</button>
+      <button onClick={handleGoogleLogin}>Googleでログイン</button>
     </div>
   );
 }

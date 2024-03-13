@@ -22,7 +22,12 @@ import pageRouter from './routes/page';
 const app: express.Express = express();
 
 // ミドルウェアの設定
-app.use(cors());
+// CORS設定をカスタマイズ
+const corsOptions = {
+  origin: 'http://localhost:3000', // フロントエンドのオリジンを指定
+  credentials: true, // クレデンシャル付きのリクエストを許可
+};
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));

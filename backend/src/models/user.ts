@@ -1,7 +1,7 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document,ObjectId } from 'mongoose';
 
-// ユーザードキュメントのインターフェース
 export interface IUser extends Document {
+  _id: ObjectId; // または string でも構わないが、ObjectId の方が明示的
   email: string;
   name: string;
   googleId: string;
