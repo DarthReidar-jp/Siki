@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
 const router = express.Router();
-
+//ページ作成
 router.post('/', async (req: Request, res: Response) => {
   const token = req.cookies['access_token']; // クッキーからトークンを取得
   if (!token) {
@@ -17,7 +17,7 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
-    const { title, content } = req.body;
+    const { title } = req.body;
 
     let existingPage = await Page.findOne({ userId, title });
     let newTitle = title;
@@ -31,7 +31,6 @@ router.post('/', async (req: Request, res: Response) => {
     const newPage = new Page({
       userId,
       title: newTitle,
-      content,
     });
     await newPage.save();
     res.status(201).json({ message: 'Page created successfully', page: newPage });

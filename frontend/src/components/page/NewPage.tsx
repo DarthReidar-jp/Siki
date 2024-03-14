@@ -1,68 +1,63 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Page.css'
 
-const CreatePage = () => {
+const NewPage = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // フォームのデフォルト送信を防ぐ
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
 
-    // バックエンドへ送信するデータ
-    const pageData = {
-      title,
-      content,
-    };
-
-    try {
-      // バックエンドにデータを送信
-      const response = await fetch('http://localhost:8000/api/page', {
-        method: 'POST',
-        credentials: 'include', 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pageData),
-      });
-
-      if (response.ok) {
-        // 送信成功時の処理
-        const result = await response.json();
-        console.log('Page created:', result);
-        // 成功後、フォームをクリアするなどの処理をここに追加
-      } else {
-        // エラー処理
-        console.error('Failed to create page');
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && title.trim().length > 0) {
+      e.preventDefault(); // フォームの送信を防ぐ
+      try {
+        const response = await fetch('http://localhost:8000/api/page', {
+          method: 'POST',
+          credentials: 'include', 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({title}),
+        });
+        if (response.ok) {
+          // 送信成功時の処理
+          const result = await response.json();
+          console.log('Page created:', result);
+          // navigateの引数を修正
+          navigate(`/${result.page._id}`); // 修正: 正しいページIDに基づくURLにリダイレクト
+        } else {
+          // エラー処理
+          console.error('Failed to create page');
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
     }
   };
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <div className="page">
-          <div className='page-body'>
-            <input
-              className='title'
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-            />
-            <textarea
-              className='content'
-              placeholder="Content"
-              value={content}
-              onChange={e => setContent(e.target.value)}
-            />
-            <button type="submit">Create Page</button>
-          </div>
+      <div className="page">
+        <div className='page-body'>
+          <input
+            className='title'
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            onKeyDown={handleKeyDown} // 修正部分
+            placeholder="タイトルを入力"
+          />
+          <textarea
+            className='content'
+            placeholder="コンテンツを入力"
+          />
         </div>
-      </form>
-    </div>
+      </div>
+    </div>   
   );
 };
 
-export default CreatePage;
+export default NewPage;

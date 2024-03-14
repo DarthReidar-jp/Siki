@@ -11,10 +11,9 @@ interface PageData {
 
 const Page: React.FC = () => {
   const [page, setPage] = useState<PageData | null>(null);
-  // 編集中のタイトルとコンテンツを保持するためのステート
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
-  const { id } = useParams<{ id: string }>(); // 正しくパラメータを取得
+  const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
 
   const fetchPage = useCallback(async () => {
@@ -37,11 +36,11 @@ const Page: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [id]); // titleが変更された時にfetchPageを再生成
+  }, [id]);
 
   useEffect(() => {
     fetchPage();
-  }, [fetchPage]); // useEffectの依存関係リストにfetchPageを追加
+  }, [fetchPage]);
 
   // ページの更新処理
   const handleUpdate = async () => {
@@ -63,7 +62,6 @@ const Page: React.FC = () => {
       }
       const updatedPage = await response.json();
       setPage(updatedPage);
-      // 更新成功後、適宜アクション（例：通知表示など）
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +77,7 @@ const Page: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to delete page');
       }
-      navigate('/display'); // 削除後にdisplayページへリダイレクト
+      navigate('/display');
     } catch (error) {
       console.error(error);
     }
@@ -115,5 +113,4 @@ const Page: React.FC = () => {
     </div>
   );
 };
-
 export default Page;
