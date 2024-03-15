@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 const router = express.Router();
 //ページ作成
 router.post('/', async (req: Request, res: Response) => {
-  const token = req.cookies['access_token']; // クッキーからトークンを取得
+  const token = req.cookies['access_token'];
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
   }
@@ -17,7 +17,7 @@ router.post('/', async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
     const { title,lines } = req.body;
-    const content = lines.join('\\n');
+    const content = lines.join('');
     const newPage = new Page({
       userId,
       title,
@@ -72,7 +72,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
     page.title = title;
     page.lines = lines;
-    page.content = lines.join('\\n');
+    page.content = lines.join('');
     page.vector = await getPageVector(page.content);
     await page.save();
     res.json(page);

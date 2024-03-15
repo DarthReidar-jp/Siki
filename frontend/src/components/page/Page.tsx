@@ -14,10 +14,10 @@ const Page: React.FC = () => {
   const [page, setPage] = useState<PageData | null>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const linesRefs = useRef<(HTMLDivElement | null)[]>([]); // 各行の参照を保持する配列
+  const contentRef = useRef<HTMLDivElement | null>(null); // contentEditableの大枠を参照するためのref
 
   const fetchPage = useCallback(async () => {
-    if (!id) { // idがundefinedでないことを確認
+    if (!id) { 
       console.error("Page ID is undefined, can't fetch.");
       return;
     }
@@ -42,12 +42,11 @@ const Page: React.FC = () => {
 
   // ページの更新処理
   const handleUpdate = async () => {
-    if (!page) {
-      console.error("Page is null, can't update.");
+    if (!page || !contentRef.current) {
+      console.error("Page is null or content ref is null, can't update.");
       return;
     }
-    // linesの更新
-    const updatedLines = linesRefs.current.filter(ref => ref !== null).map(ref => ref!.innerText);
+    const lines = Array.from(contentRef.current.children).map(child => child.textContent || '');
     try {
       const response = await fetch(`http://localhost:8000/api/page/${page._id}`, {
         method: 'PUT',
@@ -56,7 +55,7 @@ const Page: React.FC = () => {
         },
         body: JSON.stringify({
           title: page.title,
-          lines: updatedLines,
+          lines: lines,
         }),
         credentials: 'include',
       });
@@ -88,35 +87,25 @@ const Page: React.FC = () => {
 
   return (
     <div className="container">
-      {page ? (
-        <div className="page">
-          <div className="page-body">
-            <h2
-              contentEditable
-              suppressContentEditableWarning={true}
-              onBlur={(e) => setPage({ ...page, title: e.target.innerText })}
-            >
-              {page.title}
-            </h2>
+    {page ? (
+      <div className="page">
+        <div className="page-body">
+          <h2 contentEditable suppressContentEditableWarning={true} onBlur={(e) => setPage(prev => prev ? { ...prev, title: e.target.innerText } : null)}>
+            {page.title}
+          </h2>
+          <div ref={contentRef} className="editable-lines" contentEditable suppressContentEditableWarning={true}>
             {page.lines.map((line, index) => (
-              <div
-                key={index}
-                ref={el => linesRefs.current[index] = el}
-                contentEditable
-                suppressContentEditableWarning={true}
-                className="editable-line"
-              >
-                {line}
-              </div>
+              <div key={index}>{line}</div>
             ))}
           </div>
-          <button className="custom-btn" onClick={handleUpdate}>更新</button>
-          <button className="custom-btn" onClick={handleDelete}>削除</button>
         </div>
-      ) : (
-        <div>No page found.</div>
-      )}
-    </div>
+        <button className="custom-btn" onClick={handleUpdate}>更新</button>
+        <button className="custom-btn" onClick={handleDelete}>削除</button>
+      </div>
+    ) : (
+      <div>No page found.</div>
+    )}
+  </div>
   );
 };
 export default Page;
