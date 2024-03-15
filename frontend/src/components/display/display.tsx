@@ -1,41 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './display.css'; // CSSスタイルは適宜調整してください
+import './display.css'; 
 
-// ページデータの型定義（適宜調整してください）
+
 interface Page {
   _id: string;
   title: string;
   content: string;
-  score?: number;
 }
 
 const Display: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
+  const [sort, setSort] = useState<string>('createdAsc'); 
+
 
   useEffect(() => {
-    fetchPages();
-  }, []);
+    fetchPages(sort);
+  }, [sort]);
 
-  const fetchPages = async () => {
+  const fetchPages = async (sort: string) => {
     try {
-      // バックエンドのエンドポイントに対してGETリクエストを送信
-      const response = await fetch('http://localhost:8000/api', {
+      // ソートオプションをクエリパラメータに追加
+      const url = `http://localhost:8000/api?sort=${sort}`;
+      const response = await fetch(url, {
         method: 'GET',
-        credentials: 'include', // クッキーを含むリクエストを行う
+        credentials: 'include',
       });
       if (!response.ok) {
         throw new Error('Failed to fetch pages');
       }
-      const pages = await response.json(); // レスポンスボディをJSONとしてパース
-      setPages(pages); // 取得したページデータを状態にセット
+      const pages = await response.json();
+      setPages(pages);
     } catch (error) {
       console.error("Error fetching pages:", error);
     }
   };
+  
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSort(e.target.value);
+  };
 
   return (
     <div className="main-content">
+      <select onChange={handleSortChange} value={sort}>
+        <option value="createdAsc">作成日順</option>
+        <option value="updatedDesc">更新日順</option>
+        <option value="titleAsc">タイトル (A-Z)</option>
+        <option value="titleDesc">タイトル (Z-A)</option>
+      </select>
       {pages.length ? (
         pages.map(page => (
           <Link to={`/${page._id}`} key={page._id}>
@@ -43,11 +55,6 @@ const Display: React.FC = () => {
               <div className="page-body">
                 <h5 className="page-title">{page.title}</h5>
                 <p className="page-content">{page.content}</p>
-                {page.score && (
-                  <p className="page-content score">
-                    Score: {page.score.toFixed(5)}
-                  </p>
-                )}
               </div>
             </div>
           </Link>

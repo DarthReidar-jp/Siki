@@ -14,8 +14,28 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
+    const sortOption = req.query.sort; // クエリパラメータから並べ替えオプションを取得
+    let sort = {};
 
-    const pages: IPage[] = await Page.find({ userId });
+    switch(sortOption) {
+      case 'createdAsc':
+        sort = { createdAt: 1 };
+        break;
+      case 'updatedDesc':
+        sort = { updatedAt: -1 };
+        break;
+      case 'titleAsc':
+        sort = { title: 1 };
+        break;
+      case 'titleDesc':
+        sort = { title: -1 };
+        break;
+      default:
+        // デフォルトのソートオプション、必要に応じて変更してください
+        sort = { createdAt: -1 };
+    }
+
+    const pages: IPage[] = await Page.find({ userId }).sort(sort);
     res.json(pages);
   } catch (e) {
     handleError(e, res);
