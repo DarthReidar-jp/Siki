@@ -1,4 +1,3 @@
-//App.tsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -8,13 +7,14 @@ import Sidebar from './components/sidebar/sidebar';
 import Home from './components/home/home';
 import NewPage from './components/page/NewPage';
 import Page from './components/page/Page';
-import AuthSuccess from './components/auth/AuthSuccess'; 
+import AuthSuccess from './components/auth/AuthSuccess';
+import Search from './components/display/SearchResults'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     checkLoginStatus()
       .then(isLoggedIn => {
@@ -27,47 +27,34 @@ function App() {
       });
   }, []);
 
-  const handleLogin = (loggedIn: boolean) => {
-    setIsLoggedIn(loggedIn);
-  };
-
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  return isLoading ? (
-    <div>Loading...</div>
-  ) : (
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!isLoggedIn) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  return (
     <Router>
       <div className='app'>
-        <Header onSidebarToggle={handleSidebarToggle}/>
+        <Header onSidebarToggle={handleSidebarToggle} />
         <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <Sidebar />
           <Routes>
-            <Route path="/auth/success" element={<AuthSuccess onLogin={handleLogin} />} />
-            {isLoggedIn ? (
-              <>
-                <Route path="/" element={
-                  <>
-                    <Sidebar />
-                    <Display />
-                  </>
-                } />
-                <Route path="/new" element={
-                  <>
-                    <Sidebar />
-                    <NewPage />
-                  </>
-                } />
-                <Route path="/:id" element={
-                  <>
-                    <Sidebar />
-                    <Page />
-                  </>
-                } />
-              </>
-            ) : (
-              <Route path="/" element={<Home />} />
-            )}
+            <Route path="/auth/success" element={<AuthSuccess onLogin={setIsLoggedIn} />} />
+            <Route path="/" element={<Display />} />
+            <Route path="/new" element={<NewPage />} />
+            <Route path="/:id" element={<Page />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </main>
       </div>

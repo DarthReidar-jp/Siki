@@ -6,7 +6,6 @@ import './sidebar.css';
 function Sidebar() {
   return (
     <div className="sidebar">
-      {/* サイドバーの内容 */}
       <ul>
         <li><Link to="/new" className="custom-link">新しいページを作成</Link></li>
         <li><Link to="/" className="custom-link">トップページへ</Link></li>
