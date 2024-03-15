@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 
@@ -7,14 +7,14 @@ interface PageData {
   _id: string;
   title: string;
   content: string;
+  lines: string[];
 }
 
 const Page: React.FC = () => {
   const [page, setPage] = useState<PageData | null>(null);
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
-  const { id } = useParams<{ id: string }>(); 
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const linesRefs = useRef<(HTMLDivElement | null)[]>([]); // 各行の参照を保持する配列
 
   const fetchPage = useCallback(async () => {
     if (!id) { // idがundefinedでないことを確認
@@ -31,8 +31,6 @@ const Page: React.FC = () => {
       }
       const data = await response.json();
       setPage(data);
-      setEditTitle(data.title);
-      setEditContent(data.content);
     } catch (error) {
       console.error(error);
     }
@@ -48,13 +46,18 @@ const Page: React.FC = () => {
       console.error("Page is null, can't update.");
       return;
     }
+    // linesの更新
+    const updatedLines = linesRefs.current.filter(ref => ref !== null).map(ref => ref!.innerText);
     try {
       const response = await fetch(`http://localhost:8000/api/page/${page._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ title: editTitle, content: editContent }),
+        body: JSON.stringify({
+          title: page.title,
+          lines: updatedLines,
+        }),
         credentials: 'include',
       });
       if (!response.ok) {
@@ -77,7 +80,7 @@ const Page: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to delete page');
       }
-      navigate('/display');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
@@ -88,24 +91,27 @@ const Page: React.FC = () => {
       {page ? (
         <div className="page">
           <div className="page-body">
-            <input
-              className="title"
-              type="text"
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-            />
-            <textarea
-              className="content"
-              value={editContent}
-              onChange={(e) => setEditContent(e.target.value)}
-            />
+            <h2
+              contentEditable
+              suppressContentEditableWarning={true}
+              onBlur={(e) => setPage({ ...page, title: e.target.innerText })}
+            >
+              {page.title}
+            </h2>
+            {page.lines.map((line, index) => (
+              <div
+                key={index}
+                ref={el => linesRefs.current[index] = el}
+                contentEditable
+                suppressContentEditableWarning={true}
+                className="editable-line"
+              >
+                {line}
+              </div>
+            ))}
           </div>
-          <button className="custom-btn" onClick={handleUpdate}>
-            更新
-          </button>
-          <button className="custom-btn" onClick={handleDelete}>
-            削除
-          </button>
+          <button className="custom-btn" onClick={handleUpdate}>更新</button>
+          <button className="custom-btn" onClick={handleDelete}>削除</button>
         </div>
       ) : (
         <div>No page found.</div>

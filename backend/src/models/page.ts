@@ -1,12 +1,13 @@
 import mongoose, { Document } from 'mongoose';
+import { getPageVector } from '../utils/openaiUtils';
 
 // ドキュメントインターフェースを定義
 export interface IPage extends Document {
   userId: string;
   title: string;
-  content: string; // 従来のコンテンツ全体を表すフィールド
-  lines: string[]; // 追加: 各行を個別に格納する配列
-  vector: number[]; // テキストのベクトル表現
+  lines: string[]; 
+  content: string; 
+  vector: number[]; 
   folderIds: string[];
   score: number;
   createdAt: Date;
@@ -17,8 +18,8 @@ export interface IPage extends Document {
 const PageSchema = new mongoose.Schema<IPage>({
   userId: { type: String, required: true },
   title: { type: String, required: true },
+  lines: [{ type: String, default: [] }],
   content: { type: String, default: '' },
-  lines: [{ type: String, default: [] }], // 追加: linesフィールド
   vector: { type: [Number], default: [] },
   folderIds: { type: [String], default: [] },
   score: { type: Number, default: 0 },
@@ -26,13 +27,13 @@ const PageSchema = new mongoose.Schema<IPage>({
   updatedAt: { type: Date, default: Date.now }
 });
 
-PageSchema.index({ userId: 1, title: 1 }, { unique: true });
-
 // ミドルウェアでupdatedAtを更新
 PageSchema.pre('save', function(next) {
+  
   this.updatedAt = new Date();
   next();
 });
+
 
 // モデルを作成
 const Page = mongoose.model<IPage>('Page', PageSchema);

@@ -1,40 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Page.css'
 
 const NewPage = () => {
   const [title, setTitle] = useState('');
+  const contentRef = useRef<HTMLDivElement>(null); // contenteditable用のref
   const navigate = useNavigate();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && title.trim().length > 0) {
-      e.preventDefault(); // フォームの送信を防ぐ
+  const handleSubmit = async () => {
+    if (title.trim().length > 0) {
+      const content = contentRef.current?.innerText || ''; // contenteditable領域のテキストを取得
       try {
         const response = await fetch('http://localhost:8000/api/page', {
           method: 'POST',
-          credentials: 'include', 
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({title}),
+          // titleとcontenteditable領域から取得したテキストをlines配列として送信
+          body: JSON.stringify({ title, lines: [title, content] }),
         });
         if (response.ok) {
-          // 送信成功時の処理
           const result = await response.json();
           console.log('Page created:', result);
-          // navigateの引数を修正
-          navigate(`/${result.page._id}`); // 修正: 正しいページIDに基づくURLにリダイレクト
+          navigate(`/${result.page._id}`);
         } else {
-          // エラー処理
           console.error('Failed to create page');
         }
       } catch (error) {
         console.error('Error:', error);
       }
+    }
+  };
+
+  // Enterキーでフォームを送信
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // フォームの送信を防ぐ
+      handleSubmit(); // 送信処理を実行
     }
   };
 
@@ -47,16 +54,19 @@ const NewPage = () => {
             type="text"
             value={title}
             onChange={handleTitleChange}
-            onKeyDown={handleKeyDown} // 修正部分
+            onKeyDown={handleKeyDown}
             placeholder="タイトルを入力"
           />
-          <textarea
+          <div
+            ref={contentRef}
+            contentEditable
             className='content'
-            placeholder="コンテンツを入力"
-          />
+            onKeyDown={handleKeyDown}
+          ></div>
         </div>
+        <button onClick={handleSubmit}>送信</button>
       </div>
-    </div>   
+    </div>
   );
 };
 

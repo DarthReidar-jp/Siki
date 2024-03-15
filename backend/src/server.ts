@@ -15,11 +15,15 @@ import './config/passportSetup'; // Passport設定をインポート
 import connectDB from './db'; // ここでdb.tsからconnectDBをインポートします
 
 // インポートパスを修正する必要があります
+import serverRouter from './routes/server'; // 正しいパスに注意してください
 import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
 
 const app: express.Express = express();
+
+app.set('view engine', 'pug');
+app.set('views', './views'); // pugファイルが格納されているディレクトリを指定
 
 // ミドルウェアの設定
 // CORS設定をカスタマイズ
@@ -50,6 +54,7 @@ connectDB().then(() => {
 });
 
 // ルーターの設定
+app.use('/', serverRouter); 
 app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);

@@ -13,24 +13,17 @@ router.post('/', async (req: Request, res: Response) => {
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
-    const { title } = req.body;
-
-    let existingPage = await Page.findOne({ userId, title });
-    let newTitle = title;
-    let counter = 1;
-    while (existingPage) {
-      newTitle = `${title} (${counter})`;
-      counter++;
-      existingPage = await Page.findOne({ userId, title: newTitle });
-    }
-    // 新しいページを保存
+    const { title,lines } = req.body;
+    const content = lines.join('\\n');
     const newPage = new Page({
       userId,
-      title: newTitle,
+      title,
+      lines,
+      content,
+      createdAt:new Date(),
     });
     await newPage.save();
     res.status(201).json({ message: 'Page created successfully', page: newPage });
@@ -68,7 +61,7 @@ router.put('/:id', async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
-    const { title, content } = req.body;
+    const { title, lines } = req.body;
     const pageId = req.params.id;
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -77,18 +70,10 @@ router.put('/:id', async (req: Request, res: Response) => {
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
     }
-    // 同じユーザーの中で重複するタイトルがないかチェック
-    let existingPage = await Page.findOne({ userId, title, _id: { $ne: pageId } });
-    let newTitle = title;
-    let counter = 1;
-    // タイトルが重複する場合、(n)を付与する
-    while (existingPage) {
-      newTitle = `${title} (${counter})`;
-      counter++;
-      existingPage = await Page.findOne({ userId, title: newTitle, _id: { $ne: pageId } });
-    }
-    page.title = newTitle;
-    page.content = content;
+    page.title = title;
+    page.lines = lines;
+    page.content = lines.join('\\n');
+    page.vector = await getPageVector(page.content);
     await page.save();
     res.json(page);
   } catch (e) {
@@ -96,7 +81,6 @@ router.put('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// 削除
 router.delete('/:id', async (req: Request, res: Response) => {
   const token = req.cookies['access_token']; // クッキーからトークンを取得
   if (!token) {
@@ -114,24 +98,19 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// エラーハンドリング関数
+
 function handleError(error: any, req: Request, res: Response) {
   console.error(`Error processing request ${req.method} ${req.url}`);
-  console.error(error); // スタックトレースをログに記録
-
+  console.error(error); 
   if (error instanceof jwt.JsonWebTokenError) {
-    // JWT関連のエラー詳細
     console.error("JWT verification error:", error.message);
     res.status(401).json({ message: 'Invalid token', error: error.message });
   } else if (error instanceof mongoose.Error) {
-    // Mongoose (MongoDB)関連のエラー詳細
     console.error("Database error:", error.message);
     res.status(500).json({ message: 'Database error', error: error.message });
   } else if (error instanceof Error) {
-    // 一般的なエラー詳細
     res.status(500).json({ message: 'Internal server error', error: error.message });
   } else {
-    // 予期せぬエラータイプ
     res.status(500).json({ message: 'Unexpected error', error: String(error) });
   }
 }
