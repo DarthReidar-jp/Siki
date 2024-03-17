@@ -1,37 +1,36 @@
 import mongoose from 'mongoose';
 import { getQueryVector } from './openaiUtils';
-const Page = mongoose.model('Page'); // 'Page'モデルがすでに定義されていると仮定
+
+const Page = mongoose.model('Page'); // モデルの取得
 
 async function performVectorSearch(query: string): Promise<any[]> {
-    const queryVector = await getQueryVector(query);
-    // MongoDB Atlasのフルテキスト検索を利用するためのaggregateクエリを構築
-    const agg = [
-        {
-            $search: {
-                index: 'vector_index', // 使用する検索インデックスの名前
-                compound: {
-                    should: [{
-                        vector: {
-                            path: 'vector', // ベクトルデータを含むフィールドのパス
-                            query: queryVector, // 検索クエリベクトル
-                            score: { boost: { value: 1 } } // スコアブーストオプション
-                        }
-                    }]
-                }
+  const queryVector = await getQueryVector(query);
+  const collection = mongoose.connection.db.collection('pages'); // コレクションの取得
+  const agg = [
+    {
+            '$vectorSearch': {
+                'index': 'vector_index',
+                'path': 'vector',
+                'queryVector': queryVector,
+                'numCandidates': 100,
+                'limit': 10
             }
         },
         {
-            $project: { // 取得するフィールドを指定
-                title: 1,
-                content: 1,
-                score: { $meta: 'searchScore' } // 検索スコア
+            '$project': {
+                'title': 1,
+                'content': 1,
+                'score': { '$meta': 'vectorSearchScore' }
             }
         },
+        {
+            '$sort': { 'score': -1 }
+        }
     ];
 
-    // Mongooseのaggregateメソッドを使用してクエリを実行
-    const results = await Page.aggregate(agg);
-    return results;
+
+  const results = await collection.aggregate(agg).toArray(); // 集計とレスポンスの取得
+  return results;
 }
 
 export { performVectorSearch };
