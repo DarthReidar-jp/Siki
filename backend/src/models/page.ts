@@ -5,6 +5,7 @@ import { getPageVector } from '../utils/openaiUtils';
 export interface IPage extends Document {
   userId: string;
   title: string;
+  root:any;
   lines: string[]; 
   content: string; 
   vector: number[]; 
@@ -18,6 +19,7 @@ export interface IPage extends Document {
 const PageSchema = new mongoose.Schema<IPage>({
   userId: { type: String, required: true },
   title: { type: String, required: true },
+  root:{ type: mongoose.Schema.Types.Mixed, required: true }, 
   lines: [{ type: String, default: [] }],
   content: { type: String, default: '' },
   vector: { type: [Number], default: [] },

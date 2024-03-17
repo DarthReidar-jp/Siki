@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
     <header className='header'>
       <button className="custom-btn" onClick={onSidebarToggle}>=</button>
       <Link to="/new" className="custom-btn">+</Link>
-      <form onSubmit={handleSearch}>
+      <form  className ='search-form' onSubmit={handleSearch}>
         <input
           type="text"
           placeholder="Search..."

@@ -1,18 +1,25 @@
 @charset "UTF-8";
 
 /* メインコンテンツのスタイル */
-.main-content {
+.page-display {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* 250pxの幅のメモを画面幅に応じて動的に配置 */
-  grid-gap: 20px; /* メモ同士の間隔 */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+  grid-gap: 20px; 
   padding: 20px 50px;
+}
+
+/* ソートコンテナのスタイル */
+.sort-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 50px 20px 50px;
 }
 
 /* リンクのスタイルを調整する */
 a {
-  color: inherit; /* リンクの色を親要素の色と同じにする */
-  text-decoration: none; /* 下線を削除する */
-  cursor: pointer; /* カーソルをポインターに変更する */
+  color: inherit; 
+  text-decoration: none; 
+  cursor: pointer;
 }
 
 
@@ -25,9 +32,8 @@ a {
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
-  box-shadow: 0 2px 4px rgba(151, 151, 151, 0.1);
   transition: 0.3s;
-  aspect-ratio: 1 / 1; /* 正方形の形状を維持 */
+  aspect-ratio: 1 / 1.03; /* 正方形の形状を維持 */
 }
 
 .page:hover {
@@ -36,23 +42,26 @@ a {
 
 .page .page-body {
   flex: 1 1 auto;
-  padding: 0.5rem 0.9rem;
+  padding: 0.4rem 0.4rem;
 }
 
 .page .page-title {
   font-size: 0.8rem;
-  margin-bottom: 0.5rem; /* タイトルとテキストの間隔 */
+  text-decoration: bold;
+  margin: 0.2rem; 
+  font-weight: bold;
 }
 
 .page .page-content {
-  font-size: 0.5rem; /* テキストのフォントサイズ */
-  color: #636363; /* テキストの色 */
+  font-size: 0.7rem; /* テキストのフォントサイズ */
+  margin: 0.2rem; 
+  color: #636363; 
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5; /* 表示される最大行数を5行に設定 */
-  line-height: 1.2; /* 行の高さ */
+  -webkit-line-clamp: 7; /* 表示される最大行数を5行に設定 */
+  line-height: 1.4; /* 行の高さ */
   max-height: 10em; /* line-height * line-clamp の値 */
 }
 

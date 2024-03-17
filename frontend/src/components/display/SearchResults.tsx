@@ -38,27 +38,29 @@ const SearchResults: React.FC = () => {
 
   return (
     <div className="main-content">
-      {pages.length ? (
-        pages.map(page => (
-          <Link to={`/${page._id}`} key={page._id}>
-            <div className="page">
-              <div className="page-body">
-                <h5 className="page-title">{page.title}</h5>
-                <p className="page-content">{page.content}</p>
-                {page.score && (
-                    <p className="page-content score">
-                      Score: {page.score.toFixed(5)}
-                    </p>
-                  )}
+      <div className='page-display'>
+        {pages.length ? (
+          pages.map(page => (
+            <Link to={`/${page._id}`} key={page._id}>
+              <div className="page">
+                <div className="page-body">
+                  <p className="page-title">{page.title}</p>
+                  <p className="page-content">{page.content}</p>
+                  {page.score && (
+                      <p className="page-content score">
+                        Score: {page.score.toFixed(5)}
+                      </p>
+                    )}
+                </div>
               </div>
-            </div>
-          </Link>
-        ))
-      ) : (
-        <div className="no-pages">
-          <p>No search results found.</p>
-        </div>
-      )}
+            </Link>
+          ))
+        ) : (
+          <div className="no-pages">
+            <p>No search results found.</p>
+          </div>
+        )}
+      </div>    
     </div>
   );
 };

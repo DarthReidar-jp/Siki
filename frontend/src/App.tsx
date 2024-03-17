@@ -8,7 +8,8 @@ import Home from './components/home/home';
 import NewPage from './components/page/NewPage';
 import Page from './components/page/Page';
 import AuthSuccess from './components/auth/AuthSuccess';
-import Search from './components/display/SearchResults'
+import Search from './components/display/SearchResults';
+import PageRich from './components/page/PageRich' ;
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -55,6 +56,7 @@ function App() {
             <Route path="/new" element={<NewPage />} />
             <Route path="/:id" element={<Page />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/rich" element={<PageRich />} />
           </Routes>
         </main>
       </div>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Page.css';
 
-// ページデータの型定義
 interface PageData {
   _id: string;
   title: string;
@@ -14,7 +13,7 @@ const Page: React.FC = () => {
   const [page, setPage] = useState<PageData | null>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const contentRef = useRef<HTMLDivElement | null>(null); // contentEditableの大枠を参照するためのref
+  const contentRef = useRef<HTMLDivElement | null>(null); 
 
   const fetchPage = useCallback(async () => {
     if (!id) { 
@@ -40,7 +39,6 @@ const Page: React.FC = () => {
     fetchPage();
   }, [fetchPage]);
 
-  // ページの更新処理
   const handleUpdate = async () => {
     if (!page || !contentRef.current) {
       console.error("Page is null or content ref is null, can't update.");
@@ -69,7 +67,6 @@ const Page: React.FC = () => {
     }
   };
 
-  // ページの削除
   const handleDelete = async () => {
     try {
       const response = await fetch(`http://localhost:8000/api/page/${page?._id}`, {
@@ -88,14 +85,14 @@ const Page: React.FC = () => {
   return (
     <div className="container">
     {page ? (
-      <div className="page">
-        <div className="page-body">
-          <h2 contentEditable suppressContentEditableWarning={true} onBlur={(e) => setPage(prev => prev ? { ...prev, title: e.target.innerText } : null)}>
+      <div className="page-diteil">
+        <div className="page-diteil-body">
+          <h2 className='title' contentEditable suppressContentEditableWarning={true} onBlur={(e) => setPage(prev => prev ? { ...prev, title: e.target.innerText } : null)}>
             {page.title}
           </h2>
           <div ref={contentRef} className="editable-lines" contentEditable suppressContentEditableWarning={true}>
             {page.lines.map((line, index) => (
-              <div key={index}>{line}</div>
+              <div className='content' key={index}>{line}</div>
             ))}
           </div>
         </div>

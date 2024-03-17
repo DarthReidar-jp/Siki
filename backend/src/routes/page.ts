@@ -35,6 +35,45 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/rich', async (req: Request, res: Response) => {
+  const token = req.cookies['access_token'];
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const userId = decoded.userId;
+    const { root } = req.body;
+    // テキストのみを抽出してlinesに格納
+    const extractTexts = (node: any): string[] => {
+      if (!node || !node.children) return [];
+      return node.children.flatMap((child: any) => {
+        if (child.text) return [child.text];
+        return extractTexts(child);
+      });
+    };
+    const lines = extractTexts(root);
+    // titleとcontentを設定
+    const title = lines[0] || '';
+    const content = lines.join('');
+    const newPage = new Page({
+      userId,
+      title,
+      root,
+      lines,
+      content,
+      createdAt:new Date(),
+    });
+    await newPage.save();
+    res.status(201).json({ message: 'Page created successfully', page: newPage });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    handleError(error, req, res);
+  }
+});
+
 // メモの詳細を表示
 router.get('/:id', async (req: Request, res: Response) => {
 	const token = req.cookies['access_token']; // クッキーからトークンを取得

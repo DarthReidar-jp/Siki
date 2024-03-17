@@ -42,28 +42,32 @@ const Display: React.FC = () => {
 
   return (
     <div className="main-content">
-      <select onChange={handleSortChange} value={sort}>
-        <option value="createdAsc">作成日順</option>
-        <option value="updatedDesc">更新日順</option>
-        <option value="titleAsc">タイトル (A-Z)</option>
-        <option value="titleDesc">タイトル (Z-A)</option>
-      </select>
-      {pages.length ? (
-        pages.map(page => (
-          <Link to={`/${page._id}`} key={page._id}>
-            <div className="page">
-              <div className="page-body">
-                <h5 className="page-title">{page.title}</h5>
-                <p className="page-content">{page.content}</p>
+      <div className="sort-container">
+        <select onChange={handleSortChange} value={sort} className="sort-select">
+          <option value="createdAsc">作成日順</option>
+          <option value="updatedDesc">更新日順</option>
+          <option value="titleAsc">タイトル (A-Z)</option>
+          <option value="titleDesc">タイトル (Z-A)</option>
+        </select>
+      </div>
+      <div className='page-display'>
+        {pages.length ? (
+          pages.map(page => (
+            <Link to={`/${page._id}`} key={page._id}>
+              <div className="page">
+                <div className="page-body">
+                  <p className="page-title">{page.title}</p>
+                  <p className="page-content">{page.content}</p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))
-      ) : (
-        <div className="no-pages">
-          <p>No pages found.</p>
-        </div>
-      )}
+            </Link>
+          ))
+        ) : (
+          <div className="no-pages">
+            <p>No pages found.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

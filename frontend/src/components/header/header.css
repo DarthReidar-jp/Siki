@@ -17,8 +17,6 @@
     text-decoration: none;
     vertical-align: middle;
     cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     border: 1px solid #ababab6c;
     border-radius: 0.25rem;
@@ -26,4 +24,10 @@
     padding: 0.2rem 0.2rem;
     font-size: 0.75rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
+}
+
+.search-form{
+  display: inline-block;
+  margin: 0.2rem;
+  padding: 0.2rem 0.2rem;
+}
