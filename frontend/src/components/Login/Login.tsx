@@ -1,7 +1,7 @@
 import React from 'react';
-import "./home.css";
+import "./Login.css";
 
-function Home() {
+function Login() {
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:8000/api/auth/google';
   };
@@ -13,4 +13,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Login;

@@ -13,7 +13,7 @@ router.get('/google',
 
 // Googleからのコールバックを処理
 router.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: 'http://localhost:3000/' }),
+  passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
   (req, res) => {
     const user = req.user as IUser;
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
@@ -26,7 +26,7 @@ router.get('/google/callback',
       sameSite: 'strict',
     });
     // 認証確認ページにリダイレクト
-    res.redirect('http://localhost:3000/auth/success');
+    res.redirect('http://localhost:3000/');
   }
 );
 // ログイン状態を確認するためのエンドポイント
