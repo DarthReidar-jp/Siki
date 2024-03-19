@@ -9,7 +9,9 @@ import NewPage from './components/page/NewPage';
 import Page from './components/page/Page';
 import AuthSuccess from './components/auth/AuthSuccess';
 import Search from './components/display/SearchResults';
-import PageRich from './components/page/PageRich' ;
+import PageRich from './components/page/PageRich';
+//import PageEdit from './components/page/PageEdit';
+
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

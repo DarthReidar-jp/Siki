@@ -75,6 +75,59 @@ router.post('/rich', async (req: Request, res: Response) => {
 });
 
 // メモの詳細を表示
+router.get('/rich/:id', async (req: Request, res: Response) => {
+	const token = req.cookies['access_token']; // クッキーからトークンを取得
+	  if (!token) {
+	    return res.status(401).json({ message: 'No token provided' });
+	  }
+	  try {
+	    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+	    const userId = decoded.userId;
+	    const pageId = req.params.id;
+      const page: IPage | null = await Page.findOne({ userId, _id: pageId });
+    res.json(page);
+  } catch (e) {
+    handleError(e,req, res);
+  }
+});
+
+router.put('/rich/:id', async (req: Request, res: Response) => {
+  const token = req.cookies['access_token']; // クッキーからトークンを取得
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const userId = decoded.userId;
+    const { root } = req.body;
+    // テキストのみを抽出してlinesに格納
+    const extractTexts = (node: any): string[] => {
+      if (!node || !node.children) return [];
+      return node.children.flatMap((child: any) => {
+        if (child.text) return [child.text];
+        return extractTexts(child);
+      });
+    };
+    const pageId = req.params.id;
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const page = await Page.findOne({ _id: pageId, userId });
+    if (!page) {
+      return res.status(404).json({ error: 'Page not found' });
+    }
+    page.lines = extractTexts(root);
+    page.title = page.lines[0] || '';
+    page.content = page.lines.join('');
+    page.vector = await getPageVector(page.content);
+    await page.save();
+    res.json(page);
+  } catch (e) {
+    handleError(e, req,res);
+  }
+});
+
+// メモの詳細を表示
 router.get('/:id', async (req: Request, res: Response) => {
 	const token = req.cookies['access_token']; // クッキーからトークンを取得
 	  if (!token) {
