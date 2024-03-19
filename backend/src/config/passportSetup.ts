@@ -1,7 +1,7 @@
 // src/config/passportSetup.ts
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import User, { IUser } from '../models/user'; // IUserをインポート
+import User from '../models/user'; // IUserをインポート
 
 passport.use(new GoogleStrategy.Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID!,
@@ -23,12 +23,12 @@ passport.use(new GoogleStrategy.Strategy({
 }));
 
 passport.serializeUser((user: any, done) => {
-  done(null, user._id.toString()); // 型アサーションを使用しているため、型チェックを回避
+  done(null, user._id.toString()); 
 });
 
 passport.deserializeUser((id: any, done) => {
   User.findById(id).then((user: any) => {
-    done(null, user); // 型アサーションを使用しているため、型チェックを回避
+    done(null, user); 
   });
 });
 
