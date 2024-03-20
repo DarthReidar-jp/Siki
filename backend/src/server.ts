@@ -21,6 +21,7 @@ import serverRouter from './routes/server';
 import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
+import richRouter from './routes/richText';
 
 const app: express.Express = express();
 
@@ -56,6 +57,7 @@ app.use('/', serverRouter);
 app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
+app.use('/api/rich', richRouter);
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {
