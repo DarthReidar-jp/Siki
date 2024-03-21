@@ -1,16 +1,22 @@
-import {
-  createEditor,
-  EditorState,
-  LexicalEditor
-} from "lexical";
 import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
+import { createEditor, EditorState, LexicalEditor } from "lexical";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { useParams } from 'react-router-dom';
 import { loadEditorState } from "./LoadEditorState";
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
+import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
+import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import EditorActions from "./EditorActions";
+import InlineToolbarPlugin from "./InlineToolbarPlugin";
+import ToolbarPlugin from "./ToolbarPlugin";
+import MarkdownPlugin from "./MarkdownPlugin";
+import DeleteButton from "./DeleteButton";
+import { nodes } from "./nodes";
 
 const theme = {
 };
@@ -31,45 +37,54 @@ function Editor() {
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
   useEffect(() => {
-    // 非同期関数をuseEffect内で定義
     const fetchData = async () => {
       try {
-        const data = await loadEditorState(id); // 非同期関数を待ちます
+        const data = await loadEditorState(id);
         setSerializedEditorState(data);
       } catch (error) {
         console.error("Data loading error:", error);
-        // エラーハンドリングをここで行います。
       }
     };
-
     fetchData();
   }, [id]);
 
   useEffect(() => {
     if (serializedEditorState) {
-      // データがロードされた後でエディターを初期化
       const editorInstance = createEditor();
       setEditor(editorInstance);
     }
-  }, [serializedEditorState]); // serializedEditorStateが変更されたらこの効果を実行
+  }, [serializedEditorState]);
 
-  if (!editor) return <>Loading...</>; // エディターがまだなければ、ロード中を表示
+  if (!editor) return <>Loading...</>;
 
   const initialConfig = {
     namespace: "MyEditor",
     theme,
+    nodes,
     onError,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={<ContentEditable className="editor-input" />}
-        placeholder={<div>Enter some text...</div>}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <OnChangePlugin onChange={onChange} />
+      <ToolbarPlugin />
+      <InlineToolbarPlugin />
+      <div>
+        <RichTextPlugin
+          contentEditable={<ContentEditable className="editor-input" />}
+          placeholder={<div>Enter some text...</div>}
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <OnChangePlugin onChange={onChange} />
+        <ListPlugin />
+        <CheckListPlugin />
+        <MarkdownPlugin />
+        <AutoFocusPlugin />
+        <OnChangePlugin onChange={onChange} />
+        <HistoryPlugin />
+        <EditorActions />
+        <DeleteButton id={id} />
+      </div>
     </LexicalComposer>
   );
 }

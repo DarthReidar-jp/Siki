@@ -11,5 +11,6 @@ export const loadEditorState = async (id:any) => {
     const data = await response.json();
     console.log(data.root);
     const Json = JSON.stringify(data.root)
+    console.log(Json)
     return Json;
   };

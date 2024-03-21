@@ -18,7 +18,7 @@ const EditorActions = () => {
         const result = await response.json();
         console.log('Page created:', result);
         console.log(JSON.stringify(serializedState));
-        navigate(`/rich/${result.page._id}`);
+        navigate(`/${result.page._id}`);
     };
 
     const saveContent = () => {
