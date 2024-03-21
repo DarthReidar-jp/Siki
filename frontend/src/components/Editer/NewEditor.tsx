@@ -11,7 +11,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import './pagerich.css';
 import { nodes } from "./nodes";
-import EditorActions from "./EditerActions";
+import EditorActions from "./EditorActions";
 import InlineToolbarPlugin from "./InlineToolbarPlugin";
 import ToolbarPlugin from "./ToolbarPlugin";
 import MarkdownPlugin from "./MarkdownPlugin";

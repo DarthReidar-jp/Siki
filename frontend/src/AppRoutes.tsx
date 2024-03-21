@@ -5,7 +5,8 @@ import NewPage from './components/page/NewPage';
 import Page from './components/page/Page';
 import Search from './components/display/SearchResults';
 import NewEditor from './components/Editer/NewEditor';
-import PageEdit from './components/Editer/PageEdit';
+//import PageEdit from './components/Editer/PageEdit';
+import Editor from './components/Editor/Editor';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/:id" element={<Page />} />
       <Route path="/search" element={<Search />} />
       <Route path="/newrich" element={<NewEditor />} />
-      <Route path="/rich/:id" element={<PageEdit />} />
+      <Route path="/rich/:id" element={<Editor />} />
     </Routes>
   );
 };

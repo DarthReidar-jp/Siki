@@ -1,34 +1,20 @@
 // Header.tsx
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
 import './header.css';
+import SidebarToggleButton from './SidebarToggleButton';
+import NewPageButton from './NewPageButton';
+import VectorSearchForm from './VectorSearchForm';
 
 interface HeaderProps {
   onSidebarToggle: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
-
-  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-  };
-
   return (
     <header className='header'>
-      <button className="custom-btn" onClick={onSidebarToggle}>=</button>
-      <Link to="/new" className="custom-btn">+</Link>
-      <form  className ='search-form' onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
+      <SidebarToggleButton onClick={onSidebarToggle} />
+      <NewPageButton />
+      <VectorSearchForm />
     </header>
   );
 };

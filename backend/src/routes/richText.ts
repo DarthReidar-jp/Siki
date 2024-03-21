@@ -16,25 +16,30 @@ router.post('/', async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
     const { root } = req.body;
+    const { root: rootNode } = root; // フロントエンドから送信されたrootオブジェクトから実際のrootノードを取り出す
     // テキストのみを抽出してlinesに格納
     const extractTexts = (node: any): string[] => {
-      if (!node || !node.children) return [];
-      return node.children.flatMap((child: any) => {
-        if (child.text) return [child.text];
-        return extractTexts(child);
-      });
+      if (!node) return []; // ノードがnullまたはundefinedの場合、空の配列を返す
+      if (node.text) return [node.text]; // テキストプロパティがある場合は、その値を含む配列を返す
+      // childrenプロパティがある場合、その各子ノードに対してextractTextsを再帰的に呼び出し、
+      // 結果をflatMapを使って平坦化する
+      return node.children?.flatMap(extractTexts) || [];
     };
-    const lines = extractTexts(root);
+    
+
+    const lines = extractTexts(rootNode);
     // titleとcontentを設定
-    const title = lines[0] || '';
+    const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
     const content = lines.join('');
+    console.log('Extracted title:', title); // 抽出したタイトルをログに出力
+    console.log('Extracted content:', content); // 抽出したコンテンツをログに出力
     const newPage = new Page({
       userId,
       title,
       root,
       lines,
       content,
-      createdAt:new Date(),
+      createdAt: new Date(),
     });
     await newPage.save();
     res.status(201).json({ message: 'Page created successfully', page: newPage });
@@ -45,25 +50,8 @@ router.post('/', async (req: Request, res: Response) => {
     handleError(error, req, res);
   }
 });
-
 // メモの詳細を表示
 router.get('/:id', async (req: Request, res: Response) => {
-	const token = req.cookies['access_token']; // クッキーからトークンを取得
-	  if (!token) {
-	    return res.status(401).json({ message: 'No token provided' });
-	  }
-	  try {
-	    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
-	    const userId = decoded.userId;
-	    const pageId = req.params.id;
-      const page: IPage | null = await Page.findOne({ userId, _id: pageId });
-    res.json(page);
-  } catch (e) {
-    handleError(e,req, res);
-  }
-});
-
-router.put('/:id', async (req: Request, res: Response) => {
   const token = req.cookies['access_token']; // クッキーからトークンを取得
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
@@ -71,8 +59,24 @@ router.put('/:id', async (req: Request, res: Response) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
+    const pageId = req.params.id;
+    const page: IPage | null = await Page.findOne({ userId, _id: pageId });
+    res.json(page);
+  } catch (e) {
+    handleError(e, req, res);
+  }
+});
+
+router.put('/:id', async (req: Request, res: Response) => {
+  const token = req.cookies['access_token'];
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const userId = decoded.userId;
     const { root } = req.body;
-    // テキストのみを抽出してlinesに格納
+
     const extractTexts = (node: any): string[] => {
       if (!node || !node.children) return [];
       return node.children.flatMap((child: any) => {
@@ -95,13 +99,15 @@ router.put('/:id', async (req: Request, res: Response) => {
     await page.save();
     res.json(page);
   } catch (e) {
-    handleError(e, req,res);
+    handleError(e, req, res);
   }
 });
 
 function handleError(error: any, req: Request, res: Response) {
   console.error(`Error processing request ${req.method} ${req.url}`);
-  console.error(error); 
+  console.error('Request body:', req.body); // リクエストボディの内容をログに出力
+  
+  console.error(error);
   if (error instanceof jwt.JsonWebTokenError) {
     console.error("JWT verification error:", error.message);
     res.status(401).json({ message: 'Invalid token', error: error.message });

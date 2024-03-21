@@ -1,13 +1,9 @@
+// Display.tsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './display.css'; 
-
-
-interface Page {
-  _id: string;
-  title: string;
-  content: string;
-}
+import './display.css';
+import SortSelect from './SortSelect';
+import PageList from './PageList';
+import { Page } from '../../types'; 
 
 const Display: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
@@ -20,7 +16,6 @@ const Display: React.FC = () => {
 
   const fetchPages = async (sort: string) => {
     try {
-      // ソートオプションをクエリパラメータに追加
       const url = `http://localhost:8000/api?sort=${sort}`;
       const response = await fetch(url, {
         method: 'GET',
@@ -35,40 +30,12 @@ const Display: React.FC = () => {
       console.error("Error fetching pages:", error);
     }
   };
-  
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSort(e.target.value);
-  };
 
   return (
     <div className="main-content">
-      <div className="sort-container">
-        <select onChange={handleSortChange} value={sort} className="sort-select">
-          <option value="createdAsc">作成日順</option>
-          <option value="updatedDesc">更新日順</option>
-          <option value="titleAsc">タイトル (A-Z)</option>
-          <option value="titleDesc">タイトル (Z-A)</option>
-        </select>
-      </div>
-      <div className='page-display'>
-        {pages.length ? (
-          pages.map(page => (
-            <Link to={`/${page._id}`} key={page._id}>
-              <div className="page">
-                <div className="page-body">
-                  <p className="page-title">{page.title}</p>
-                  <p className="page-content">{page.content}</p>
-                </div>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="no-pages">
-            <p>No pages found.</p>
-          </div>
-        )}
-      </div>
-    </div>
+    <SortSelect sort={sort} onSortChange={(e) => setSort(e.target.value)} />
+    <PageList pages={pages} />
+  </div>
   );
 };
 

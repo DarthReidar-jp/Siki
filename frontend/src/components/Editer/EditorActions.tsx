@@ -7,7 +7,7 @@ const EditorActions = () => {
     const navigate = useNavigate();
 
     const saveEditorContent = async (serializedState: any) => {
-        const response = await fetch('http://localhost:8000/api/page/rich', {
+        const response = await fetch('http://localhost:8000/api/rich', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -17,14 +17,16 @@ const EditorActions = () => {
         });
         const result = await response.json();
         console.log('Page created:', result);
-        navigate(`/${result.page._id}`);
+        console.log(JSON.stringify(serializedState));
+        navigate(`/rich/${result.page._id}`);
     };
 
     const saveContent = () => {
         const editorState = editor.getEditorState();
         editorState.read(() => {
             const serializedState = editorState.toJSON();
-            saveEditorContent(serializedState);
+            const rootObject = { root: serializedState };
+            saveEditorContent(rootObject);
         });
     };
 

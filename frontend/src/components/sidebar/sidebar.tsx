@@ -1,13 +1,13 @@
 // components/sidebar/Sidebar.tsx
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './sidebar.css';
+import './sidebar.css'
+import TopPageButton from './TopPageButton';
 
 function Sidebar() {
   return (
     <div className="sidebar">
       <ul>
-        <li><Link to="/" className="custom-link">トップページへ</Link></li>
+        <TopPageButton />
       </ul>
     </div>
   );
