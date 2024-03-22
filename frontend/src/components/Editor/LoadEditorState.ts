@@ -1,5 +1,4 @@
 
-
 export const loadEditorState = async (id:any) => {
     const response = await fetch(`http://localhost:8000/api/rich/${id}`, {
       method: 'GET',

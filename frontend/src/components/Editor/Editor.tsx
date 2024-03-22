@@ -7,19 +7,10 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { loadEditorState } from "./LoadEditorState";
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { CheckListPlugin } from '@lexical/react/LexicalCheckListPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import EditorActions from "./EditorActions";
-import InlineToolbarPlugin from "./InlineToolbarPlugin";
-import ToolbarPlugin from "./ToolbarPlugin";
-import MarkdownPlugin from "./MarkdownPlugin";
+import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
-import { nodes } from "./nodes";
-
-const theme = {
-};
+import {theme} from "./Theme";
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -59,16 +50,13 @@ function Editor() {
 
   const initialConfig = {
     namespace: "MyEditor",
-    theme,
-    nodes,
+    theme:theme,
     onError,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <ToolbarPlugin />
-      <InlineToolbarPlugin />
       <div>
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
@@ -76,13 +64,8 @@ function Editor() {
           ErrorBoundary={LexicalErrorBoundary}
         />
         <OnChangePlugin onChange={onChange} />
-        <ListPlugin />
-        <CheckListPlugin />
-        <MarkdownPlugin />
         <AutoFocusPlugin />
-        <OnChangePlugin onChange={onChange} />
-        <HistoryPlugin />
-        <EditorActions />
+        <UpdateButton id={id}/>
         <DeleteButton id={id} />
       </div>
     </LexicalComposer>

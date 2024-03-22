@@ -42,7 +42,6 @@ function ToolbarPlugin() {
                     $wrapNodes(selection, () => $createParagraphNode());
                 }
             });
-
             setBlockType("paragraph");
         }
 
@@ -56,7 +55,6 @@ function ToolbarPlugin() {
                     $wrapNodes(selection, () => $createQuoteNode());
                 }
             });
-
             setBlockType("quote");
         }
 

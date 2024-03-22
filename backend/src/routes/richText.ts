@@ -76,14 +76,16 @@ router.put('/:id', async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
     const { root } = req.body;
-
+    const { root: rootNode } = root; // フロントエンドから送信されたrootオブジェクトから実際のrootノードを取り出す
+    // テキストのみを抽出してlinesに格納
     const extractTexts = (node: any): string[] => {
-      if (!node || !node.children) return [];
-      return node.children.flatMap((child: any) => {
-        if (child.text) return [child.text];
-        return extractTexts(child);
-      });
+      if (!node) return []; // ノードがnullまたはundefinedの場合、空の配列を返す
+      if (node.text) return [node.text]; // テキストプロパティがある場合は、その値を含む配列を返す
+      // childrenプロパティがある場合、その各子ノードに対してextractTextsを再帰的に呼び出し、
+      // 結果をflatMapを使って平坦化する
+      return node.children?.flatMap(extractTexts) || [];
     };
+    
     const pageId = req.params.id;
     if (!userId) {
       return res.status(401).json({ error: 'Unauthorized' });
@@ -92,8 +94,9 @@ router.put('/:id', async (req: Request, res: Response) => {
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
     }
-    page.lines = extractTexts(root);
-    page.title = page.lines[0] || '';
+    page.root = root;
+    page.lines = extractTexts(rootNode);
+    page.title =  page.lines.length > 0 ? page.lines[0] : 'デフォルトタイトル';
     page.content = page.lines.join('');
     page.vector = await getPageVector(page.content);
     await page.save();
