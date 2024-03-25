@@ -11,15 +11,17 @@ const SearchForm = () => {
   };
 
   return (
-    <form className='search-form' onSubmit={handleSearch}>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button type="submit">Search</button>
-    </form>
+    <div>
+      <form className='search-container' onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button type="submit">検索</button>
+      </form>
+    </div>
+
   );
 };
 

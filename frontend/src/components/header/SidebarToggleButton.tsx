@@ -5,7 +5,9 @@ interface SidebarToggleButtonProps {
   }
   
   const SidebarToggleButton: React.FC<SidebarToggleButtonProps> = ({ onClick }) => (
-    <button className="custom-btn" onClick={onClick}>=</button>
+    <div>
+      <button className="button" onClick={onClick}>=</button>
+    </div>
   );
   
   export default SidebarToggleButton;

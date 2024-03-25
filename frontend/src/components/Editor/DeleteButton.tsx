@@ -19,7 +19,7 @@ const DeleteButton = ({ id }: { id: any }) => {
         }
       };
     return (
-        <button onClick={handleDelete}>削除</button>
+        <button className='button' onClick={handleDelete}>削除</button>
     );
 };
 

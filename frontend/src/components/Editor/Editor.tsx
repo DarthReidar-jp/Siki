@@ -58,9 +58,9 @@ function Editor() {
   };
 
   return (
-    <div className="container">
-      <div className="page-diteil">
-        <div className="page-diteil-body">
+    <div className="page-container">
+      <div className="page">
+        <div className="editor">
           <LexicalComposer initialConfig={initialConfig}>
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
@@ -75,6 +75,7 @@ function Editor() {
         </div>
       </div>
     </div>
+
   );
 };
 

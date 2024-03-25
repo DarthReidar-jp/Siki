@@ -56,7 +56,7 @@ router.get('/search', async (req: Request, res: Response) => {
     if (typeof query !== 'string') {
       return res.status(400).json({ message: 'Query must be a string.' });
     }
-    const searchResults = await performVectorSearch(query);
+    const searchResults = await performVectorSearch(query,userId);
     res.json(searchResults);
   } catch (e) {
     console.error('Search error:', e);

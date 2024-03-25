@@ -33,7 +33,7 @@ const UpdateButton = ({ id }: { id: any }) => {
     };
 
     return (
-        <button onClick={updateContent}>更新</button>
+        <button className='button' onClick={updateContent}>更新</button>
     );
 };
 

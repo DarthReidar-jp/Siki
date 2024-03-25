@@ -31,7 +31,7 @@ const EditorActions = () => {
     };
 
     return (
-        <button onClick={saveContent}>Save</button>
+        <button className='button' onClick={saveContent}>Save</button>
     );
 };
 

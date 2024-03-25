@@ -8,21 +8,15 @@ import Auth from './components/auth/Auth';
 import HomeRoutes from './HomeRoutes';
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const { isLoggedIn, isLoading } = Auth();
-
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <Router>
       {isLoggedIn ? 
         <div className='app'>
-          <Header onSidebarToggle={handleSidebarToggle} />
-          <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <Header />
+          <main className='content' >
             <Sidebar />
             <AppRoutes />
           </main>

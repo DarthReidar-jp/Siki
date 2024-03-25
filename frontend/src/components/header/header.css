@@ -1,33 +1,54 @@
 .header {
-    background-color: #ffffff;
-    padding: 5px 5px;
-    position: fixed;
-    z-index: 1000;
-    width: 100%;
-  }
-
-.custom-btn {
-    display: inline-block;
-    width: 4%;
-    color: #4b4b4b;
-    background-color: #ffffff;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    border: 1px solid #ababab6c;
-    border-radius: 0.25rem;
-    margin: 0.2rem;
-    padding: 0.2rem 0.2rem;
-    font-size: 0.75rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background-color: #ffffff;
+  padding: 5px 5px;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  display: flex; /* Flexboxを使用する */
+  align-items: center; /* 中央揃えにする */
+  justify-content: space-between; /* ジャスティファイを使用して要素を均等に配置 */
 }
 
-.search-form{
-  display: inline-block;
-  margin: 0.2rem;
-  padding: 0.2rem 0.2rem;
+/* 新しいページボタンと検索フォームのコンテナ */
+.center-container {
+  display: flex; /* Flexboxを使用する */
+  justify-content: center; /* 中央揃えにする */
+  align-items: center; /* アイテムを垂直方向の中央に配置 */
+  flex-grow: 1; /* 中央の空間を最大限に利用 */
+}
+
+.search-container{
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  height: 2.2em;
+  overflow: hidden;
+  background: #cdcdcd;
+}
+.search-container input[type="text"]{
+  border: none;
+  width: 450px;
+  height: 2.0em;
+  background: #cdcdcd;
+}
+.search-container input[type="text"]:focus {
+  outline: 0;
+}
+.search-container input[type="submit"]{
+  cursor: pointer;
+  font-family: FontAwesome;
+  font-size: 1.3em;
+  border: none;
+  background: none;
+  color: #fff;
+  position: absolute;
+  height: 2.5em;
+  right: 8px;
+  top: -10px;
+  outline : none;
+}
+.search-container ::-webkit-input-placeholder {
+  color: #fff;
 }

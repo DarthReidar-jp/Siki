@@ -21,9 +21,9 @@ const editorConfig = {
 const NewEditor = () => {
 
   return (
-    <div className="container">
-      <div className="page-diteil">
-        <div className="page-diteil-body">
+    <div className="page-container">
+      <div className="page">
+        <div className="editor">
           <LexicalComposer initialConfig={editorConfig}>
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
