@@ -6,8 +6,8 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import './pagerich.css';
-import EditorActions from "./EditorActions";
+import SaveButton from "./SaveButton";
+import "./Editor.css";
 
 function onChange(editorState: EditorState) {
   console.log(editorState);
@@ -21,17 +21,22 @@ const editorConfig = {
 const NewEditor = () => {
 
   return (
-    <LexicalComposer initialConfig={editorConfig}>
-      <div>
-        <RichTextPlugin
-          contentEditable={<ContentEditable className='TableNode__contentEditable' />}
-          placeholder={<div className="placeholder">What's on your mind?</div>}
-          ErrorBoundary={LexicalErrorBoundary} />
-        <AutoFocusPlugin />
-        <OnChangePlugin onChange={onChange} />
-        <EditorActions />
+    <div className="container">
+      <div className="page-diteil">
+        <div className="page-diteil-body">
+          <LexicalComposer initialConfig={editorConfig}>
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" />}
+              placeholder={<div>Enter some text...</div>}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <OnChangePlugin onChange={onChange} />
+            <AutoFocusPlugin />
+            <SaveButton />
+          </LexicalComposer>
+        </div>
       </div>
-    </LexicalComposer>
+    </div>
   );
 };
 

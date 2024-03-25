@@ -6,11 +6,12 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { loadEditorState } from "./LoadEditorState";
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
-import {theme} from "./Theme";
+import { loadEditorState } from "./LoadEditorState";
+import { theme } from "./Theme";
+import "./Editor.css";
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -31,6 +32,7 @@ function Editor() {
     const fetchData = async () => {
       try {
         const data = await loadEditorState(id);
+        console.log(data);
         setSerializedEditorState(data);
       } catch (error) {
         console.error("Data loading error:", error);
@@ -50,26 +52,30 @@ function Editor() {
 
   const initialConfig = {
     namespace: "MyEditor",
-    theme:theme,
+    theme: theme,
     onError,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <div>
-        <RichTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<div>Enter some text...</div>}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin onChange={onChange} />
-        <AutoFocusPlugin />
-        <UpdateButton id={id}/>
-        <DeleteButton id={id} />
+    <div className="container">
+      <div className="page-diteil">
+        <div className="page-diteil-body">
+          <LexicalComposer initialConfig={initialConfig}>
+            <RichTextPlugin
+              contentEditable={<ContentEditable className="editor-input" />}
+              placeholder={<div>Enter some text...</div>}
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <OnChangePlugin onChange={onChange} />
+            <AutoFocusPlugin />
+            <UpdateButton id={id} />
+            <DeleteButton id={id} />
+          </LexicalComposer>
+        </div>
       </div>
-    </LexicalComposer>
+    </div>
   );
-}
+};
 
 export default Editor;
