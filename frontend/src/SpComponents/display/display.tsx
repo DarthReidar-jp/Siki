@@ -1,14 +1,14 @@
 // Display.tsx
 import React, { useState, useEffect } from 'react';
-import './display.css';
 import SortSelect from './SortSelect';
 import PageList from './PageList';
-import { Page } from '../../types'; 
+import { Page } from '../../types';
+import './sp-display.scss';
+
 
 const Display: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
-  const [sort, setSort] = useState<string>('createdAsc'); 
-
+  const [sort, setSort] = useState<string>('createdAsc');
 
   useEffect(() => {
     fetchPages(sort);
@@ -32,10 +32,10 @@ const Display: React.FC = () => {
   };
 
   return (
-    <div className="main-content">
-    <SortSelect sort={sort} onSortChange={(e) => setSort(e.target.value)} />
-    <PageList pages={pages} />
-  </div>
+    <div className="sp-content">
+      <SortSelect sort={sort} onSortChange={(e) => setSort(e.target.value)} />
+      <PageList pages={pages} />
+    </div>
   );
 };
 

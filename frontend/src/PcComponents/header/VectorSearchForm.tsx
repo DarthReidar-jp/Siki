@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GrSearch } from "react-icons/gr";
 
 const SearchForm = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,7 +19,7 @@ const SearchForm = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button type="submit">検索</button>
+        <button type="submit"><GrSearch /></button>
       </form>
     </div>
 

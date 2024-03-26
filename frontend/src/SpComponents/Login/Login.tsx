@@ -8,6 +8,7 @@ function Login() {
   return (
     <div className='center'>
       <h1>Googleでログインしてください</h1>
+      <p>スマホだよ</p>
       <button onClick={handleGoogleLogin}>Googleでログイン</button>
     </div>
   );

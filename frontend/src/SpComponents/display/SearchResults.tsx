@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import './display.css';
+import './sp-display.scss';
 
 interface Page {
   _id: string;
