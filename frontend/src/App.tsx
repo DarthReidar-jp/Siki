@@ -1,39 +1,21 @@
-// App.tsx
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import React from 'react';
 import './App.css';
-import Header from './components/header/header';
-import Display from './components/display/display';
-import Sidebar from './components/sidebar/sidebar';
-import Page from './components/page/Page';
-import NewPage from './components/page/NewPage';
+import Auth from './utils/auth/Auth';
+import { mediaQuery, useMediaQuery } from './utils/MediaQuery';
+import PcComponent from './PcComponents/PcComponent';
+import SpComponent from './SpComponents/SpComponent';
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isLoggedIn, isLoading } = Auth();
+  const isSp = useMediaQuery(mediaQuery.sp)
+  console.log(isSp)
+  if (isLoading) return <div>Loading...</div>;
 
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-  const handleGoogleLogin = async () => {
-    // GoogleのOAuth認証ページへリダイレクトする
-    window.location.href = `http://localhost:8000/api/auth/google`;
-  };
-
-  return (
-    <Router> {/* RouterでAppコンポーネントをラップ */}
-      <div className='app'>     
-        <Header onSidebarToggle={handleSidebarToggle} />
-        <main className={`content ${sidebarOpen ? 'sidebar-open' : ''}`}>
-          <Sidebar />
-          <button onClick={handleGoogleLogin}>Googleでログイン</button>
-          <Routes>
-            <Route path="/" element={<Display />} />
-            <Route path="/:id" element={<Page />} />
-            <Route path="/new" element={<NewPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+  // スマホかPCかの判定を行い、ログイン状態をプロパティとして子コンポーネントに渡す
+  return isSp ? (
+    <SpComponent isLoggedIn={isLoggedIn} />
+  ) : (
+    <PcComponent isLoggedIn={isLoggedIn} />
   );
 };
 

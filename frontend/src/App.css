@@ -6,16 +6,26 @@
 }
 
 .content {
-  transition: margin-left 0.5s;
   width: 100%;
   margin-top: 50px;
 }
 
-.sidebar-open {
-  margin-left: 100px; /* サイドバーの幅に応じて調整 */
+.button {
+  display: inline-block;
+  width: 30px;
+  color: #4b4b4b;
+  background-color: #ffffff;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #ababab6c;
+  border-radius: 0.25rem;
+  margin: 0.2rem;
+  padding: 0.2rem 0.2rem;
+  font-size: 0.75rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
-.sidebar-open .sidebar {
-  transform: translateX(0);
-}
-

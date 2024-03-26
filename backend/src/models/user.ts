@@ -1,8 +1,7 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document,ObjectId } from 'mongoose';
 
-// ユーザードキュメントのインターフェース
 export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId; // _idフィールドを追加
+  _id: ObjectId; // または string でも構わないが、ObjectId の方が明示的
   email: string;
   name: string;
   googleId: string;
@@ -12,7 +11,6 @@ export interface IUser extends Document {
 
 // Mongooseスキーマを定義
 const UserSchema = new mongoose.Schema<IUser>({
-  _id: mongoose.Types.ObjectId, // _idフィールドを追加
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   googleId: { type: String, required: true, unique: true },
@@ -20,7 +18,6 @@ const UserSchema = new mongoose.Schema<IUser>({
   updatedAt: { type: Date, default: Date.now }
 });
 
-// 残りのコードは省略
 
 // インデックスを作成
 UserSchema.index({ email: 1 }, { unique: true });

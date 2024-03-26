@@ -1,11 +1,16 @@
-import { getDBCollection } from './dbUtils';
+import mongoose from 'mongoose';
 import { getQueryVector } from './openaiUtils';
 
-async function performVectorSearch(query: string): Promise<any[]> {
-    const queryVector = await getQueryVector(query);
-    const collection = await getDBCollection('memos');
-    const agg = [
-        {
+const Page = mongoose.model('Page'); // モデルの取得
+
+async function performVectorSearch(query: string, userId: string): Promise<any[]> {
+  const queryVector = await getQueryVector(query);
+  const collection = mongoose.connection.db.collection('pages'); // コレクションの取得
+  const agg = [
+    {
+        '$match': { 'userId': userId } // 特定のユーザーIDに基づくフィルタリング
+    },
+    {
             '$vectorSearch': {
                 'index': 'vector_index',
                 'path': 'vector',
@@ -22,15 +27,13 @@ async function performVectorSearch(query: string): Promise<any[]> {
             }
         },
         {
-            '$match': {
-                'score': { '$gte': 0.7 }
-            }
-        },
-        {
             '$sort': { 'score': -1 }
         }
     ];
-    return await collection.aggregate<any>(agg).toArray();
+
+
+  const results = await collection.aggregate(agg).toArray(); // 集計とレスポンスの取得
+  return results;
 }
 
 export { performVectorSearch };
