@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './display.css';
 import SortSelect from './SortSelect';
 import PageList from './PageList';
-import { Page } from '../../types'; 
+import { Page } from '../../utils/types'; 
 
 const Display: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);

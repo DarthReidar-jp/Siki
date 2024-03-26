@@ -1,7 +1,7 @@
 // PageItem.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Page } from '../../types';
+import { Page } from '../../utils/types';
 
 interface PageItemProps {
   page: Page;

@@ -1,6 +1,6 @@
 // PageList.tsx
 import React from 'react';
-import { Page } from '../../types';
+import { Page } from '../../utils/types';
 import PageItem from './PageItem'; // 適切なパスに調整してください
 
 interface PageListProps {

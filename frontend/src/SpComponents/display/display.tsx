@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import SortSelect from './SortSelect';
 import PageList from './PageList';
-import { Page } from '../../types';
+import { Page } from '../../utils/types';
 import './sp-display.scss';
 
 
