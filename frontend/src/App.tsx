@@ -1,30 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import Header from './components/header/header';
-import Sidebar from './components/sidebar/sidebar';
-import AppRoutes from './AppRoutes';
-import Auth from './components/auth/Auth';
-import HomeRoutes from './HomeRoutes';
+import Auth from './utils/auth/Auth';
+import { mediaQuery, useMediaQuery } from './utils/MediaQuery';
+import PcComponent from './PcComponent';
+import SpComponent from './SpComponent';
 
 function App() {
   const { isLoggedIn, isLoading } = Auth();
+  const isSp = useMediaQuery(mediaQuery.sp)
   if (isLoading) return <div>Loading...</div>;
 
-  return (
-    <Router>
-      {isLoggedIn ? 
-        <div className='app'>
-          <Header />
-          <main className='content' >
-            <Sidebar />
-            <AppRoutes />
-          </main>
-        </div>
-       : 
-        <HomeRoutes />
-      }
-    </Router>
+  // スマホかPCかの判定を行い、ログイン状態をプロパティとして子コンポーネントに渡す
+  return isSp ? (
+    <SpComponent isLoggedIn={isLoggedIn} />
+  ) : (
+    <PcComponent isLoggedIn={isLoggedIn} />
   );
 };
 
