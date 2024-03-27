@@ -8,6 +8,7 @@ export const loadEditorState = async (id: any) => {
     throw new Error('Failed to fetch page');
   }
   const data = await response.json();
+  console.log(data);
   const Json = JSON.stringify(data.root)
   return Json;
 };

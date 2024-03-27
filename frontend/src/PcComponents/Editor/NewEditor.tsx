@@ -22,7 +22,7 @@ function onChange(editorState: EditorState) {
 const editorConfig = {
   namespace: "MyEditor",
   onError: (error: any) => console.error(error),
-  nodes
+  nodes:nodes
 };
 
 const NewEditor = () => {

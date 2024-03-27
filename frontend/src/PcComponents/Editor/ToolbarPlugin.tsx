@@ -5,7 +5,7 @@ import {
     $isRangeSelection,
 } from "lexical";
 import { useCallback, useState } from "react";
-import { $wrapNodes } from "@lexical/selection";
+import { $setBlocksType } from "@lexical/selection";
 import { HeadingTagType, $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import './Editor.scss';
@@ -40,7 +40,7 @@ function ToolbarPlugin() {
             editor.update(() => {
                 const selection = $getSelection();
                 if ($isRangeSelection(selection)) {
-                    $wrapNodes(selection, () => $createParagraphNode());
+                    $setBlocksType(selection, () => $createParagraphNode());
                 }
             });
             setBlockType("paragraph");
@@ -52,7 +52,7 @@ function ToolbarPlugin() {
             editor.update(() => {
                 const selection = $getSelection();
                 if ($isRangeSelection(selection)) {
-                    $wrapNodes(selection, () => $createQuoteNode());
+                    $setBlocksType(selection, () => $createQuoteNode());
                 }
             });
             setBlockType("quote");
@@ -101,7 +101,7 @@ function ToolbarPlugin() {
                 editor.update(() => {
                     const selection = $getSelection();
                     if ($isRangeSelection(selection)) {
-                        $wrapNodes(selection, () => $createHeadingNode(type));
+                        $setBlocksType(selection, () => $createHeadingNode(type));
                     }
                 });
                 setBlockType(type);

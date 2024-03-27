@@ -11,12 +11,14 @@ import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import { loadEditorState } from "./LoadEditorState";
 import { theme } from "./Theme";
-import { nodes } from './nodes';
 import InlineToolbarPlugin from './InlineToolbarPlugin';
 import MarkdownPlugin from './MarkdownPlugin';
 import ToolbarPlugin from './ToolbarPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import "./Editor.scss";
+
+import { nodes } from './nodes';
+
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -48,7 +50,11 @@ function Editor() {
 
   useEffect(() => {
     if (serializedEditorState) {
-      const editorInstance = createEditor();
+      const editorInstance = createEditor(    
+        {namespace: "MyEditor",
+          theme: theme,
+          onError,
+          nodes:nodes});
       setEditor(editorInstance);
     }
   }, [serializedEditorState]);
@@ -59,7 +65,7 @@ function Editor() {
     namespace: "MyEditor",
     theme: theme,
     onError,
-    nodes,
+    nodes:nodes,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
@@ -70,7 +76,6 @@ function Editor() {
           <ToolbarPlugin />
           <InlineToolbarPlugin />
           <div className="editor">
-
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
               placeholder={<div>Enter some text...</div>}
@@ -78,11 +83,10 @@ function Editor() {
             />
             <OnChangePlugin onChange={onChange} />
             <AutoFocusPlugin />
-            <MarkdownPlugin />
             <HistoryPlugin />
+            <MarkdownPlugin />
             <UpdateButton id={id} />
             <DeleteButton id={id} />
-
           </div>
         </LexicalComposer>
       </div>

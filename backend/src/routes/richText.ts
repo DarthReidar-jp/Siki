@@ -16,23 +16,18 @@ router.post('/', async (req: Request, res: Response) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
     const userId = decoded.userId;
     const { root } = req.body;
-    const { root: rootNode } = root; // フロントエンドから送信されたrootオブジェクトから実際のrootノードを取り出す
-    // テキストのみを抽出してlinesに格納
+    const { root: rootNode } = root;
+    console.log(rootNode);
     const extractTexts = (node: any): string[] => {
-      if (!node) return []; // ノードがnullまたはundefinedの場合、空の配列を返す
-      if (node.text) return [node.text]; // テキストプロパティがある場合は、その値を含む配列を返す
-      // childrenプロパティがある場合、その各子ノードに対してextractTextsを再帰的に呼び出し、
-      // 結果をflatMapを使って平坦化する
+      if (!node) return [];
+      if (node.text) return [node.text];
       return node.children?.flatMap(extractTexts) || [];
     };
-    
-
     const lines = extractTexts(rootNode);
-    // titleとcontentを設定
     const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
     const content = lines.join('');
-    console.log('Extracted title:', title); // 抽出したタイトルをログに出力
-    console.log('Extracted content:', content); // 抽出したコンテンツをログに出力
+    console.log('Extracted title:', title); 
+    console.log('Extracted content:', content);
     const newPage = new Page({
       userId,
       title,

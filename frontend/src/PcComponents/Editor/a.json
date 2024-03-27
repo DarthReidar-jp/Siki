@@ -1,48 +1,64 @@
 {
+    "_id": "660380e4cf2b45a4ecf348d5",
+    "userId": "65f17a26afc040f7b8eec049",
+    "title": "テスト",
     "root": {
-        "children": [
-            {
-                "children": [
-                    {
-                        "detail": 0,
-                        "format": 0,
-                        "mode": "normal",
-                        "style": "",
-                        "text": "タイトル",
-                        "type": "text",
-                        "version": 1
-                    }
-                ],
-                "direction": "ltr",
-                "format": "",
-                "indent": 0,
-                "type": "paragraph",
-                "version": 1
-            },
-            {
-                "children": [
-                    {
-                        "detail": 0,
-                        "format": 0,
-                        "mode": "normal",
-                        "style": "",
-                        "text": "タイトル",
-                        "type": "text",
-                        "version": 1
-                    }
-                ],
-                "direction": "ltr",
-                "format": "",
-                "indent": 0,
-                "type": "heading",
-                "version": 1,
-                "tag": "h1"
-            }
-        ],
-        "direction": "ltr",
-        "format": "",
-        "indent": 0,
-        "type": "root",
-        "version": 1
-    }
+        "root": {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "detail": 0,
+                            "format": 0,
+                            "mode": "normal",
+                            "style": "",
+                            "text": "テスト",
+                            "type": "text",
+                            "version": 1
+                        }
+                    ],
+                    "direction": "ltr",
+                    "format": "",
+                    "indent": 0,
+                    "type": "paragraph",
+                    "version": 1
+                },
+                {
+                    "children": [
+                        {
+                            "detail": 0,
+                            "format": 0,
+                            "mode": "normal",
+                            "style": "",
+                            "text": "テスト",
+                            "type": "text",
+                            "version": 1
+                        }
+                    ],
+                    "direction": "ltr",
+                    "format": "",
+                    "indent": 0,
+                    "type": "paragraph",
+                    "version": 1
+                }
+            ],
+            "direction": "ltr",
+            "format": "",
+            "indent": 0,
+            "type": "root",
+            "version": 1
+        }
+    },
+    "editorState": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"テスト\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1},{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"テスト\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}",
+    "lines": [
+        "テスト",
+        "テスト"
+    ],
+    "content": "テストテスト",
+    "vector": [],
+    "folderIds": [],
+    "score": 0,
+    "createdAt": "2024-03-27T02:13:56.169Z",
+    "updatedAt": "2024-03-27T02:13:56.170Z",
+    "__v": 0
 }
