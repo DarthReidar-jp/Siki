@@ -24,7 +24,8 @@ const EditorActions = () => {
     const saveContent = () => {
         const editorState = editor.getEditorState();
         editorState.read(() => {
-            const serializedState = editorState.toJSON();
+            const serializedState = editorState;
+            console.log(serializedState);
             const rootObject = { root: serializedState };
             saveEditorContent(rootObject);
         });

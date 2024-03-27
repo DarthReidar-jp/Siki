@@ -11,7 +11,12 @@ import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import { loadEditorState } from "./LoadEditorState";
 import { theme } from "./Theme";
-import "./Editor.css";
+import { nodes } from './nodes';
+import InlineToolbarPlugin from './InlineToolbarPlugin';
+import MarkdownPlugin from './MarkdownPlugin';
+import ToolbarPlugin from './ToolbarPlugin';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import "./Editor.scss";
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -54,14 +59,18 @@ function Editor() {
     namespace: "MyEditor",
     theme: theme,
     onError,
+    nodes,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
   return (
     <div className="page-container">
       <div className="page">
-        <div className="editor">
-          <LexicalComposer initialConfig={initialConfig}>
+        <LexicalComposer initialConfig={initialConfig}>
+          <ToolbarPlugin />
+          <InlineToolbarPlugin />
+          <div className="editor">
+
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
               placeholder={<div>Enter some text...</div>}
@@ -69,10 +78,13 @@ function Editor() {
             />
             <OnChangePlugin onChange={onChange} />
             <AutoFocusPlugin />
+            <MarkdownPlugin />
+            <HistoryPlugin />
             <UpdateButton id={id} />
             <DeleteButton id={id} />
-          </LexicalComposer>
-        </div>
+
+          </div>
+        </LexicalComposer>
       </div>
     </div>
 

@@ -7,7 +7,7 @@ import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import SaveButton from "./SaveButton";
-import "./Editor.css";
+import "./Editor.scss";
 
 function onChange(editorState: EditorState) {
   console.log(editorState);
@@ -19,9 +19,8 @@ const editorConfig = {
 };
 
 const NewEditor = () => {
-
   return (
-    <div className="page-container">
+    <div className="sp-page-container">
       <div className="page">
         <div className="editor">
           <LexicalComposer initialConfig={editorConfig}>

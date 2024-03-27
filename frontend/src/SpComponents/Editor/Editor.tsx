@@ -11,7 +11,7 @@ import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import { loadEditorState } from "./LoadEditorState";
 import { theme } from "./Theme";
-import "./Editor.css";
+import "./Editor.scss";
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -58,7 +58,7 @@ function Editor() {
   };
 
   return (
-    <div className="page-container">
+    <div className="sp-page-container">
       <div className="page">
         <div className="editor">
           <LexicalComposer initialConfig={initialConfig}>

@@ -26,7 +26,7 @@ const UpdateButton = ({ id }: { id: any }) => {
     const updateContent = () => {
         const editorState = editor.getEditorState();
         editorState.read(() => {
-            const serializedState = editorState.toJSON();
+            const serializedState = editorState;
             const rootObject = { root: serializedState };
             updateEditorContent(rootObject);
         });

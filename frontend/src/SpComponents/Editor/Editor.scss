@@ -1,0 +1,65 @@
+/* 基本的なリセットとカスタムプロパティの定義 */
+:root {
+  --page-bg: #ffffff;
+  --page-text-color: #333333;
+  --editor-bg: #f7f7f7;
+  --editor-border: #cccccc;
+  --button-bg: #007bff;
+  --button-text-color: #ffffff;
+  --placeholder-color: #aaa;
+}
+
+.sp-page-container {
+  display: flex;
+  justify-content: center;
+  padding: 10px; /* スマートフォン用にパディングを調整 */
+
+  .page {
+    width: 100%; /* スマートフォンでは幅を100%に */
+    max-width: 100%; /* 最大幅も100%に調整 */
+    margin: auto;
+    background-color: var(--page-bg);
+    padding: 15px; /* スマートフォンでは内側の余白を少し減らす */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    border-radius: 8px;
+  }
+  
+  .editor {
+    background-color: var(--editor-bg);
+    border: 1px solid var(--editor-border);
+    border-radius: 4px;
+    padding: 10px; /* スマートフォンではパディングを減らす */
+    margin-bottom: 15px; /* スマートフォンではマージンを調整 */
+    min-height: 200px; /* 入力エリアの最小高さを調整 */
+  }
+  
+  .editor-input {
+    min-height: 100px; /* 入力エリアの高さをスマートフォン用に調整 */
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    padding: 8px; /* 入力しやすいようにパディングを追加 */
+    font-size: 16px; /* スマートフォンではフォントサイズを少し大きく */
+  }
+  
+  .editor-input:focus {
+    outline: none;
+  }
+  
+  .editor-input::placeholder {
+    color: var(--placeholder-color);
+  }
+  
+  .editor .button {
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 18px; /* ボタンのサイズを指操作に適したものに調整 */
+    cursor: pointer;
+    transition: background-color .3s;
+    font-size: 14px; /* ボタン内のテキストサイズを調整 */
+  }
+  
+}
+

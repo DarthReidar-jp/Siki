@@ -10,10 +10,6 @@ const textFormat = [
     "bold",
     "italic",
     "underline",
-    "strikethrough",
-    "code",
-    "subscript",
-    "superscript",
 ];
 
 const InlineToolbarPlugin: React.FC = () => {
