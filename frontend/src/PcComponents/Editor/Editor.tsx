@@ -7,17 +7,17 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import UpdateButton from "./UpdateButton";
-import DeleteButton from "./DeleteButton";
-import { loadEditorState } from "./LoadEditorState";
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { theme } from "./Theme";
+import { nodes } from './nodes';
+import { loadEditorState } from "./LoadEditorState";
 import InlineToolbarPlugin from './InlineToolbarPlugin';
 import MarkdownPlugin from './MarkdownPlugin';
 import ToolbarPlugin from './ToolbarPlugin';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import UpdateButton from "./UpdateButton";
+import DeleteButton from "./DeleteButton";
 import "./Editor.scss";
-
-import { nodes } from './nodes';
+import "./Theme.scss";
 
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
@@ -35,11 +35,11 @@ function Editor() {
   const [serializedEditorState, setSerializedEditorState] = useState<string>("");
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
+  //データの取得
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await loadEditorState(id);
-        console.log(data);
         setSerializedEditorState(data);
       } catch (error) {
         console.error("Data loading error:", error);
@@ -47,14 +47,16 @@ function Editor() {
     };
     fetchData();
   }, [id]);
-
+  //Editorの作成
   useEffect(() => {
     if (serializedEditorState) {
-      const editorInstance = createEditor(    
-        {namespace: "MyEditor",
+      const editorInstance = createEditor(
+        {
+          namespace: "MyEditor",
           theme: theme,
           onError,
-          nodes:nodes});
+          nodes: nodes
+        });
       setEditor(editorInstance);
     }
   }, [serializedEditorState]);
@@ -65,7 +67,7 @@ function Editor() {
     namespace: "MyEditor",
     theme: theme,
     onError,
-    nodes:nodes,
+    nodes: nodes,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
@@ -91,7 +93,6 @@ function Editor() {
         </LexicalComposer>
       </div>
     </div>
-
   );
 };
 

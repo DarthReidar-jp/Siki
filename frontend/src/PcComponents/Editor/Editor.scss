@@ -15,7 +15,7 @@
   padding: 20px;
 
   .page {
-    width: 700px; /* 適切な幅に調整 */
+    width: 700px;
     max-width: 90%;
     height: auto;
     margin: auto;
@@ -24,15 +24,15 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
     border-radius: 8px;
   }
-  
+
   .editor {
     background-color: var(--editor-bg);
     border: 1px solid var(--editor-border);
     border-radius: 4px;
     padding: 15px;
     margin-bottom: 20px;
-    min-height: 300px; /* 最小高さを設定 */
-    
+    min-height: 300px;
+
     .placeholder {
       position: absolute;
       color: #888888;
@@ -41,25 +41,25 @@
       pointer-events: none;
       user-select: none;
     }
+
+    .editor-input {
+      min-height: 150px;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+    }
   
+    .editor-input:focus {
+      outline: none;
+    }
+  
+    .editor-input::placeholder {
+      color: var(--placeholder-color);
+    }
+
   }
-  
-  .editor-input {
-    min-height: 150px; /* 入力欄の高さを確保 */
-    background-color: transparent;
-    border: none;
-    outline: none;
-    width: 100%;
-  }
-  
-  .editor-input:focus {
-    outline: none;
-  }
-  
-  .editor-input::placeholder {
-    color: var(--placeholder-color);
-  }
-  
+
   .button {
     background-color: var(--button-bg);
     color: var(--button-text-color);
@@ -72,5 +72,3 @@
   }
 
 }
-
-

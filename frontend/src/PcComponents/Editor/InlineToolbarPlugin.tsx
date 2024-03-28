@@ -1,16 +1,17 @@
 import React from 'react';
 import {
-FORMAT_TEXT_COMMAND,
-TextFormatType,
+    FORMAT_TEXT_COMMAND,
+    TextFormatType,
 } from "lexical";
 import { useCallback } from "react";
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { TbBold, TbItalic, TbUnderline } from "react-icons/tb";
 
-const textFormat = [
-    "bold",
-    "italic",
-    "underline",
-];
+const formatToIcon = {
+    bold: <TbBold />,
+    italic: <TbItalic />,
+    underline: <TbUnderline />,
+};
 
 const InlineToolbarPlugin: React.FC = () => {
     const [editor] = useLexicalComposerContext();
@@ -26,13 +27,13 @@ const InlineToolbarPlugin: React.FC = () => {
 
     return (
         <div>
-            {textFormat.map((format) => (
+            {Object.entries(formatToIcon).map(([format, Icon]) => (
                 <button
                     key={format}
                     type="button"
                     onClick={() => formatText(format as TextFormatType)}
                 >
-                    {format}
+                    {Icon}
                 </button>
             ))}
         </div>

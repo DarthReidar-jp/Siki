@@ -19,7 +19,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
     return (
       <Router>
         {isLoggedIn ? (
-          <div className='app'>
+          <div className='pc-app'>
             <Header />
             <main className='content'>
               <Sidebar />

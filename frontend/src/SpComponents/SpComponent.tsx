@@ -18,7 +18,7 @@ const SpComponent: React.FC<SpComponentProps> = ({ isLoggedIn }) => {
     return (
       <Router>
         {isLoggedIn ? (
-          <div className='app'>
+          <div className='sp-app'>
             <Header />
             <main className='content'>
               <Routes>

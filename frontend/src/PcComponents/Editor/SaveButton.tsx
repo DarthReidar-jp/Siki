@@ -7,7 +7,8 @@ const EditorActions = () => {
     const navigate = useNavigate();
 
     const saveEditorContent = async (serializedState: any) => {
-        const response = await fetch('http://localhost:8000/api/rich', {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
+        const response = await fetch(`${backendUrl}page/`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -16,8 +17,6 @@ const EditorActions = () => {
             body: JSON.stringify(serializedState),
         });
         const result = await response.json();
-        console.log('Page created:', result);
-        console.log(JSON.stringify(serializedState));
         navigate(`/${result.page._id}`);
     };
 
@@ -25,7 +24,6 @@ const EditorActions = () => {
         const editorState = editor.getEditorState();
         editorState.read(() => {
             const serializedState = editorState;
-            console.log(serializedState);
             const rootObject = { root: serializedState };
             saveEditorContent(rootObject);
         });

@@ -21,8 +21,9 @@ const SearchResults: React.FC = () => {
   }, [location.search]);
 
   const fetchSearchResults = async (query: string) => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
-      const response = await fetch(`http://localhost:8000/api/search?query=${encodeURIComponent(query)}`, {
+      const response = await fetch(`${backendUrl}/search?query=${encodeURIComponent(query)}`, {
         method: 'GET',
         credentials: 'include',
       });

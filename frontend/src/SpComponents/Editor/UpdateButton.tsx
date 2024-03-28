@@ -8,8 +8,8 @@ const UpdateButton = ({ id }: { id: any }) => {
     const navigate = useNavigate();
 
     const updateEditorContent = async (serializedState: any) => {
-        // テンプレート文字列の構文を正しく使用するように変更
-        const response = await fetch(`http://localhost:8000/api/rich/${id}`, {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
+        const response = await fetch(`${backendUrl}page/${id}`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -26,7 +26,7 @@ const UpdateButton = ({ id }: { id: any }) => {
     const updateContent = () => {
         const editorState = editor.getEditorState();
         editorState.read(() => {
-            const serializedState = editorState;
+            const serializedState = editorState.toJSON();
             const rootObject = { root: serializedState };
             updateEditorContent(rootObject);
         });

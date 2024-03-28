@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import Auth from './utils/auth/Auth';
 import { mediaQuery, useMediaQuery } from './utils/MediaQuery';
 import PcComponent from './PcComponents/PcComponent';

@@ -1,13 +1,14 @@
 
 export const loadEditorState = async (id: any) => {
-  const response = await fetch(`http://localhost:8000/api/rich/${id}`, {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const response = await fetch(`${backendUrl}page/${id}`, {
     method: 'GET',
     credentials: 'include',
   });
   if (!response.ok) {
     throw new Error('Failed to fetch page');
   }
-  const data = await response.json();
-  const Json = JSON.stringify(data.root)
-  return Json;
+  const jsonData = await response.json();
+  const editorStateString = JSON.stringify(jsonData.root)
+  return editorStateString;
 };

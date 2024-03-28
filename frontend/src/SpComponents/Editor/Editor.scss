@@ -17,7 +17,6 @@
   .page {
     width: 100%; /* スマートフォンでは幅を100%に */
     max-width: 100%; /* 最大幅も100%に調整 */
-    margin: auto;
     background-color: var(--page-bg);
     padding: 15px; /* スマートフォンでは内側の余白を少し減らす */
     box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
@@ -28,9 +27,18 @@
     background-color: var(--editor-bg);
     border: 1px solid var(--editor-border);
     border-radius: 4px;
-    padding: 10px; /* スマートフォンではパディングを減らす */
+    padding: 5px; /* スマートフォンではパディングを減らす */
     margin-bottom: 15px; /* スマートフォンではマージンを調整 */
     min-height: 200px; /* 入力エリアの最小高さを調整 */
+  }
+
+  .placeholder {
+    position: absolute;
+    color: #888888;
+    top: 63px;
+    left: 20px;
+    pointer-events: none;
+    user-select: none;
   }
   
   .editor-input {

@@ -13,15 +13,20 @@ import ToolbarPlugin from './ToolbarPlugin';
 import SaveButton from "./SaveButton";
 import "./Editor.scss";
 import { nodes } from './nodes';
+import { theme } from "./Theme";
 
 
 function onChange(editorState: EditorState) {
   console.log(editorState);
 }
+function onError(error: any) {
+  console.error(error);
+}
 
 const editorConfig = {
   namespace: "MyEditor",
-  onError: (error: any) => console.error(error),
+  theme:theme,
+  onError,
   nodes:nodes
 };
 

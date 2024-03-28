@@ -9,14 +9,14 @@ const Display: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
   const [sort, setSort] = useState<string>('createdAsc'); 
 
-
   useEffect(() => {
     fetchPages(sort);
   }, [sort]);
 
   const fetchPages = async (sort: string) => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
-      const url = `http://localhost:8000/api?sort=${sort}`;
+      const url = `${backendUrl}?sort=${sort}`;
       const response = await fetch(url, {
         method: 'GET',
         credentials: 'include',

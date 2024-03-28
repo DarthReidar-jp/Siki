@@ -15,6 +15,7 @@ import {
     INSERT_CHECK_LIST_COMMAND,
 } from "@lexical/list";
 import { TbH1, TbH2, TbH3, TbQuote, TbList, TbListNumbers, TbCheckbox } from "react-icons/tb";
+import { PiParagraph } from "react-icons/pi";
 
 function ToolbarPlugin() {
     const SupportedBlockType = {
@@ -122,7 +123,7 @@ function ToolbarPlugin() {
                 <TbH3 />
             </button>
             <button type="button" onClick={() => formatParagraph()}>
-                p
+                <PiParagraph />
             </button>
             <button type="button" onClick={() => formatQuote()}>
                 <TbQuote />

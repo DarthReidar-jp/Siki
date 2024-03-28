@@ -1,19 +1,21 @@
 import React from 'react';
 import {
-$createParagraphNode,
-$getSelection,
-$isRangeSelection,
+    $createParagraphNode,
+    $getSelection,
+    $isRangeSelection,
 } from "lexical";
 import { useCallback, useState } from "react";
-import { $wrapNodes } from "@lexical/selection";
-import { HeadingTagType, $createHeadingNode ,$createQuoteNode } from "@lexical/rich-text";
+import { $setBlocksType } from "@lexical/selection";
+import { HeadingTagType, $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import './pagerich.css';
+import './Editor.scss';
 import {
-INSERT_ORDERED_LIST_COMMAND,
-INSERT_UNORDERED_LIST_COMMAND,
-INSERT_CHECK_LIST_COMMAND,
+    INSERT_ORDERED_LIST_COMMAND,
+    INSERT_UNORDERED_LIST_COMMAND,
+    INSERT_CHECK_LIST_COMMAND,
 } from "@lexical/list";
+import { TbH1, TbH2, TbH3, TbQuote, TbList, TbListNumbers, TbCheckbox } from "react-icons/tb";
+import { PiParagraph } from "react-icons/pi";
 
 function ToolbarPlugin() {
     const SupportedBlockType = {
@@ -39,12 +41,11 @@ function ToolbarPlugin() {
             editor.update(() => {
                 const selection = $getSelection();
                 if ($isRangeSelection(selection)) {
-                    $wrapNodes(selection, () => $createParagraphNode());
+                    $setBlocksType(selection, () => $createParagraphNode());
                 }
             });
             setBlockType("paragraph");
         }
-
     }, [blockType, editor]);
 
     const formatQuote = useCallback(() => {
@@ -52,12 +53,11 @@ function ToolbarPlugin() {
             editor.update(() => {
                 const selection = $getSelection();
                 if ($isRangeSelection(selection)) {
-                    $wrapNodes(selection, () => $createQuoteNode());
+                    $setBlocksType(selection, () => $createQuoteNode());
                 }
             });
             setBlockType("quote");
         }
-
     }, [blockType, editor]);
 
     const formatBulletList = useCallback(() => {
@@ -102,7 +102,7 @@ function ToolbarPlugin() {
                 editor.update(() => {
                     const selection = $getSelection();
                     if ($isRangeSelection(selection)) {
-                        $wrapNodes(selection, () => $createHeadingNode(type));
+                        $setBlocksType(selection, () => $createHeadingNode(type));
                     }
                 });
                 setBlockType(type);
@@ -114,28 +114,28 @@ function ToolbarPlugin() {
     return (
         <div>
             <button type="button" onClick={() => formatHeading("h1")}>
-                h1
+                <TbH1 />
             </button>
             <button type="button" onClick={() => formatHeading("h2")}>
-                h2
+                <TbH2 />
             </button>
             <button type="button" onClick={() => formatHeading("h3")}>
-                h3
+                <TbH3 />
             </button>
             <button type="button" onClick={() => formatParagraph()}>
-                p
+                <PiParagraph />
             </button>
             <button type="button" onClick={() => formatQuote()}>
-                quote
+                <TbQuote />
             </button>
             <button type="button" onClick={() => formatBulletList()}>
-                list
+                <TbList />
             </button>
             <button type="button" onClick={() => formatNumberList()}>
-                number
+                <TbListNumbers />
             </button>
             <button type="button" onClick={() => formatCheckList()}>
-                check
+                <TbCheckbox />
             </button>
         </div>
     );

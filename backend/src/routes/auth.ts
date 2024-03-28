@@ -11,8 +11,8 @@ router.get('/google',
     scope: ['profile', 'email']
   }));
 
-router.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: 'http://localhost:3000/login' }),
+  router.get('/google/callback', 
+  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}login` }),
   (req, res) => {
     const user = req.user as IUser;
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
@@ -23,7 +23,8 @@ router.get('/google/callback',
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     });
-    res.redirect('http://localhost:3000/');
+    // リダイレクト先を環境変数で指定したURLの基に設定
+    res.redirect(`${process.env.FRONTEND_URL}`);
   }
 );
 // ログイン状態を確認するためのエンドポイント
@@ -45,5 +46,7 @@ router.get('/verify', (req, res) => {
     return res.json({ isLoggedIn: true });
   });
 });
+
+
 
 export default router;

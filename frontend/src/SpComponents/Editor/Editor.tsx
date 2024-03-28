@@ -7,11 +7,18 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { theme } from "./Theme";
+import { nodes } from './nodes';
+import { loadEditorState } from "./LoadEditorState";
+import InlineToolbarPlugin from './InlineToolbarPlugin';
+import MarkdownPlugin from './MarkdownPlugin';
+import ToolbarPlugin from './ToolbarPlugin';
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
-import { loadEditorState } from "./LoadEditorState";
-import { theme } from "./Theme";
 import "./Editor.scss";
+import "./Theme.scss";
+
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
   editorState.read(() => {
@@ -28,11 +35,11 @@ function Editor() {
   const [serializedEditorState, setSerializedEditorState] = useState<string>("");
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
+  //データの取得
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await loadEditorState(id);
-        console.log(data);
         setSerializedEditorState(data);
       } catch (error) {
         console.error("Data loading error:", error);
@@ -40,10 +47,16 @@ function Editor() {
     };
     fetchData();
   }, [id]);
-
+  //Editorの作成
   useEffect(() => {
     if (serializedEditorState) {
-      const editorInstance = createEditor();
+      const editorInstance = createEditor(
+        {
+          namespace: "MyEditor",
+          theme: theme,
+          onError,
+          nodes: nodes
+        });
       setEditor(editorInstance);
     }
   }, [serializedEditorState]);
@@ -54,14 +67,17 @@ function Editor() {
     namespace: "MyEditor",
     theme: theme,
     onError,
+    nodes: nodes,
     editorState: editor.parseEditorState(serializedEditorState)
   };
 
   return (
     <div className="sp-page-container">
       <div className="page">
-        <div className="editor">
-          <LexicalComposer initialConfig={initialConfig}>
+        <LexicalComposer initialConfig={initialConfig}>
+          <ToolbarPlugin />
+          <InlineToolbarPlugin />
+          <div className="editor">
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
               placeholder={<div>Enter some text...</div>}
@@ -69,13 +85,14 @@ function Editor() {
             />
             <OnChangePlugin onChange={onChange} />
             <AutoFocusPlugin />
+            <HistoryPlugin />
+            <MarkdownPlugin />
             <UpdateButton id={id} />
             <DeleteButton id={id} />
-          </LexicalComposer>
-        </div>
+          </div>
+        </LexicalComposer>
       </div>
     </div>
-
   );
 };
 

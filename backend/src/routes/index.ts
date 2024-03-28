@@ -1,19 +1,18 @@
 import express, { Request, Response } from 'express';
 import Page, { IPage } from '../models/page';
-import { IUser } from '../models/user'; // 適切なパスを使用してください
-import jwt from 'jsonwebtoken';
 import { performVectorSearch } from '../utils/searchUtils'; 
+import { verifyToken } from '../utils/verifyToken';
+
 
 const router = express.Router();
 
 // ユーザーに関連するページデータを取得
 router.get('/', async (req: Request, res: Response) => {
-	const token = req.cookies['access_token']; // クッキーからトークンを取得
-	  if (!token) {
-	    return res.status(401).json({ message: 'No token provided' });
-	  }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const decoded = verifyToken(req);
+    if (!decoded) {
+      return res.status(401).json({ message: 'No token provided or invalid token' });
+    }
     const userId = decoded.userId;
     const sortOption = req.query.sort; // クエリパラメータから並べ替えオプションを取得
     let sort = {};
@@ -44,12 +43,11 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.get('/search', async (req: Request, res: Response) => {
-	const token = req.cookies['access_token']; // クッキーからトークンを取得
-	  if (!token) {
-	    return res.status(401).json({ message: 'No token provided' });
-	  }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as jwt.JwtPayload;
+    const decoded = verifyToken(req);
+    if (!decoded) {
+      return res.status(401).json({ message: 'No token provided or invalid token' });
+    }
     const userId = decoded.userId;
     const { query } = req.query;
     console.log('Query:', query); // デバッグ情報としてクエリをログに出力
