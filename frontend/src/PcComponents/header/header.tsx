@@ -1,7 +1,6 @@
 // Header.tsx
 import React from 'react';
-import './header.css';
-
+import './header.scss';
 import NewPageButton from './NewPageButton';
 import VectorSearchForm from './VectorSearchForm';
 

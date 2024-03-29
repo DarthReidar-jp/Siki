@@ -5,7 +5,7 @@ interface SortSelectProps {
     onSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const SortSelect: React.FC<SortSelectProps> = ({ sort, onSortChange }) => (
+const Sort: React.FC<SortSelectProps> = ({ sort, onSortChange }) => (
     <div className="sort-container">
         <select onChange={onSortChange} value={sort} className="sort-select">
             <option value="createdAsc">作成日順</option>
@@ -16,4 +16,4 @@ const SortSelect: React.FC<SortSelectProps> = ({ sort, onSortChange }) => (
     </div>
 );
 
-export default SortSelect;
+export default Sort;

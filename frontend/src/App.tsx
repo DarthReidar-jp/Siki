@@ -1,22 +1,20 @@
 import React from 'react';
 import './App.scss';
-import Auth from './utils/auth/Auth';
-import { mediaQuery, useMediaQuery } from './utils/MediaQuery';
+import useAuth from './utils/auth/useAuth';
+import { mediaQuery, useMediaQuery } from './utils/useMediaQuery';
 import PcComponent from './PcComponents/PcComponent';
 import SpComponent from './SpComponents/SpComponent';
 
 function App() {
-  const { isLoggedIn, isLoading } = Auth();
+  const { isLoggedIn, isLoading } = useAuth();
   const isSp = useMediaQuery(mediaQuery.sp)
-  console.log(isSp)
+
   if (isLoading) return <div>Loading...</div>;
 
-  // スマホかPCかの判定を行い、ログイン状態をプロパティとして子コンポーネントに渡す
-  return isSp ? (
-    <SpComponent isLoggedIn={isLoggedIn} />
-  ) : (
-    <PcComponent isLoggedIn={isLoggedIn} />
-  );
+  // PCかスマホか
+  const ComponentToRender = isSp ? SpComponent : PcComponent;
+
+  return <ComponentToRender isLoggedIn={isLoggedIn} />;
 };
 
 export default App;

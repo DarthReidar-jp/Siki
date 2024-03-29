@@ -1,15 +1,16 @@
 import React from 'react';
-import "./Login.css";
+import "./Login.scss";
 
-function Login() {
+const Login = () => {
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/auth/google';
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+    window.location.href = `${backendUrl}auth/google`;
   };
+
   return (
     <div className='center'>
       <h1>Googleでログインしてください</h1>
-      <p>スマホだよ</p>
-      <button onClick={handleGoogleLogin}>Googleでログイン</button>
+      <button className='button' onClick={handleGoogleLogin}>Googleでログイン</button>
     </div>
   );
 }

@@ -4,7 +4,7 @@
   flex-direction: column;
   height: 100vh;
 
-  .content {
+  .pc-content {
     width: 100%;
     margin-top: 50px;
   }
@@ -26,7 +26,10 @@
     margin: 0.2rem;
     padding: 0.2rem 0.2rem;
     font-size: 0.75rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out, 
+    background-color 0.15s ease-in-out, 
+    border-color 0.15s ease-in-out, 
+    box-shadow 0.15s ease-in-out;
   }
 }
 
@@ -35,7 +38,7 @@
   flex-direction: column;
   height: 100vh;
 
-  .content {
+  .sp-content {
     width: 100%;
     margin-top: 50px;
   }
@@ -57,6 +60,9 @@
     margin: 0.2rem;
     padding: 0.2rem 0.2rem;
     font-size: 0.75rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: color 0.15s ease-in-out, 
+    background-color 0.15s ease-in-out, 
+    border-color 0.15s ease-in-out, 
+    box-shadow 0.15s ease-in-out;
   }
 }

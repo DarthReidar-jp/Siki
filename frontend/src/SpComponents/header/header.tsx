@@ -1,14 +1,13 @@
 // Header.tsx
 import React from 'react';
 import './header.scss';
-
 import NewPageButton from './NewPageButton';
 import VectorSearchForm from './VectorSearchForm';
 
 
 const Header = () => {
   return (
-    <header className='sp-header'>
+    <header className='header'>
       <div className='center-container'>
         <NewPageButton />
         <VectorSearchForm />

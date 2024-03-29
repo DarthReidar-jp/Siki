@@ -6,23 +6,26 @@ const SearchForm = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    if(searchQuery.trim()) { // 空白のみの検索を防ぐ
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
-    <div>
-      <form className='search-container' onSubmit={handleSearch}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <button type="submit"><GrSearch /></button>
-      </form>
-    </div>
-
+    <form className='search-container' onSubmit={handleSearch}>
+      <input
+        type="text"
+        placeholder="Search..." // プレースホルダーの追加でユーザーエクスペリエンス向上
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        aria-label="Search" // アクセシビリティ向上のためにaria-labelを追加
+      />
+      <button type="submit" aria-label="Submit search"> {/* アクセシビリティ向上のためにaria-labelを追加 */}
+        <GrSearch />
+      </button>
+    </form>
   );
 };
 
