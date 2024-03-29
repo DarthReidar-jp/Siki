@@ -30,7 +30,7 @@ app.set('views', './views');
 
 // ミドルウェアの設定
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 };
 app.use(cors(corsOptions));
