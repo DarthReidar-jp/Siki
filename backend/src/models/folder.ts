@@ -1,30 +1,28 @@
 import mongoose, { Document } from 'mongoose';
 
-// フォルダードキュメントのインターフェース
 export interface IFolder extends Document {
+  userId: string;
   name: string;
   description: string;
-  pageIds: string[];
+  pages: mongoose.Schema.Types.ObjectId[]; // ページのObjectIdを格納する配列
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Mongooseスキーマを定義
 const FolderSchema = new mongoose.Schema<IFolder>({
+  userId: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, default: '' },
-  pageIds: { type: [String], default: [] },
+  pages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Page' }], // 'Page'モデルへの参照
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
 
-// ミドルウェアでupdatedAtを更新
 FolderSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();
 });
 
-// Folderモデルを作成
 const Folder = mongoose.model<IFolder>('Folder', FolderSchema);
 
 export default Folder;

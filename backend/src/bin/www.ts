@@ -4,7 +4,7 @@ import debugModule from 'debug';
 const debug = debugModule('backend:server');
 import http from 'http';
 import { Server } from 'socket.io';
-import path from 'path'; // pathモジュールをインポート
+import path from 'path';
 
 /**
  * Get port from environment and store in Express.

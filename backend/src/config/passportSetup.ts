@@ -9,7 +9,6 @@ passport.use(new GoogleStrategy.Strategy({
   callbackURL: "/api/auth/google/callback"
 },
   async (accessToken, refreshToken, profile, done) => {
-    // ユーザー検索または新規作成
     const existingUser = await User.findOne({ googleId: profile.id });
     if (existingUser) {
       return done(null, existingUser);

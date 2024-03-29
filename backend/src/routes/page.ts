@@ -16,13 +16,10 @@ router.post('/', async (req: Request, res: Response) => {
     }
     const userId = decoded.userId;
     const { root } = req.body;
-    const { root: rootNode } = root;
-    console.log(rootNode);
-    const lines = extractTexts(rootNode);
+    console.log(root);
+    const lines = extractTexts(root.root);
     const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
     const content = lines.join('');
-    console.log('Extracted title:', title); 
-    console.log('Extracted content:', content);
     const newPage = new Page({
       userId,
       title,
@@ -93,8 +90,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
     const userId = decoded.userId;
     const pageId = req.params.id;
-
-    const page = await Page.findOneAndDelete({ _id: pageId, userId });
+    await Page.findOneAndDelete({ _id: pageId, userId });
     res.json({ message: 'Page deleted successfully' });
   } catch (e) {
     handleError(e, req,res);

@@ -1,6 +1,5 @@
 import mongoose, { Document } from 'mongoose';
 
-// ドキュメントインターフェースを定義 (オプション)
 export interface IBook extends Document {
   title: string;
   content: string;
@@ -9,7 +8,6 @@ export interface IBook extends Document {
   updatedAt: Date;
 }
 
-// Mongooseスキーマを定義
 const BookSchema = new mongoose.Schema<IBook>({
   title: { type: String, required: true },
   content: { type: String, default: '' },
@@ -23,7 +21,6 @@ BookSchema.pre('save', function(next) {
   next();
 });
 
-// モデルを作成
 const Book = mongoose.model<IBook>('Book', BookSchema);
 
 export default Book;

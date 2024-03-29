@@ -1,0 +1,70 @@
+{
+    "_id": {
+        "$oid": "660649b52f7a11c20fb726bf"
+    },
+    "userId": "65f00d44ac1bd61675e5e8b5",
+    "title": "デフォルトタイトル",
+    "root": {
+        "root": {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "detail": {
+                                "$numberInt": "0"
+                            },
+                            "format": {
+                                "$numberInt": "0"
+                            },
+                            "mode": "normal",
+                            "style": "",
+                            "text": "テスト",
+                            "type": "text",
+                            "version": {
+                                "$numberInt": "1"
+                            }
+                        }
+                    ],
+                    "direction": "ltr",
+                    "format": "",
+                    "indent": {
+                        "$numberInt": "0"
+                    },
+                    "type": "paragraph",
+                    "version": {
+                        "$numberInt": "1"
+                    }
+                }
+            ],
+            "direction": "ltr",
+            "format": "",
+            "indent": {
+                "$numberInt": "0"
+            },
+            "type": "root",
+            "version": {
+                "$numberInt": "1"
+            }
+        }
+    },
+    "lines": [],
+    "content": "",
+    "vector": [],
+    "folderIds": [],
+    "score": {
+        "$numberInt": "0"
+    },
+    "createdAt": {
+        "$date": {
+            "$numberLong": "1711688117306"
+        }
+    },
+    "updatedAt": {
+        "$date": {
+            "$numberLong": "1711688117306"
+        }
+    },
+    "__v": {
+        "$numberInt": "0"
+    }
+}

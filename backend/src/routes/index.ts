@@ -6,6 +6,8 @@ import { verifyToken } from '../utils/verifyToken';
 
 const router = express.Router();
 
+
+
 // ユーザーに関連するページデータを取得
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -14,7 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'No token provided or invalid token' });
     }
     const userId = decoded.userId;
-    const sortOption = req.query.sort; // クエリパラメータから並べ替えオプションを取得
+    const sortOption = req.query.sort;
     let sort = {};
 
     switch(sortOption) {
