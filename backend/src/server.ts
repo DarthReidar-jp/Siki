@@ -11,6 +11,7 @@ import cors from "cors";
 import session from 'express-session';
 import passport from 'passport';
 import createError from 'http-errors';
+import path from 'path';
 
 // 設定とDB接続関連のインポート
 import './config/passportSetup';
@@ -56,6 +57,14 @@ app.use('/', serverRouter);
 app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
+
+// Reactのビルドされた静的ファイルを提供
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));
+
+// すべての未処理のGETリクエストをReactのindex.htmlにリダイレクト
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'frontend', 'build', 'index.html'));
+});
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {
