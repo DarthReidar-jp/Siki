@@ -18,7 +18,6 @@ import './config/passportSetup';
 import connectDB from './db';
 
 //　ルートのインポート
-import serverRouter from './routes/server';
 import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
@@ -53,7 +52,6 @@ connectDB().then(() => {console.log('データベースへの接続が確立さ�
 });
 
 // ルーターの設定
-app.use('/', serverRouter); 
 app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
