@@ -30,9 +30,8 @@
     "start": "WATCHPACK_POLLING=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "build:frontend": "cd ../frontend && npm install && npm run build",
-    "postinstall": "npm run build:frontend"
+    "eject": "react-scripts eject"
+
   },
   "eslintConfig": {
     "extends": [
