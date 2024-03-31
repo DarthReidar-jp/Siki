@@ -31,7 +31,7 @@ app.set('views', './views');
 
 // ミドルウェアの設定
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL2,
   credentials: true,
 };
 app.use(cors(corsOptions));
