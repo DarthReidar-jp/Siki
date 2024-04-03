@@ -1,0 +1,89 @@
+{
+    "name": "reira",
+    "displayName": "reira",
+    "exported": 1710386974,
+    "users": [
+        {
+            "id": "6421a510d21f42001ca8d44d",
+            "name": "reira",
+            "displayName": "reira",
+            "email": "reira.endo@gmail.com"
+        }
+    ],
+    "pages": [
+        {
+            "title": "reira",
+            "created": 1696741108,
+            "updated": 1707873490,
+            "id": "64d45499cf26a9001b257417",
+            "lines": [
+                "reira",
+                "[https://scrapbox.io/files/65cb1981280a350025c5b577.png]",
+                "",
+                "[*** 自己紹介]",
+                "れいらです。",
+                "24歳でグンマー出身で、現在は神奈川県に住んでいます。",
+                "Scrapboxは読書の時のメモや普段勉強したことをまとめる、自分のWikiとして使っています。",
+                "",
+                "\t[人生を振り返る2024]",
+                "\t[勉強していること]",
+                "",
+                "code:script.js",
+                " import \"https://scrapbox.io/api/code/reira/pin-diary-6/min.js\";",
+                ""
+            ]
+        },
+        {
+            "title": "れいら",
+            "created": 1707814313,
+            "updated": 1708389593,
+            "id": "65cb2da694df9e00247b1627",
+            "lines": [
+                "れいら",
+                "[https://scrapbox.io/files/65cb2dc484c08100258c1f16.png]",
+                "",
+                ">[*** 自己紹介]",
+                "れいらです。",
+                "24歳で[グンマー]出身で、現在は[神奈川県]に住んでいます。",
+                "Scrapboxは[読書]の時の[メモ]や普段[勉強]したことをまとめる、自分のWikiとして使っています。",
+                "2023年8月からはじめた新参です。",
+                "それまで、Notesしか使ったことありませんでした。",
+                ">contact",
+                "基本SNSは見ないのでメールだとありがたいです。",
+                "[reira.endo@gmail.com]",
+                "X[https://twitter.com/en_reira en_reira]",
+                "nostr[https://nostter.app/npub182r0ws7xc7v2yq2t69gr8k6tfkrt7tqrfytqavl5m27n7yul6mus4vdj05 reira]",
+                "github [https://github.com/DarthReidar-jp darthreidar]",
+                "株式投資scrapbox[/stock-investment-group]",
+                ">私の情報",
+                "\t[人生を振り返る2024]",
+                "\t[勉強していること]"
+            ]
+        },
+        {
+            "title": "教えて下さい",
+            "created": 1707810584,
+            "updated": 1710383297,
+            "id": "65cb1f10280c120025ca88d8",
+            "lines": [
+                "教えて下さい",
+                "自然言語処理",
+                "谷口忠大",
+                "ネルケ無方"
+            ]
+        },
+        {
+            "title": "読む",
+            "created": 1709551953,
+            "updated": 1709551973,
+            "id": "65e5b14d5b9a7e00270ac56e",
+            "lines": [
+                "読む",
+                "https://www.mongodb.com/basics/retrieval-augmented-generation",
+                "https://www.mongodb.com/developer/products/atlas/rag-atlas-vector-search-langchain-openai/",
+                "https://js.langchain.com/docs/use_cases/question_answering/",
+                ""
+            ]
+        }
+    ]
+}

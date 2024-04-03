@@ -1,5 +1,4 @@
 import mongoose, { Document } from 'mongoose';
-import { getPageVector } from '../utils/openaiUtils';
 
 // ドキュメントインターフェースを定義
 export interface IPage extends Document {

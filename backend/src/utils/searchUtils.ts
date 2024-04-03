@@ -8,9 +8,6 @@ async function performVectorSearch(query: string, userId: string): Promise<any[]
   const collection = mongoose.connection.db.collection('pages'); // コレクションの取得
   const agg = [
     {
-        '$match': { 'userId': userId } // 特定のユーザーIDに基づくフィルタリング
-    },
-    {
             '$vectorSearch': {
                 'index': 'vector_index',
                 'path': 'vector',
@@ -18,6 +15,9 @@ async function performVectorSearch(query: string, userId: string): Promise<any[]
                 'numCandidates': 100,
                 'limit': 10
             }
+        },
+        {
+            '$match': { 'userId': userId } // 特定のユーザーIDに基づくフィルタリング
         },
         {
             '$project': {
