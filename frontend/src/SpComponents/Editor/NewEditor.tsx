@@ -7,13 +7,19 @@ import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import InlineToolbarPlugin from './InlineToolbarPlugin';
-import MarkdownPlugin from './MarkdownPlugin';
-import ToolbarPlugin from './ToolbarPlugin';
+import InlineToolbarPlugin from './lexical-plugin/InlineToolbarPlugin';
+import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
+import ToolbarPlugin from './lexical-plugin/ToolbarPlugin';
 import SaveButton from "./SaveButton";
 import "./Editor.scss";
 import { nodes } from './nodes';
 import { theme } from "./Theme";
+
+import { validateUrl } from "./lexical-plugin/validateUrl";
+import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
+import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
 
 
 function onChange(editorState: EditorState) {
@@ -47,6 +53,10 @@ const NewEditor = () => {
             <AutoFocusPlugin />
             <MarkdownPlugin />
             <HistoryPlugin />
+            <LinkPlugin validateUrl={validateUrl} />
+            <ClickableLinkPlugin />
+            <TabIndentationPlugin />
+            <LexicalAutoLinkPlugin />
           </div>
           <SaveButton />
         </LexicalComposer>

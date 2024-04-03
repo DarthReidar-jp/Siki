@@ -10,14 +10,20 @@ import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { theme } from "./Theme";
 import { nodes } from './nodes';
-import { loadEditorState } from "./LoadEditorState";
-import InlineToolbarPlugin from './InlineToolbarPlugin';
-import MarkdownPlugin from './MarkdownPlugin';
-import ToolbarPlugin from './ToolbarPlugin';
+import { loadEditorState } from "../../utils/LoadEditorState";
+import InlineToolbarPlugin from './lexical-plugin/InlineToolbarPlugin';
+import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
+import ToolbarPlugin from './lexical-plugin/ToolbarPlugin';
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import "./Editor.scss";
 import "./Theme.scss";
+
+import { validateUrl } from "./lexical-plugin/validateUrl";
+import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
+import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
+import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
 
 
 function onChange(editorState: EditorState, editor: LexicalEditor) {
@@ -87,6 +93,10 @@ function Editor() {
             <AutoFocusPlugin />
             <HistoryPlugin />
             <MarkdownPlugin />
+            <LinkPlugin validateUrl={validateUrl} />
+            <ClickableLinkPlugin />
+            <TabIndentationPlugin />
+            <LexicalAutoLinkPlugin />
             <UpdateButton id={id} />
             <DeleteButton id={id} />
           </div>
