@@ -8,7 +8,7 @@ import { useCallback, useState } from "react";
 import { $setBlocksType } from "@lexical/selection";
 import { HeadingTagType, $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import './Editor.scss';
+import '../Editor.scss';
 import {
     INSERT_ORDERED_LIST_COMMAND,
     INSERT_UNORDERED_LIST_COMMAND,
@@ -16,6 +16,7 @@ import {
 } from "@lexical/list";
 import { TbH1, TbH2, TbH3, TbQuote, TbList, TbListNumbers, TbCheckbox } from "react-icons/tb";
 import { PiParagraph } from "react-icons/pi";
+import LinkToolbarItem from "./LinkToolbarItem";
 
 function ToolbarPlugin() {
     const SupportedBlockType = {
@@ -137,6 +138,7 @@ function ToolbarPlugin() {
             <button type="button" onClick={() => formatCheckList()}>
                 <TbCheckbox />
             </button>
+            <LinkToolbarItem />
         </div>
     );
 }

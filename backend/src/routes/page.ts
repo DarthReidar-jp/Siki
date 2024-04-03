@@ -20,12 +20,15 @@ router.post('/', async (req: Request, res: Response) => {
     const lines = extractTexts(root.root);
     const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
     const content = lines.join('');
+    const vector = await getPageVector(content);
+    console.log(vector);
     const newPage = new Page({
       userId,
       title,
       root,
       lines,
       content,
+      vector,
       createdAt: new Date(),
     });
     await newPage.save();

@@ -3,7 +3,7 @@ import { Page } from './types';
 
 export const fetchSearchResults = async (query: string): Promise<Page[]> => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const url = `${backendUrl}/search?query=${encodeURIComponent(query)}`;
+  const url = `${backendUrl}search?query=${encodeURIComponent(query)}`;
   
   try {
     const response = await fetch(url, {
