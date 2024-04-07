@@ -138,7 +138,7 @@ function ToolbarPlugin() {
             <button type="button" onClick={() => formatCheckList()}>
                 <TbCheckbox />
             </button>
-            <LinkToolbarItem />
+                <LinkToolbarItem />
         </div>
     );
 }
