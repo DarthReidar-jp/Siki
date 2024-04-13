@@ -51,6 +51,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const pageId = req.params.id;
     const page: IPage | null = await Page.findOne({ userId, _id: pageId });
     res.json(page);
+    if(page != null){console.log(page.root);}
   } catch (e) {
     handleError(e, req, res);
   }
