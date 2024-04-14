@@ -5,13 +5,21 @@
  * @param json 元のJSONデータ
  * @returns クリーニングされたJSONデータ
  */
-const creanJSON = (json: any) => {
+interface Page {
+    title: string;
+    lines: string[];
+}
+
+const MAX_CHARACTERS_PER_PAGE = 3000;
+
+const cleanAndSplitJSON = (json: any): Page[] => {
     if (!json || !Array.isArray(json.pages)) {
         console.error('Invalid input: json is undefined or pages property is not an array');
         return [];  // あるいはエラーハンドリングをする
     }
+
     // pages要素のみを抽出
-    const pages = json.pages.map((page: any) => {
+    const pages: Page[] = json.pages.map((page: any): Page => {
         // 不要なプロパティ(id, created, updated)の削除
         delete page.id;
         delete page.created;
@@ -27,8 +35,34 @@ const creanJSON = (json: any) => {
         };
     });
 
-    return pages;
-}
+        // 新しいページを生成する関数
+        const newPages: Page[] = [];
+        pages.forEach(page => {
+            let currentLines: string[] = [];
+            let currentCharCount = 0;
+            let pageNumber = 1;
+    
+            page.lines.forEach(line => {
+                const newTitle = `${page.title} Part ${pageNumber}`;
+                if (currentCharCount + line.length + newTitle.length > MAX_CHARACTERS_PER_PAGE) {
+                    newPages.push({ title: page.title, lines: [newTitle, ...currentLines] });
+                    pageNumber++;
+                    currentLines = [line];
+                    currentCharCount = line.length;
+                } else {
+                    currentLines.push(line);
+                    currentCharCount += line.length;
+                }
+            });
+    
+            // 残りの行を追加
+            if (currentLines.length > 0) {
+                newPages.push({ title: page.title, lines: [`${page.title} Part ${pageNumber}`, ...currentLines] });
+            }
+        });
+    
+        return newPages;
+    };
 
 
 /**
@@ -37,7 +71,7 @@ const creanJSON = (json: any) => {
  * @returns EditorState形式のJSONオブジェクトの配列
  */
 const createEditorState = (json: any) => {
-    const cleanedPages = creanJSON(json);
+    const cleanedPages = cleanAndSplitJSON(json);
 
     const editorStates = cleanedPages.map((page: any) => {
         const children = page.lines.map((line: string) => {
