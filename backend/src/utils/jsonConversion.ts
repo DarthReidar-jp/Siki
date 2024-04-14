@@ -8,61 +8,68 @@
 interface Page {
     title: string;
     lines: string[];
-}
-
-const MAX_CHARACTERS_PER_PAGE = 3000;
-
-const cleanAndSplitJSON = (json: any): Page[] => {
+    hasPart: boolean;
+  }
+  
+  const MAX_CHARACTERS_PER_PAGE = 3000;
+  
+  const cleanAndSplitJSON = (json: any): Page[] => {
     if (!json || !Array.isArray(json.pages)) {
-        console.error('Invalid input: json is undefined or pages property is not an array');
-        return [];  // あるいはエラーハンドリングをする
+      console.error('Invalid input: json is undefined or pages property is not an array');
+      return [];
     }
-
-    // pages要素のみを抽出
+  
     const pages: Page[] = json.pages.map((page: any): Page => {
-        // 不要なプロパティ(id, created, updated)の削除
-        delete page.id;
-        delete page.created;
-        delete page.updated;
-
-        // linesの文字列正規化（タブの削除）
-        const normalizedLines = page.lines.map((line: string) => line.replace(/\t/g, ''));
-
-        // 変換後のページオブジェクトを返す
-        return {
-            title: page.title,
-            lines: normalizedLines
-        };
+      delete page.id;
+      delete page.created;
+      delete page.updated;
+  
+      const normalizedLines = page.lines.map((line: string) => line.replace(/\t/g, ''));
+      
+      return {
+        title: page.title,
+        lines: normalizedLines,
+        hasPart: false
+      };
     });
-
-        // 新しいページを生成する関数
-        const newPages: Page[] = [];
-        pages.forEach(page => {
-            let currentLines: string[] = [];
-            let currentCharCount = 0;
-            let pageNumber = 1;
-    
-            page.lines.forEach(line => {
-                const newTitle = `${page.title} Part ${pageNumber}`;
-                if (currentCharCount + line.length + newTitle.length > MAX_CHARACTERS_PER_PAGE) {
-                    newPages.push({ title: page.title, lines: [newTitle, ...currentLines] });
-                    pageNumber++;
-                    currentLines = [line];
-                    currentCharCount = line.length;
-                } else {
-                    currentLines.push(line);
-                    currentCharCount += line.length;
-                }
-            });
-    
-            // 残りの行を追加
-            if (currentLines.length > 0) {
-                newPages.push({ title: page.title, lines: [`${page.title} Part ${pageNumber}`, ...currentLines] });
-            }
+  
+    const newPages: Page[] = [];
+  
+    pages.forEach(page => {
+      let currentLines: string[] = [];
+      let currentCharCount = 0;
+      let pageNumber = 1;
+  
+      page.lines.forEach(line => {
+        const newTitle = page.hasPart ? `${page.title} Part ${pageNumber}` : page.title;
+        
+        if (currentCharCount + line.length + newTitle.length > MAX_CHARACTERS_PER_PAGE) {
+          newPages.push({
+            title: newTitle,
+            lines: [...currentLines],
+            hasPart: page.hasPart || pageNumber > 1
+          });
+          pageNumber++;
+          currentLines = [line];
+          currentCharCount = line.length;
+        } else {
+          currentLines.push(line);
+          currentCharCount += line.length;
+        }
+      });
+  
+      if (currentLines.length > 0) {
+        const finalTitle = page.hasPart ? `${page.title} Part ${pageNumber}` : page.title;
+        newPages.push({
+          title: finalTitle,
+          lines: [...currentLines],
+          hasPart: page.hasPart || pageNumber > 1
         });
-    
-        return newPages;
-    };
+      }
+    });
+  
+    return newPages;
+  };
 
 
 /**
