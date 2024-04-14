@@ -78,7 +78,7 @@ function Editor() {
   };
 
   return (
-    <div className="sp-page-container">
+    <div className="page-container">
       <div className="page">
         <LexicalComposer initialConfig={initialConfig}>
           <ToolbarPlugin />

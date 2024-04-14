@@ -8,6 +8,7 @@ import Editor from './Editor/Editor';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
+import "./PcComponent.scss";
 
 // isLoggedInを受け取れるように型定義を追加
 interface PcComponentProps {

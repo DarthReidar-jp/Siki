@@ -8,7 +8,7 @@ interface PageListProps {
 }
 
 const PageList: React.FC<PageListProps> = ({ pages }) => (
-  <div className='page-display'>
+  <div className='page-list'>
     {pages.length ? (
       pages.map(page => (
         <PageItem key={page._id} page={page} />

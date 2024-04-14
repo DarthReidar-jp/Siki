@@ -5,6 +5,7 @@ import { getPageVector } from '../utils/openaiUtils';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { verifyToken } from '../utils/verifyToken';
+import { extractTexts } from '../utils/extractTextUtils';
 
 const router = express.Router();
 //ページ作成
@@ -16,16 +17,14 @@ router.post('/', async (req: Request, res: Response) => {
     }
     const userId = decoded.userId;
     const { root } = req.body;
-    console.log(root);
     const lines = extractTexts(root.root);
     const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
     const content = lines.join('');
     const vector = await getPageVector(content);
-    console.log(vector);
     const newPage = new Page({
       userId,
       title,
-      root,
+      editorState:root,
       lines,
       content,
       vector,
@@ -51,7 +50,6 @@ router.get('/:id', async (req: Request, res: Response) => {
     const pageId = req.params.id;
     const page: IPage | null = await Page.findOne({ userId, _id: pageId });
     res.json(page);
-    if(page != null){console.log(page.root);}
   } catch (e) {
     handleError(e, req, res);
   }
@@ -74,7 +72,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
     }
-    page.root = root;
+    page.editorState = root;
     page.lines = extractTexts(rootNode);
     page.title =  page.lines.length > 0 ? page.lines[0] : 'デフォルトタイトル';
     page.content = page.lines.join('');
@@ -101,12 +99,6 @@ router.delete('/:id', async (req: Request, res: Response) => {
   }
 });
 
-//文字列抽出関数
-const extractTexts = (node: any): string[] => {
-  if (!node) return [];
-  if (node.text) return [node.text]; 
-  return node.children?.flatMap(extractTexts) || [];
-};
 //エラーハンドリング
 function handleError(error: any, req: Request, res: Response) {
   console.error(`Error processing request ${req.method} ${req.url}`);

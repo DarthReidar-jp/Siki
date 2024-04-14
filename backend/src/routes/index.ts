@@ -4,7 +4,7 @@ import { performVectorSearch } from '../utils/searchUtils';
 import { verifyToken } from '../utils/verifyToken';
 import { createEditorState } from '../utils/jsonConversion';
 import { getPageVector } from '../utils/openaiUtils';
-
+import { extractTexts } from '../utils/extractTextUtils';
 
 const router = express.Router();
 
@@ -44,6 +44,7 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+//検索
 router.get('/search', async (req: Request, res: Response) => {
   try {
     const decoded = verifyToken(req);
@@ -66,38 +67,28 @@ router.get('/search', async (req: Request, res: Response) => {
 
 //JSONimport関数
 router.post('/json', async (req: Request, res: Response) => {
-  // トークン検証
   const decoded = verifyToken(req);
   if (!decoded) {
       return res.status(401).json({ message: 'No token provided or invalid token' });
   }
   const userId = decoded.userId;
-
-  // JSONファイルの読み込みと前処理
-  // req.bodyからJSONデータを取得する
-  const jsonData = JSON.parse(req.body.data);  // JSON文字列をオブジェクトに変換
-  const pages = createEditorState(jsonData);  // createEditorStateが正しくJSONオブジェクトを受け取るようにする
-  console.log(pages);
-  // 各ページに対して以下の処理を繰り返す
+  const jsonData = JSON.parse(req.body.data);  
+  const pages = createEditorState(jsonData); 
   for (const page of pages) {
-      const root = page.root;  // ページデータからroot nodeを取得
-
+      const root = page.root; 
       const lines = extractTexts(root.root);
       const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
       const content = lines.join('');
       const vector = await getPageVector(content);
-      // 新しいページインスタンスの作成
       const newPage = new Page({
           userId,
           title,
-          root,
+          editorState:root,
           lines,
           content,
           vector,
           createdAt: new Date(),
       });
-
-      // データベースへの保存
       try {
           await newPage.save();
           console.log({title},"をほぞんしました");
@@ -107,17 +98,8 @@ router.post('/json', async (req: Request, res: Response) => {
           return;
       }
   }
-
-  // すべてのページが正常に保存された場合
   res.status(201).json({ message: 'All pages saved successfully' });
 });
-
-//文字列抽出関数
-const extractTexts = (node: any): string[] => {
-  if (!node) return [];
-  if (node.text) return [node.text]; 
-  return node.children?.flatMap(extractTexts) || [];
-};
 
 // エラーハンドリング関数
 function handleError(error: any, res: Response) {

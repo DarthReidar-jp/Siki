@@ -2,68 +2,71 @@
 
 /* メインコンテンツのスタイルをネストして表現 */
 .sp-content {
-  .page-display {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); // 二列で表示
-    grid-gap: 10px; // スマホではギャップを小さく
-    padding: 10px; // スマホでは周囲の余白を小さく
-  }
-
   .sort-container {
     display: flex;
     justify-content: flex-end;
     padding: 0 10px 10px 10px; // スマホでは余白を調整
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-  }
+  .page-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); // 二列で表示
+    grid-gap: 10px; // スマホではギャップを小さく
+    padding: 10px; // スマホでは周囲の余白を小さく
 
-  .page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 0.25rem;
-    transition: 0.3s;
-    aspect-ratio: 1 / 1.03; // スマホでは維持
-
-    &:hover {
-      box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
+    a {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
     }
 
-    .page-body {
-      flex: 1 1 auto;
-      padding: 0.4rem; // スマホではパディングを一律に
-    }
+    .page {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 0.25rem;
+      transition: 0.3s;
+      aspect-ratio: 1 / 1.03; // スマホでは維持
 
-    .page-title {
-      font-size: 0.9rem; // スマホでは若干大きめに
-      text-decoration: bold;
-      margin: 0.2rem;
-      font-weight: bold;
-    }
+      &:hover {
+        box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
+      }
 
-    .page-content {
-      font-size: 0.8rem; // スマホでは読みやすいサイズに
-      margin: 0.2rem;
-      color: #636363;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5; // 最大行数を調整
-      line-height: 1.2; // 行の高さを調整
-      max-height: 6em; // max-heightも調整
+      .page-body {
+        flex: 1 1 auto;
+        padding: 0.4rem; // スマホではパディングを一律に
+      }
 
-      &.score {
+      .page-title {
+        font-size: 0.9rem; // スマホでは若干大きめに
+        text-decoration: bold;
+        margin: 0.2rem;
         font-weight: bold;
-        color: #007bff; // スコアの色はそのまま
+      }
+
+      .page-content {
+        font-size: 0.8rem; // スマホでは読みやすいサイズに
+        margin: 0.2rem;
+        color: #636363;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5; // 最大行数を調整
+        line-height: 1.2; // 行の高さを調整
+        max-height: 6em; // max-heightも調整
+
+        &.score {
+          font-weight: bold;
+          color: #007bff; // スコアの色はそのまま
+        }
       }
     }
   }
+
+
+
 }

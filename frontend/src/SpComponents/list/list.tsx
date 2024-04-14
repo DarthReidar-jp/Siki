@@ -23,7 +23,7 @@ const List: React.FC = () => {
   }, [sort]);
 
   return (
-    <div className="main-content">
+    <div>
       <Sort sort={sort} onSortChange={(e) => setSort(e.target.value)} /> 
       <PageList pages={pages} />
     </div>

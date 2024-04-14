@@ -41,31 +41,31 @@ const createEditorState = (json: any) => {
 
     const editorStates = cleanedPages.map((page: any) => {
         const children = page.lines.map((line: string) => {
-                return {
-                    children: [{
-                        detail:0,
-                        format: 0,
-                        mode: "normal",
-                        style:"",
-                        text: line,
-                        type: "text",
-                        version: 1
-                    }],
-                    direction:"ltr",
-                    format: "",
-                    indent: 0,
-                    type: "paragraph",
+            return {
+                children: [{
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: line,
+                    type: "text",
                     version: 1
-                };
-            });
+                }],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "paragraph",
+                version: 1
+            };
+        });
 
         return {
-            root:{
+            root: {
                 root: {
                     children: children,
-                    direction:"ltr",
-                    format:"",
-                    indent:0,
+                    direction: "ltr",
+                    format: "",
+                    indent: 0,
                     type: "root",
                     version: 1
                 }

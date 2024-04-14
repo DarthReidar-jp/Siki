@@ -7,6 +7,7 @@ import Header from './header/header';
 import Login from './Login/Login';
 import Editor from './Editor/Editor';
 import NewEditor from './Editor/NewEditor';
+import "./SpComponent.scss";
 
 // isLoggedInを受け取れるように型定義を追加
 interface SpComponentProps {

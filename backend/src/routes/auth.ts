@@ -1,7 +1,7 @@
 // src/routes/auth.ts
 import express from 'express';
 import passport from 'passport';
-import { IUser } from '../models/user'; 
+import { IUser } from '../models/user';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get('/google',
     scope: ['profile', 'email']
   }));
 
-  router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}` }),
   (req, res) => {
     const user = req.user as IUser;
@@ -36,7 +36,7 @@ router.get('/verify', (req, res) => {
       message: 'ログインされていません',
     });
   }
-  jwt.verify(token, process.env.JWT_SECRET_KEY!, (err:any, decoded:any) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY!, (err: any, decoded: any) => {
     if (err) {
       return res.status(500).json({
         isLoggedIn: false,
@@ -46,7 +46,5 @@ router.get('/verify', (req, res) => {
     return res.json({ isLoggedIn: true });
   });
 });
-
-
 
 export default router;
