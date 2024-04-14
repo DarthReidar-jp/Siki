@@ -38,7 +38,7 @@ const editorConfig = {
 
 const NewEditor = () => {
   return (
-    <div className="sp-page-container">
+    <div className="page-container">
       <div className="page">
         <LexicalComposer initialConfig={editorConfig}>
           <ToolbarPlugin />

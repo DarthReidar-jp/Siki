@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './sidebar.scss'
 import TopPageButton from './TopPageButton';
+import FileImport from './FileImport';
 
 const Sidebar = () => {
   // サイドバーの表示状態を管理するための状態変数
@@ -23,6 +24,7 @@ const Sidebar = () => {
     <div className={`sidebar ${isVisible ? 'active' : ''}`}>
       <ul>
         <TopPageButton />
+        <FileImport />
       </ul>
     </div>
   );
