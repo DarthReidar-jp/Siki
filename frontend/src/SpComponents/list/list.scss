@@ -6,11 +6,11 @@
     display: flex;
     justify-content: flex-end;
     padding: 0 10px 10px 10px; // スマホでは余白を調整
-  }
+  }   
 
   .page-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); // 二列で表示
+    grid-template-columns: repeat(auto-fill,minmax(150px, 1fr)); // 二列で表示
     grid-gap: 10px; // スマホではギャップを小さく
     padding: 10px; // スマホでは周囲の余白を小さく
 
@@ -66,7 +66,4 @@
       }
     }
   }
-
-
-
 }

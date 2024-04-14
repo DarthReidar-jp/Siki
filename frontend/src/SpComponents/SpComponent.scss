@@ -1,16 +1,19 @@
+* {
+  box-sizing: border-box; // 全ての要素に適用
+}
 .sp-app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  
-    .sp-content {
-      width: 100%;
-      margin-top: 50px;
-    }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // コンテンツがビューポートの高さに合うように設定
+
+  .sp-content {
+    width: 100%; // 幅を100%に設定
+    max-width: 100%; // 最大幅も100%に設定してはみ出しを防ぐ
+    margin-top: 50px;
+    overflow: hidden; // はみ出したコンテンツは非表示に
+  }
     .button {
       display: inline-block;
-      width: 30px;
       color: #4b4b4b;
       background-color: #ffffff;
       font-weight: 400;

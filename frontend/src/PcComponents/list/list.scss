@@ -42,21 +42,20 @@
     box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
   }
 
-  .page .page-body {
+  .page-body {
     flex: 1 1 auto;
     padding: 0.4rem 0.4rem;
   }
 
-  .page .page-title {
+  .page-title {
     font-size: 0.8rem;
     text-decoration: bold;
     margin: 0.2rem;
     font-weight: bold;
   }
 
-  .page .page-content {
+  .page-content {
     font-size: 0.7rem;
-    /* テキストのフォントサイズ */
     margin: 0.2rem;
     color: #636363;
     overflow: hidden;
@@ -64,14 +63,11 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 7;
-    /* 表示される最大行数を5行に設定 */
     line-height: 1.4;
-    /* 行の高さ */
     max-height: 10em;
-    /* line-height * line-clamp の値 */
   }
 
-  .page .page-content.score {
+  .page-content.score {
     font-weight: bold;
     color: #007bff;
     /* スコアの色 */
