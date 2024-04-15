@@ -104,10 +104,13 @@ router.post('/json', async (req: Request, res: Response) => {
 // エラーハンドリング関数
 function handleError(error: any, res: Response) {
   if (error instanceof Error) {
+    console.error("Server Error:", error); // ここでエラー内容を詳しくログに記録
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
     res.status(500).json({ error: error.message });
   } else {
     res.status(500).json({ error: String(error) });
   }
+  
 }
 
 export default router;
