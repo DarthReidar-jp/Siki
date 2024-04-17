@@ -1,0 +1,73 @@
+// ChatAppのスタイル
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  
+    .message-area {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+  
+      .message {
+        margin: 10px 0;
+        padding: 8px;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  
+        &.user {
+          background-color: #d1e7fd;
+          align-self: flex-end;
+        }
+  
+        &.server {
+          background-color: #e2e2e2;
+          align-self: flex-start;
+        }
+  
+        strong {
+          font-weight: bold;
+          color: #333;
+        }
+      }
+    }
+  
+    form {
+      display: flex;
+      padding: 10px;
+      background-color: #e8e8e8;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      box-shadow: 0 -1px 2px rgba(0,0,0,0.2);
+  
+      input[type="text"] {
+        flex-grow: 1;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+  
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+  

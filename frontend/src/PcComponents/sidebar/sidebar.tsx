@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './sidebar.scss'
 import TopPageButton from './TopPageButton';
+import ChatButton from './ChatButton';
 import FileImport from './FileImport';
 
 const Sidebar = () => {
@@ -25,6 +26,7 @@ const Sidebar = () => {
       <ul>
         <TopPageButton />
         <FileImport />
+        <ChatButton />
       </ul>
     </div>
   );

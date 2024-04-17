@@ -8,6 +8,7 @@ import Editor from './Editor/Editor';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
+import Chat from './chat/Chat';
 import "./PcComponent.scss";
 
 // isLoggedInを受け取れるように型定義を追加
@@ -29,6 +30,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
               <Route path="/search" element={<Search />} />
               <Route path="/new" element={<NewEditor />} />
               <Route path="/:id" element={<Editor />} />
+              <Route path="/chat" element={<Chat />} />
             </Routes>
           </main>
         </div>

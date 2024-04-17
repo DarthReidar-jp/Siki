@@ -21,6 +21,7 @@ import connectDB from './db';
 import authRoutes from './routes/auth';
 import indexRouter from './routes/index'; 
 import pageRouter from './routes/page';
+import chatRouter from './routes/chat';
 
 const app: express.Express = express();
 
@@ -55,6 +56,7 @@ connectDB().then(() => {console.log('データベースへの接続が確立さ�
 app.use('/api',indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
+app.use('/api/chat',chatRouter);
 
 // Reactのビルドされた静的ファイルを提供
 app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));
