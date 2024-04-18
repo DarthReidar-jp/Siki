@@ -1,38 +1,43 @@
 // ChatAppのスタイル
 .chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #f9f9f9;
-    font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 80%; /* 横幅を80%に設定 */
+  margin-right: auto; /* 右のマージンを自動調整 */
+  margin-left: auto; /* 左のマージンを自動調整 */
+  background-color: #f2f3f5; /* 背景色の変更 */
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   
     .message-area {
       flex-grow: 1;
-      overflow-y: auto;
-      padding: 10px;
+      padding: 20px; /* パディングの増加 */
+      padding-bottom: 80px;
+      background-color: #fff; /* 背景色の変更 */
       background-color: #fff;
-      border-bottom: 1px solid #ccc;
   
       .message {
         margin: 10px 0;
-        padding: 8px;
-        border-radius: 5px;
-        background-color: #f0f0f0;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        padding: 12px 15px; /* パディングの変更 */
+        border-radius: 18px; /* 角の丸みを増加 */
+        background-color: #e5e5ea; /* ユーザーメッセージの背景色 */
+        box-shadow: 0 2px 2px rgba(0,0,0,0.1); /* 影の追加 */
+        white-space: pre-wrap; /* 改行と空白を保持する */
   
         &.user {
-          background-color: #d1e7fd;
-          align-self: flex-end;
+          background-color: #007bff; /* ユーザーメッセージの色を変更 */
+          color: white; /* テキスト色を白に */
+          align-self: flex-end; /* 右寄せ */
         }
   
         &.server {
-          background-color: #e2e2e2;
-          align-self: flex-start;
+          background-color: #f0f0f0; /* サーバーメッセージの背景色 */
+          align-self: flex-start; /* 左寄せ */
         }
   
         strong {
           font-weight: bold;
-          color: #333;
+          color: #4a4a4a; /* テキスト色の変更 */
         }
       }
     }
@@ -40,32 +45,34 @@
     form {
       display: flex;
       padding: 10px;
-      background-color: #e8e8e8;
+      background-color: #f2f3f5; /* フォームの背景色を変更 */
       position: fixed;
       bottom: 0;
-      width: 100%;
-      box-shadow: 0 -1px 2px rgba(0,0,0,0.2);
+      width: 80%; /* 横幅を80%に設定 */
+      left: 10%; /* 左から10%の位置に設定 */
+      box-shadow: 0 -1px 3px rgba(0,0,0,0.1); /* 影のスタイルを調整 */
   
       input[type="text"] {
         flex-grow: 1;
-        padding: 8px;
+        padding: 10px 15px; /* パディングの変更 */
         font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        border: 2px solid #d1d3d4; /* ボーダーの色と太さを変更 */
+        border-radius: 21px; /* 角の丸みを増加 */
+        background-color: #e5e5ea; /* 背景色を変更 */
         margin-right: 10px;
       }
   
       button {
         padding: 10px 20px;
         font-size: 16px;
-        background-color: #007bff;
+        background-color: #007bff; /* ボタンの背景色を変更 */
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 21px; /* 角の丸みを増加 */
         cursor: pointer;
   
         &:hover {
-          background-color: #0056b3;
+          background-color: #0056b3; /* ホバー時の背景色を変更 */
         }
       }
     }

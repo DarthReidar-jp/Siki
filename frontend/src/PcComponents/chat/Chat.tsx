@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Chat.scss';  // 確認して、このパスが正しいことを保証してください
+import './Chat.scss';
 
 interface Message {
   user: string;
@@ -9,6 +9,7 @@ interface Message {
 const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);  // ローディング状態の管理
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
@@ -18,11 +19,13 @@ const Chat: React.FC = () => {
     event.preventDefault();
     if (!inputText.trim()) return;
 
+    setIsLoading(true);  // ロード開始
     const messageToSend: Message = { user: 'user', text: inputText };
     setMessages([...messages, messageToSend]);
 
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const response = await fetch(`${backendUrl}chat`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -32,12 +35,14 @@ const Chat: React.FC = () => {
       });
 
       const reply = await response.json();
-      const serverMessage: Message = { user: 'server', text: reply.text };
+      console.log(reply);
+      const serverMessage: Message = { user: 'AI', text: reply.text };
       setMessages((prevMessages) => [...prevMessages, serverMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
     }
 
+    setIsLoading(false);  // ロード終了
     setInputText('');
   };
 
@@ -46,9 +51,10 @@ const Chat: React.FC = () => {
       <div className="message-area">
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.user}`}>
-            <strong>{message.user === 'user' ? 'You' : 'Server'}:</strong> {message.text}
+            <strong>{message.user === 'user' ? 'You' : 'AI'}:</strong> {message.text}
           </div>
         ))}
+        {isLoading && <div className="loading-message">ロード中...</div>}  
       </div>
       <form onSubmit={handleSubmit}>
         <input
@@ -58,7 +64,7 @@ const Chat: React.FC = () => {
           placeholder="Type your message here..."
           className="input-field"
         />
-        <button type="submit" className="submit-button">Send</button>
+        <button type="submit" className="submit-button" disabled={isLoading}>Send</button>  
       </form>
     </div>
   );
