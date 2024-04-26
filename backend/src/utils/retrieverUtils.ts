@@ -5,7 +5,6 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { sleep } from "langchain/util/time";
 import { SystemPrompt, contentPrompt } from "./promptUtils"
 
 async function connectToMongoDB() {
@@ -57,7 +56,7 @@ async function generateResponseUsingRAG(userId: string, userMessage: string) {
             ["human", contentPrompt],
         ]);
         const llm = new ChatOpenAI({ 
-            modelName: "gpt-3.5-turbo", 
+            modelName: "gpt-3.5-turbo-0125", 
             temperature: 0, 
             openAIApiKey: process.env.OPENAI_API_KEY });
         const ragChain = await createStuffDocumentsChain({

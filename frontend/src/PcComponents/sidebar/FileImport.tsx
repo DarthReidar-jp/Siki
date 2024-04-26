@@ -53,9 +53,9 @@ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
   
 
   return (
-    <li>
-      <input type="file" accept=".json" onChange={handleFileChange} className='import'/>
-      <p>{progress}</p>
+    <li className="px-5 py-3 hover:bg-blue-900 transition duration-300 cursor-pointer">
+      <input type="file" accept=".json" onChange={handleFileChange} className='appearance-none w-full text-xs'/>
+      <p className="text-xs mt-1 text-white">{progress}</p>
     </li>
   );
 };

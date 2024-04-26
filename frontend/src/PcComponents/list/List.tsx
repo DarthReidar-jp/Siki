@@ -57,7 +57,7 @@ const List: React.FC = () => {
   }, [sort, currentPage, hasMoreData]);
 
   return (
-    <div className="main-content">
+    <div className="px-20">
       <Sort sort={sort} onSortChange={(e) => {
         setSort(e.target.value);
       }} />

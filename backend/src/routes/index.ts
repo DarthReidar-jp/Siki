@@ -36,13 +36,9 @@ router.get('/', async (req: Request, res: Response) => {
       default:
         sort = { createdAt: -1 };
     }
-
-    // ページネーションのパラメータ
     // ページネーションのパラメータ
     const page = parseInt(req.query.page as string || '1'); // デフォルトは1ページ目
     const pageSize = parseInt(req.query.pageSize as string || '75'); // デフォルトのページサイズ
-
-
     const pages: IPage[] = await Page.find({ userId })
       .sort(sort)
       .skip((page - 1) * pageSize)
@@ -53,7 +49,6 @@ router.get('/', async (req: Request, res: Response) => {
     handleError(e, res);
   }
 });
-
 
 //検索
 router.get('/search', async (req: Request, res: Response) => {

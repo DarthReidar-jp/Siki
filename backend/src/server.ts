@@ -1,33 +1,28 @@
-// server.ts
-// 環境変数を最初に読み込む
+//server.ts
 import dotenv from 'dotenv';
 dotenv.config();
 
-// 一括でモジュールをインポート
+// モジュールをインポート
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from "cors";
 import session from 'express-session';
-import passport from 'passport';
 import createError from 'http-errors';
 import path from 'path';
+import './config/passportSetup';
+import passport from 'passport';
 
 // 設定とDB接続関連のインポート
-import './config/passportSetup';
-import connectDB from './db';
+import connectDB from './config/db';
 
 //　ルートのインポート
 import authRoutes from './routes/auth';
-import indexRouter from './routes/index'; 
+import indexRouter from './routes/index';
 import pageRouter from './routes/page';
 import chatRouter from './routes/chat';
 
 const app: express.Express = express();
-
-// viewsの設定
-app.set('view engine', 'pug');
-app.set('views', './views');
 
 // ミドルウェアの設定
 const corsOptions = {
@@ -47,16 +42,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-connectDB().then(() => {console.log('データベースへの接続が確立されました。');}).catch((error) => {
+//データベースの接続
+connectDB().then(() => { console.log('データベースへの接続が確立されました。'); }).catch((error) => {
   console.error('データベース接続に失敗しました:', error);
   process.exit(1);
 });
 
 // ルーターの設定
-app.use('/api',indexRouter);
+app.use('/api', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
-app.use('/api/chat',chatRouter);
+app.use('/api/chat', chatRouter);
 
 // Reactのビルドされた静的ファイルを提供
 app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));
@@ -68,14 +64,14 @@ app.get('*', (req: Request, res: Response) => {
 
 // 404 エラーのハンドリング
 app.use(function (req: Request, res: Response, next: NextFunction) {
-    next(createError(404));
-  });
+  next(createError(404));
+});
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
-    if (req.app.get('env') === 'development') {
-      res.status(err.status || 500).json({ message: err.message, error: err });
-    } else {
-      res.status(err.status || 500).json({ message: err.message });
-    }
-  });
+  if (req.app.get('env') === 'development') {
+    res.status(err.status || 500).json({ message: err.message, error: err });
+  } else {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+});
 
 export default app;

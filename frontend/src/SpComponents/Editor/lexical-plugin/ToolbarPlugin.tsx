@@ -8,7 +8,6 @@ import { useCallback, useState } from "react";
 import { $setBlocksType } from "@lexical/selection";
 import { HeadingTagType, $createHeadingNode, $createQuoteNode } from "@lexical/rich-text";
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import '../Editor.scss';
 import {
     INSERT_ORDERED_LIST_COMMAND,
     INSERT_UNORDERED_LIST_COMMAND,
@@ -138,7 +137,7 @@ function ToolbarPlugin() {
             <button type="button" onClick={() => formatCheckList()}>
                 <TbCheckbox />
             </button>
-                <LinkToolbarItem />
+            <LinkToolbarItem />
         </div>
     );
 }

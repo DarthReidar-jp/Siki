@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 const TopPageButton = () => (
-    <li><Link to="/" className="custom-link">トップページへ</Link></li>
+    <li className="px-5 py-3 hover:bg-blue-900 transition duration-300 cursor-pointer">
+        <Link to="/" className="block">トップページへ</Link>
+    </li>
 );
 
 export default TopPageButton;

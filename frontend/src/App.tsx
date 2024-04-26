@@ -10,7 +10,6 @@ function App() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  // PCかスマホか
   const ComponentToRender = isSp ? SpComponent : PcComponent;
 
   return <ComponentToRender isLoggedIn={isLoggedIn} />;
