@@ -4,12 +4,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Display from './list/List';
 import Search from './list/SearchResults';
 import NewEditor from './Editor/NewEditor';
-import Editor from './Editor/Editor';
+import UpdateEditor from './Editor/UpdateEditor';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
 import Chat from './chat/Chat';
-import "./PcComponent.scss";
 
 // isLoggedInを受け取れるように型定義を追加
 interface PcComponentProps {
@@ -20,27 +19,27 @@ interface PcComponentProps {
 const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
   return (
     <Router>
-      {isLoggedIn ? (
-        <div className='pc-app'>
-          <Header />
-          <main className='pc-content'>
-            <Sidebar />
-            <Routes>
-              <Route path="/" element={<Display />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/new" element={<NewEditor />} />
-              <Route path="/:id" element={<Editor />} />
-              <Route path="/chat" element={<Chat />} />
-            </Routes>
-          </main>
-        </div>
-      ) : (
-        <div className='pc-app'>
+      <div className={`pc-app flex flex-col h-screen`}>
+        {isLoggedIn ? (
+          <>
+            <Header />
+            <main className={`pc-content w-full mt-12`}>
+              <Sidebar />
+              <Routes>
+                <Route path="/" element={<Display />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/new" element={<NewEditor />} />
+                <Route path="/:id" element={<UpdateEditor />} />
+                <Route path="/chat" element={<Chat />} />
+              </Routes>
+            </main>
+          </>
+        ) : (
           <Routes>
             <Route path="/" element={<Login />} />
           </Routes>
-        </div>
-      )}
+        )}
+      </div>
     </Router>
   );
 };

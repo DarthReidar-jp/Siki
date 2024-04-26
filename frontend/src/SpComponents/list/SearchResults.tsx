@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageList from './PageList';
-import './list.scss';
+//import './list.scss';
 import { Page } from '../../utils/types';
 import { fetchSearchResults } from '../../utils/fetchSearchResults'; // 適切なパスに修正してください
 
@@ -27,7 +27,7 @@ const SearchResults: React.FC = () => {
   }, [location.search]);
 
   return (
-    <div className="main-content">
+    <div className="px-20">
       <PageList pages={pages} />
     </div>
   );
