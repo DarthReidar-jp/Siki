@@ -1,6 +1,5 @@
 // components/sidebar/Sidebar.tsx
 import React, { useState, useEffect } from 'react';
-import './sidebar.scss'
 import TopPageButton from './TopPageButton';
 import ChatButton from './ChatButton';
 import FileImport from './FileImport';
@@ -22,8 +21,8 @@ const Sidebar = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isVisible]);
   return (
-    <div className={`sidebar ${isVisible ? 'active' : ''}`}>
-      <ul>
+    <div className={`fixed top-12 left-0 bottom-0 bg-gray-400 z-50 bg-opacity-80 backdrop-blur-sm transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'} shadow-lg`}>
+      <ul className="text-white py-5">
         <TopPageButton />
         <FileImport />
         <ChatButton />
