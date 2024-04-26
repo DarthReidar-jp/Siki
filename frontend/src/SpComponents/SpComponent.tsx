@@ -21,6 +21,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
       <div className={`sp-app flex flex-col h-screen`}>
         {isLoggedIn ? (
           <>
+          
             <Header />
             <main className={`sp-content w-full mt-12`}>
               <Routes>
