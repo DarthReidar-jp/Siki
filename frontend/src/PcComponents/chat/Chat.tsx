@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Chat.scss';
 
 interface Message {
   user: string;
@@ -47,26 +46,30 @@ const Chat: React.FC = () => {
   };
 
   return (
-    <div className="chat-container">
-      <div className="message-area">
+    <div className="chat-container max-w-4xl mx-auto bg-gray-100 p-5 font-sans">
+      <div className="message-area flex flex-col grow space-y-4 p-5 bg-white">
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.user}`}>
-            <strong>{message.user === 'user' ? 'You' : 'AI'}:</strong> {message.text}
+          <div key={index} className={`message flex ${message.user === 'user' ? 'justify-end' : 'justify-start'} bg-gray-200 shadow p-3 rounded-lg`}>
+            <strong className={`font-bold ${message.user === 'user' ? 'text-white' : 'text-gray-800'}`}>{message.user === 'user' ? 'You' : 'AI'}:</strong>
+            <span className={`ml-2 ${message.user === 'user' ? 'text-white' : 'text-gray-800'}`}>{message.text}</span>
           </div>
         ))}
-        {isLoading && <div className="loading-message">ロード中...</div>}  
+        {isLoading && <div className="loading-message text-center">ロード中...</div>}
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex w-full fixed bottom-0 left-0 p-3 bg-gray-100 shadow-inner">
         <input
           type="text"
           value={inputText}
           onChange={handleInputChange}
           placeholder="Type your message here..."
-          className="input-field"
+          className="flex-grow p-3 border-2 border-gray-300 rounded-full bg-gray-200 mr-3"
         />
-        <button type="submit" className="submit-button" disabled={isLoading}>Send</button>  
+        <button type="submit" className="bg-blue-600 text-white px-5 py-3 rounded-full hover:bg-blue-700 disabled:bg-blue-300" disabled={isLoading}>
+          Send
+        </button>
       </form>
     </div>
+
   );
 };
 
