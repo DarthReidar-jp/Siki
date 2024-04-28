@@ -47,4 +47,11 @@ router.get('/verify', (req, res) => {
   });
 });
 
+// ログアウトエンドポイント
+router.get('/logout', (req, res) => {
+  res.clearCookie('access_token');  // JWTトークンをクリア
+  res.redirect(`${process.env.FRONTEND_URL}/`); // ログインページへリダイレクト（必要に応じて変更可）
+});
+
+
 export default router;
