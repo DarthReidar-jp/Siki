@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import TopPageButton from './TopPageButton';
 import ChatButton from './ChatButton';
 import FileImport from './FileImport';
+import Logout from'./LogoutButton';
 
 const Sidebar = () => {
   // サイドバーの表示状態を管理するための状態変数
@@ -26,6 +27,7 @@ const Sidebar = () => {
         <TopPageButton />
         <FileImport />
         <ChatButton />
+        <Logout />
       </ul>
     </div>
   );
