@@ -57,7 +57,7 @@ async function generateResponseUsingRAG(userId: string, userMessage: string) {
         ]);
         const llm = new ChatOpenAI({ 
             modelName: "gpt-3.5-turbo-0125", 
-            temperature: 0, 
+            temperature: 0.8, 
             openAIApiKey: process.env.OPENAI_API_KEY });
         const ragChain = await createStuffDocumentsChain({
             llm,
