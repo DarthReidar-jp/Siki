@@ -1,4 +1,3 @@
-import { OpenAI,ClientOptions} from 'openai';
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 const embeddings = new OpenAIEmbeddings({
@@ -6,8 +5,6 @@ const embeddings = new OpenAIEmbeddings({
   batchSize: 2048, 
   modelName: "text-embedding-3-small",
 });
-
-const openai = new OpenAI();
 
 async function getPageVector(content: string): Promise<number[]> {
   const response = await embeddings.embedDocuments([content]);
