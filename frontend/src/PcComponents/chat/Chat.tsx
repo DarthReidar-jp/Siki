@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { IoIosSend } from "react-icons/io";
 
 interface Message {
-  user: string;
   text: string;
+  timestamp: string;
+  sender: 'user' | 'ai';
 }
 
 const Chat: React.FC = () => {
@@ -20,9 +21,12 @@ const Chat: React.FC = () => {
     if (!inputText.trim()) return;
 
     setIsLoading(true);  // ロード開始
-    const messageToSend: Message = { user: 'user', text: inputText };
-    setMessages([...messages, messageToSend]);
-
+    const messageToSend: Message = {
+      text: inputText,
+      timestamp: new Date().toISOString(),
+      sender: 'user'
+    };
+    
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
       const response = await fetch(`${backendUrl}chat`, {
@@ -31,13 +35,21 @@ const Chat: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: inputText }),
+        body: JSON.stringify({ 
+          text: inputText,
+          chatHistory: messages.length > 0 ? [...messages, messageToSend] : []
+        }),
       });
-
-      const reply = await response.json();
-      console.log(reply);
-      const serverMessage: Message = { user: 'AI', text: reply.text };
-      setMessages((prevMessages) => [...prevMessages, serverMessage]);
+      
+      setMessages([...messages, messageToSend]);
+      const responseData = await response.json();
+      const aiMessageText = responseData.answer; // 仮に 'answer' キーが正しいテキストを含んでいるとします
+      const aiMessages: Message = {
+        text: aiMessageText,
+        timestamp: new Date().toISOString(),
+        sender: 'ai'
+      };
+      setMessages((prevMessages) => [...prevMessages, aiMessages]);
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -53,11 +65,11 @@ const Chat: React.FC = () => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${message.user === 'user' ? 'justify-end' : 'justify-start'
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'
                 }`}
             >
               <div
-                className={`max-w-3/4 p-4 rounded-lg shadow-md ${message.user === 'user'
+                className={`max-w-3/4 p-4 rounded-lg shadow-md ${message.sender === 'user'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-800'
                   }`}
