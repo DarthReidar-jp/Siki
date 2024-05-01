@@ -27,7 +27,7 @@ const SearchResults: React.FC = () => {
   }, [location.search]);
 
   return (
-    <div className="px-20">
+    <div className="px-1">
       <PageList pages={pages} />
     </div>
   );
