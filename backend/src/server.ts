@@ -21,6 +21,7 @@ import authRoutes from './routes/auth';
 import indexRouter from './routes/index';
 import pageRouter from './routes/page';
 import chatRouter from './routes/chat';
+import projectRouter from './routes/project';
 
 const app: express.Express = express();
 
@@ -53,6 +54,7 @@ app.use('/api', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/project', projectRouter);
 
 // Reactのビルドされた静的ファイルを提供
 app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));

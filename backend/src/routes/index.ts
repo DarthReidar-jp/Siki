@@ -3,7 +3,7 @@ import Page, { IPage } from '../models/page';
 import { performVectorSearch } from '../utils/searchUtils';
 import { verifyToken } from '../utils/verifyToken';
 import { createEditorState } from '../utils/jsonConversion';
-import { getPageVector } from '../utils/openaiUtils';
+import { getPageVector } from '../llm/openaiUtils';
 import { extractTexts } from '../utils/extractTextUtils';
 
 const router = express.Router();
@@ -59,7 +59,7 @@ router.get('/search', async (req: Request, res: Response) => {
     }
     const userId = decoded.userId;
     const { query } = req.query;
-    console.log('Query:', query); // デバッグ情報としてクエリをログに出力
+    console.log('Query:', query); 
     if (typeof query !== 'string') {
       return res.status(400).json({ message: 'Query must be a string.' });
     }

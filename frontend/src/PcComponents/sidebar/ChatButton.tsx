@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 const TopPageButton = () => (
-    <li className="px-5 py-3 hover:bg-blue-900 transition duration-300 cursor-pointer">
-        <Link to="/chat" className="block">
-            chat
-        </Link>
-    </li>
+    <Link to="/chat" className="block">
+        <li className="px-5 py-3 hover:bg-gray-400 transition duration-300 cursor-pointer">
+            Let's Chat!
+        </li>
+    </Link>
 );
 
 export default TopPageButton;

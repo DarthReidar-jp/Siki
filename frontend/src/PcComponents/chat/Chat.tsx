@@ -11,6 +11,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);  // ローディング状態の管理
+  const [chatId, setChatId] = useState<string | null>(null);  // Chat ID state
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
@@ -26,7 +27,9 @@ const Chat: React.FC = () => {
       timestamp: new Date().toISOString(),
       sender: 'user'
     };
-    
+
+    setInputText('');
+    setMessages([...messages, messageToSend]);
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
       const response = await fetch(`${backendUrl}chat`, {
@@ -35,27 +38,42 @@ const Chat: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           text: inputText,
           chatHistory: messages.length > 0 ? [...messages, messageToSend] : []
         }),
       });
-      
-      setMessages([...messages, messageToSend]);
+
       const responseData = await response.json();
-      const aiMessageText = responseData.answer; // 仮に 'answer' キーが正しいテキストを含んでいるとします
+      const aiMessageText = responseData.answer;
       const aiMessages: Message = {
         text: aiMessageText,
         timestamp: new Date().toISOString(),
         sender: 'ai'
       };
       setMessages((prevMessages) => [...prevMessages, aiMessages]);
+
+      // Save conversation to backend
+      const saveResponse = await fetch(`${backendUrl}chat/save`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chatId,
+          messages: [messageToSend, aiMessages]
+        })
+      });
+      const saveData = await saveResponse.json();
+      if (!chatId) {
+        setChatId(saveData.chatId); // Set chatId from backend if it's the first time
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     }
 
     setIsLoading(false);  // ロード終了
-    setInputText('');
   };
 
   return (
@@ -70,8 +88,8 @@ const Chat: React.FC = () => {
             >
               <div
                 className={`max-w-3/4 p-4 rounded-lg shadow-md ${message.sender === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-800'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-800'
                   }`}
               >
                 {message.text}

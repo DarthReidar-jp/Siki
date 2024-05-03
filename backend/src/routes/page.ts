@@ -1,7 +1,7 @@
 //page.ts
 import express, { Request, Response } from 'express';
 import Page, { IPage } from '../models/page';
-import { getPageVector } from '../utils/openaiUtils';
+import { getPageVector } from '../llm/openaiUtils';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { verifyToken } from '../utils/verifyToken';
@@ -19,22 +19,21 @@ router.post('/', async (req: Request, res: Response) => {
     const { root } = req.body;
     const lines = extractTexts(root.root);
     const title = lines.length > 0 ? lines[0] : 'デフォルトタイトル';
-    const content = lines.join('');
+    const content = lines.slice(1).join('');
     const vector = await getPageVector(content);
     const newPage = new Page({
       userId,
       title,
       editorState:root,
-      lines,
       content,
       vector,
       createdAt: new Date(),
     });
     await newPage.save();
-    res.status(201).json({ message: 'Page created successfully', page: newPage });
+    res.status(201).json({ message: 'ページの作成が成功しました', page: newPage });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: 'トークンが検証できません' });
     }
     handleError(error, req, res);
   }

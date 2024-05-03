@@ -1,8 +1,6 @@
-import React from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useNavigate } from 'react-router-dom';
 
-// 引数として{id}オブジェクトを受け取るように変更
 const UpdateButton = ({ id }: { id: any }) => {
     const [editor] = useLexicalComposerContext();
     const navigate = useNavigate();
@@ -18,8 +16,7 @@ const UpdateButton = ({ id }: { id: any }) => {
             body: JSON.stringify(serializedState),
         });
         const result = await response.json();
-        console.log('Page updated:', result); // ログのメッセージを「Page created」から「Page updated」に変更
-        console.log(JSON.stringify(serializedState));
+        console.log('ページの更新:', result);
         navigate(`/`);
     };
 

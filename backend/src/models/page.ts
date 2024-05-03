@@ -9,6 +9,7 @@ export interface IPage extends Document {
   content: string; 
   vector: number[]; 
   folderIds: mongoose.Schema.Types.ObjectId[]; // フォルダーIDもObjectIdで参照
+  projectId:string;
   score: number;
   createdAt: Date;
   updatedAt: Date;
@@ -23,6 +24,7 @@ const PageSchema = new mongoose.Schema<IPage>({
   content: { type: String, default: '' },
   vector: { type: [Number], default: [] },
   folderIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Folder', default: [] }],
+  projectId:{type:String, default:''},
   score: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }

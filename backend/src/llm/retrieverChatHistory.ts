@@ -1,70 +1,77 @@
+/* チャット履歴と質問文のクエリ文章を生成して
+クエリと類似度が高い文章をMongoDBから取得
+それら文章を元に回答を生成するのはこちら */
+
 import mongoose from 'mongoose';
-import { ChatOpenAI } from "@langchain/openai";
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { OpenAI,ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { MessagesPlaceholder } from "@langchain/core/prompts";
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HydeRetriever } from "langchain/retrievers/hyde";
+import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { createRetrievalChain } from "langchain/chains/retrieval";
-import  { searchSystemPrompt,searchcontentPrompt,RAGSystemPrompt, RAGcontentPrompt } from "./promptUtils";
 
-const historyAwarePrompt = ChatPromptTemplate.fromMessages([
-    ["system",searchSystemPrompt],
-    new MessagesPlaceholder("chat_history"),
-    ["user", searchcontentPrompt],
-]);
+import { searchSystemPrompt, searchcontentPrompt, RAGSystemPrompt, RAGcontentPrompt } from "../llm/promptUtils";
 
-const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
-    ["system", RAGSystemPrompt],
-    new MessagesPlaceholder("chat_history"),
-    ["user",  RAGcontentPrompt],
-]);
+// MongoDBコレクションのセットアップ
+async function setupMongoDBCollection() {
+    const collection = mongoose.connection.db.collection('pages');
+    return collection;
+}
+// MongoDBのベクトル検索とリトリバーの初期化
+function initializeVectorSearch(collection: any, userId: string) {
+    const vectorStore = new MongoDBAtlasVectorSearch(new OpenAIEmbeddings({
+        openAIApiKey: process.env.OPENAI_API_KEY,
+        batchSize: 2048,
+        modelName: "text-embedding-3-small",
+    }), {
+        collection,
+        indexName: "vector_index",
+        textKey: "content",
+        embeddingKey: "vector",
+    });
+    const llm = new OpenAI();
+    const retriever = new HydeRetriever({
+        vectorStore,
+        llm,
+        k: 3,
+        searchType: "similarity",
+        filter: {
+            preFilter: {
+                userId: userId
+            }
+        }
+    });
+
+    return retriever;
+}
+
+//パラメータ
+const temperature = 0.8;
 
 interface Message {
     text: string;
     timestamp: string;
     sender: 'user' | 'ai';
 }
+// チャット履歴を基にクエリを生成するためのPromptを設定
+const historyAwarePrompt = ChatPromptTemplate.fromMessages([
+    ["system", searchSystemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", searchcontentPrompt],
+]);
 
+// 検索結果を元に回答を生成するPromptを設定
+const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
+    ["system", RAGSystemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", RAGcontentPrompt],
+]);
 
-async function setupMongoDBCollection() {
-    const collection = mongoose.connection.db.collection('pages'); 
-    return collection;
-}
-
-async function initializeVectorSearch(collection: any, userId: string) {
-    try {
-        const vectorStore = new MongoDBAtlasVectorSearch(new OpenAIEmbeddings({
-            openAIApiKey: process.env.OPENAI_API_KEY,
-            batchSize: 2048,
-            modelName: "text-embedding-3-small",
-        }), {
-            collection,
-            indexName: "vector_index",
-            textKey: "content",
-            embeddingKey: "vector",
-        });
-        console.log("Vector search initialized successfully.");
-        return vectorStore.asRetriever({
-            k: 3,
-            searchType: "similarity",
-            filter: {
-                preFilter: {
-                    userId: userId
-                }
-            }
-        });
-    } catch (error) {
-        console.error("Failed to initialize vector search:", error);
-        throw error;
-    }
-}
 
 async function generateResponseUsingRAGandHistory(chat_history: Message[], userId: string, userMessage: string) {
-    let client;
     try {
         const chatHistory = chat_history.map((msg: Message) => {
             if (msg.sender === 'user') {
@@ -78,16 +85,15 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
         const collection = await setupMongoDBCollection();
         const retriever = await initializeVectorSearch(collection, userId);
 
-        // クエリの内容をログに出力
         if (userMessage === undefined) {
-            console.error("Error: userMessage.text is undefined.");
+            console.error("Error: ユーザーメッセージがありません.");
         } else {
             console.log("Query text:", userMessage);
         }
 
         const chatModel = new ChatOpenAI({
-            modelName: "gpt-3.5-turbo-0125",
-            temperature: 0.8,
+            modelName: process.env.OPENAI_CHAT_MODEL,
+            temperature: temperature,
             openAIApiKey: process.env.OPENAI_API_KEY
         });
 
@@ -108,6 +114,8 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
             combineDocsChain: historyAwareCombineDocsChain,
         });
 
+
+
         // 入力を確認してからレスポンスを生成
         if (userMessage) {
             const response = await conversationalRetrievalChain.invoke({
@@ -122,9 +130,6 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
     } catch (error) {
         console.error("Error during the document retrieval or generation process:", error);
         throw error;
-
-    } finally {
-
     }
 }
 

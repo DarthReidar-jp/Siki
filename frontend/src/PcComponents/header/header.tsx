@@ -1,4 +1,3 @@
-import React from 'react';
 import NewPageButton from './NewPageButton';
 import VectorSearchForm from './VectorSearchForm';
 

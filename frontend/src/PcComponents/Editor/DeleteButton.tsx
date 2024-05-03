@@ -10,7 +10,7 @@ const DeleteButton = ({ id }: { id: any }) => {
         credentials: 'include',
       });
       if (!response.ok) {
-        throw new Error('Failed to delete page');
+        throw new Error('ページの削除に失敗しました');
       }
       navigate('/');
     } catch (error) {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getQueryVector } from './openaiUtils';
+import { getQueryVector } from '../llm/openaiUtils';
 
 async function performVectorSearch(query: string, userId: string): Promise<any[]> {
   const queryVector = await getQueryVector(query);
@@ -10,12 +10,12 @@ async function performVectorSearch(query: string, userId: string): Promise<any[]
                 'index': 'vector_index',
                 'path': 'vector',
                 'queryVector': queryVector,
-                'numCandidates': 100,
+                'numCandidates': 1000,
                 'limit': 10
             }
         },
         {
-            '$match': { 'userId': userId } // 特定のユーザーIDに基づくフィルタリング
+            '$match': { 'userId': userId }
         },
         {
             '$project': {
@@ -31,6 +31,7 @@ async function performVectorSearch(query: string, userId: string): Promise<any[]
 
 
   const results = await collection.aggregate(agg).toArray(); // 集計とレスポンスの取得
+  console.log(results);
   return results;
 }
 

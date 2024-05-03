@@ -5,10 +5,11 @@ import { Page } from '../../utils/types';
 
 interface PageItemProps {
   page: Page;
+  projectId: string; // projectId を受け取る
 }
 
-const PageItem: React.FC<PageItemProps> = ({ page }) => (
-<Link to={`/page/${page._id}`} key={page._id}>
+const PageItem: React.FC<PageItemProps> = ({  page, projectId }) => (
+<Link to={`/${projectId}/${page._id}`} key={page._id}>
     <div className="group relative flex flex-col bg-white border border-gray-200 transition-shadow duration-100 hover:bg-gray-200 aspect-square ">
       <div className="flex-1 p-2">
         <h3 className="text-xs font-bold mb-2 overflow-hidden line-clamp-2">{page.title}</h3>
