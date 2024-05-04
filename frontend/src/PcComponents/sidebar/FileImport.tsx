@@ -51,16 +51,16 @@ const FileImport = () => {
 
   return (
     <li className="px-5 py-3 hover:bg-gray-400 transition duration-300 cursor-pointer">
-      <label className="flex items-center justify-center w-full cursor-pointer">
+      <label className="flex w-full cursor-pointer">
         <div className="relative w-full">
           <input
             type="file"
             accept=".json"
             onChange={handleFileChange}
-            className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+            className="opacity-0 absolute inset-0 w-full h-full cursor-pointer "
           />
-          <div className="flex items-center justify-center w-full h-full">
-            <span className="text-gray-600">Choose a JSON file</span>
+          <div className="flex w-full h-full ">
+            <span className="text-gray-600 text-left">Choose a JSON file</span>
           </div>
         </div>
       </label>

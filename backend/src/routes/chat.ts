@@ -1,14 +1,13 @@
 import express from 'express';
 import { verifyToken } from '../utils/verifyToken';
 import { generateResponseUsingRAGandHistory } from '../llm/retrieverChatHistory';
-import  Chat, { IChat } from '../models/chat';
-
+import Chat, { IChat } from '../models/chat';
 
 interface Message {
     text: string;
     sender: 'user' | 'ai';
-    timestamp: string;  // ISO string format
-  }
+    timestamp: string;
+}
 const router = express.Router();
 
 // メッセージを受け取るエンドポイント
@@ -33,6 +32,32 @@ router.post('/', async (req, res) => {
     }
 });
 
+// チャットIDの取得
+router.get('/', async (req, res) => {
+    const decodedToken = verifyToken(req);
+    if (!decodedToken) {
+        return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
+    }
+    const userId = decodedToken.userId; // TokenからuserIdを取得
+    try {
+        // 更新順に受け取るためのチャットデータの取得
+        const chats = await Chat.find({ userId: userId }).sort({ updatedAt: -1 });
+
+        // チャットのidとタイトルを更新順にフロントエンドへ渡す
+        const formattedChats = chats.map(chat => ({
+            id: chat._id, // チャットのID
+            title: chat.title // チャットのタイトル
+        }));
+        
+        // レスポンスの送信
+        res.status(200).json(formattedChats);
+    } catch (error) {
+        // エラーハンドリング
+        console.error('Error fetching chats:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 // メッセージの保存用エンドポイント
 router.post('/save', async (req, res) => {
     try {
@@ -53,15 +78,16 @@ router.post('/save', async (req, res) => {
             }
         } else {
             // 新しいチャットドキュメントを作成する場合
+            const firstMessageText = messages.length > 0 ? messages[0].text : "チャット";
             chat = new Chat({
                 userId,
-                title:"チャット",
+                title: firstMessageText,
                 messages: []  // 最初は空のメッセージ配列で始める
             });
         }
 
         // 受け取ったメッセージを追加
-        messages.forEach((message:Message) => {
+        messages.forEach((message: Message) => {
             chat!.messages.push({
                 text: message.text,
                 sender: message.sender,
@@ -92,7 +118,7 @@ router.get('/:chatId', async (req, res) => {
         if (!chat) {
             return res.status(404).json({ message: 'Chat not found.' });
         }
-
+        
         // チャット履歴を返す
         res.status(200).json({ messages: chat.messages });
     } catch (error) {
@@ -100,6 +126,7 @@ router.get('/:chatId', async (req, res) => {
         res.status(500).json({ error: 'Server Error: Unable to fetch chat history.' });
     }
 });
+
 
 
 export default router;
