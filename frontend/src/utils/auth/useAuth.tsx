@@ -1,5 +1,3 @@
-// src/hooks/useAuth.js (または.tsxなど、適切な場所に)
-
 import { useState, useEffect } from 'react';
 
 const useAuth = () => {
@@ -36,12 +34,11 @@ const useAuth = () => {
         method: 'GET',
         credentials: 'include',
       });
-      setIsLoggedIn(false);  // 状態を未ログインに更新
+      setIsLoggedIn(false);
     } catch (error) {
       console.error('ログアウト時にエラーが発生しました:', error);
     }
   };
-
   return { isLoggedIn, isLoading, logout };
 };
 

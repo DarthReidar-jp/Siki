@@ -1,4 +1,3 @@
-import React from 'react';
 import EditorBase from './EditorBase';
 import SaveButton from "./SaveButton";
 import { theme } from './Theme';

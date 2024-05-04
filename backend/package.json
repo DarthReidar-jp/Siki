@@ -58,6 +58,7 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.1.30",
+    "langsmith": "^0.1.22",
     "llamaindex": "^0.3.0",
     "mongodb": "^6.4.0",
     "mongoose": "^8.2.0",

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +16,7 @@ const EditorActions = () => {
             body: JSON.stringify(serializedState),
         });
         const result = await response.json();
-        navigate(`/${result.page._id}`);
+        navigate(`/page/${result.page._id}`);
     };
 
     const saveContent = () => {

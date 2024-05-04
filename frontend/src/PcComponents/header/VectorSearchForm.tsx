@@ -14,16 +14,16 @@ const SearchForm = () => {
   };
 
   return (
-    <form className='relative w-full max-w-lg bg-gray-400 rounded-full overflow-hidden' onSubmit={handleSearch}>
+    <form className='relative w-full max-w-lg bg-gray-300 rounded-full overflow-hidden' onSubmit={handleSearch}>
       <input
         type="text"
         className="w-full h-10 pl-4 pr-10 text-base bg-transparent focus:outline-none"
-        placeholder="Search..."
+        placeholder="VectorSearch..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        aria-label="Search"
+        aria-label="VectorSearch"
       />
-      <button type="submit" className="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-white bg-transparent hover:text-gray-300 transition duration-300" aria-label="Submit search">
+      <button type="submit" className="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-white bg-transparent hover:text-gray-500 transition duration-300" aria-label="Submit search">
         <GrSearch />
       </button>
     </form>

@@ -6,8 +6,8 @@ import { nodes } from './nodes';
 import { loadEditorState } from "../../utils/LoadEditorState";
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
-import "./Theme.scss";
 import EditorBase from "./EditorBase";
+import "./Theme.scss";
 
 function onError(error: any) {
   console.error(error);
@@ -18,24 +18,23 @@ function UpdateEditor() {
   const [serializedEditorState, setSerializedEditorState] = useState<string>("");
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
-  //データの取得
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await loadEditorState(id);
         setSerializedEditorState(data);
       } catch (error) {
-        console.error("Data loading error:", error);
+        console.error("データロードエラー:", error);
       }
     };
     fetchData();
   }, [id]);
-  //Editorの作成
+
   useEffect(() => {
     if (serializedEditorState) {
       const editorInstance = createEditor(
         {
-          namespace: "MyEditor",
+          namespace: "UpdateEditor",
           theme: theme,
           onError,
           nodes: nodes
@@ -47,7 +46,7 @@ function UpdateEditor() {
   if (!editor) return <>Loading...</>;
 
   const initialConfig = {
-    namespace: "MyEditor",
+    namespace: "UpdateEditor",
     theme: theme,
     onError,
     nodes: nodes,

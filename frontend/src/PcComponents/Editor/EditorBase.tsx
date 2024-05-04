@@ -18,14 +18,13 @@ interface EditorConfig {
     theme: any;
     onError: (error: Error) => void;
     nodes: any[];
-    editorState?: any; // editorState はオプショナルにするかもしれません
+    editorState?: any;
 }
 
 interface EditorBaseProps {
     initialConfig: EditorConfig;
     children: React.ReactNode;
 }
-
 
 const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
     return (
@@ -42,10 +41,10 @@ const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
                         <AutoFocusPlugin />
                         <HistoryPlugin />
                         <MarkdownPlugin />
-                        <LinkPlugin validateUrl={validateUrl} />
-                        <ClickableLinkPlugin />
                         <TabIndentationPlugin />
+                        <LinkPlugin validateUrl={validateUrl} />
                         <LexicalAutoLinkPlugin />
+                        <ClickableLinkPlugin />
                     </div>
                     {children}
                 </LexicalComposer>

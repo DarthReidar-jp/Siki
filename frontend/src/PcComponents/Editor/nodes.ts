@@ -4,7 +4,6 @@ import { ListNode, ListItemNode } from "@lexical/list";
 import { CodeNode } from "@lexical/code";
 import { LinkNode, AutoLinkNode } from "@lexical/link";
 
-
 export const nodes: Klass<LexicalNode>[] = [
     HeadingNode, 
     ListNode, 
