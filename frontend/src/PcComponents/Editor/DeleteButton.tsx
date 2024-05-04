@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const DeleteButton = ({ id }: { id: any }) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const DeleteButton = ({ id }: { id: any }) => {
     }
   };
   return (
-    <button className='button' onClick={handleDelete}>削除</button>
+    <button className='button' onClick={handleDelete}><FaRegTrashAlt /></button>
   );
 };
 

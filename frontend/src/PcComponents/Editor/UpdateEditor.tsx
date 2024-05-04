@@ -19,6 +19,7 @@ function UpdateEditor() {
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const data = await loadEditorState(id);
@@ -43,6 +44,15 @@ function UpdateEditor() {
     }
   }, [serializedEditorState]);
 
+  useEffect(() => {
+    // エディタが初期化された後に、ページの一番上にスクロールする
+    if (editor) {
+      // 少し遅延させてからスクロールを実行
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 8); // 100ミリ秒後に実行
+    }
+  }, [editor]); // 依存配列に editor を指定
   if (!editor) return <>Loading...</>;
 
   const initialConfig = {

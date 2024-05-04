@@ -3,6 +3,9 @@ import useAuth from './utils/auth/useAuth';
 import { mediaQuery, useMediaQuery } from './utils/useMediaQuery';
 import PcComponent from './PcComponents/PcComponent';
 import SpComponent from './SpComponents/SpComponent';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -12,7 +15,9 @@ function App() {
 
   const ComponentToRender = isSp ? SpComponent : PcComponent;
 
-  return <ComponentToRender isLoggedIn={isLoggedIn} />;
+  return<QueryClientProvider client={queryClient}>
+          <ComponentToRender isLoggedIn={isLoggedIn} />
+        </QueryClientProvider >;
 };
 
 export default App;

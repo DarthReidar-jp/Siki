@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useInfiniteQuery, InfiniteQueryObserverResult } from 'react-query';
 import './list.scss';
 import Sort from './Sort';
 import PageList from './PageList';
@@ -6,66 +7,78 @@ import { Page } from '../../utils/types';
 import { fetchPages } from '../../utils/fetchPages';
 import { FaSpinner } from 'react-icons/fa';
 
+interface FetchPagesError {
+  message: string;
+}
+
+interface InitialData {
+  pages: Page[][];
+  pageParams: number[];
+}
+
 const List: React.FC = () => {
-  const [pages, setPages] = useState<Page[]>([]);
   const [sort, setSort] = useState<string>('UpdateAsc');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [hasMoreData, setHasMoreData] = useState<boolean>(true); // 追加データがあるかどうか
+  const [initialData, setInitialData] = useState<InitialData | undefined>(undefined);
 
-  // スクロールイベントリスナーを設定
+  const {
+    isLoading,
+    error,
+    data,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  }: InfiniteQueryObserverResult<Page[], FetchPagesError> = useInfiniteQuery<Page[], FetchPagesError>(
+    ['pages', sort],
+    ({ pageParam = 1 }) => fetchPages(sort, pageParam),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const hasMoreData = lastPage.length > 0;
+        if (!hasMoreData) return undefined;
+        return allPages.length + 1;
+      },
+      initialData: initialData,
+    }
+  );
+
+  const handleScroll = useCallback(() => {
+    const nearBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 100;
+    if (nearBottom && !isLoading && !isFetching && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [isLoading, isFetching, hasNextPage, fetchNextPage]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
-      if (nearBottom && !isLoading && hasMoreData) { // データがない場合はリクエストを行わない
-        setCurrentPage(prev => prev + 1);
-      }
-    };
-
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isLoading, hasMoreData]);
-
-  // ソートオプションが変わったときにページ番号をリセット
-  useEffect(() => {
-    setCurrentPage(1);
-    setHasMoreData(true); // ソートが変更された場合は、再びデータがあると仮定
-  }, [sort]);
+  }, [handleScroll]);
 
   useEffect(() => {
-    const fetchAndSetPages = async () => {
-      if (!hasMoreData) return; // データがもうない場合はフェッチをスキップ
-
-      try {
-        setIsLoading(true);
-        const fetchedPages = await fetchPages(sort, currentPage);
-        if (currentPage === 1) {
-          setPages(fetchedPages);
-        } else {
-          setPages(prev => [...prev, ...fetchedPages]);
-        }
-        setHasMoreData(fetchedPages.length > 0); // 返されたページの数が0なら、これ以上データはない
-      } catch (error) {
-        console.error("Error fetching pages:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAndSetPages();
-  }, [sort, currentPage, hasMoreData]);
-
+    // ページ読み込み時のみデータをフェッチ
+    if (!data && !error) {
+      fetchNextPage({ pageParam: 1 });
+    }
+  }, [sort, fetchNextPage, data, error]);
+  
+  useEffect(() => {
+    if (data) {
+      setInitialData({ pages: data.pages, pageParams: data.pageParams as number[] });
+    }
+  }, [data]);
+  
   return (
-    <div className="px-24">
-      <Sort sort={sort} onSortChange={(e) => {
-        setSort(e.target.value);
-      }} />
-      <PageList pages={pages} />
-      {isLoading && <div className="flex justify-center items-center min-h-screen">
-        <FaSpinner className="text-4xl text-blue-500 animate-spin" />
-      </div>}
+    <div className="px-20">
+      <Sort sort={sort} onSortChange={(e) => setSort(e.target.value)} />
+      <PageList pages={data ? data.pages.flat() : []} />
+      {(isLoading || isFetching) && (
+        <div className="flex justify-center items-center min-h-screen">
+          <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+        </div>
+      )}
+      {error && <div>Error: {error.message}</div>}
     </div>
   );
 };

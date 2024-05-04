@@ -1,5 +1,6 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useNavigate } from 'react-router-dom';
+import { FaRegSave } from "react-icons/fa";
 
 const UpdateButton = ({ id }: { id: any }) => {
     const [editor] = useLexicalComposerContext();
@@ -31,7 +32,7 @@ const UpdateButton = ({ id }: { id: any }) => {
     };
 
     return (
-        <button className='button' onClick={updateContent}>更新</button>
+        <button className='button' onClick={updateContent}><FaRegSave /></button>
     );
 };
 
