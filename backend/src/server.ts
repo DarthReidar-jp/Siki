@@ -60,8 +60,15 @@ connectDB().then(() => { console.log('データベースへの接続が確立さ
   process.exit(1);
 });
 
-// ルーターの設定
-app.use('/api', indexRouter);
+// APIへの直接アクセスを禁止するミドルウェアの設定
+app.use('/api', blockDirectAPIAccess);
+
+// 認証関連のエンドポイントの設定
+// Google ログインのルートは blockDirectAPIAccess ミドルウェアをバイパス
+app.use('/api/auth/google', authRoutes);
+app.use('/api/auth/google/callback', authRoutes);
+
+// その他のAPIルートの設定
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
 app.use('/api/chat', chatRouter);
