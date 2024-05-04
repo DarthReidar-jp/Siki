@@ -1,7 +1,7 @@
 import EditorBase from './EditorBase';
 import SaveButton from "./SaveButton";
-import { theme } from './Theme';
-import { nodes } from './nodes';
+import { theme } from './lexical-plugin/Theme';
+import { nodes } from './lexical-plugin/nodes';
 
 function onError(error: any) {
   console.error(error);

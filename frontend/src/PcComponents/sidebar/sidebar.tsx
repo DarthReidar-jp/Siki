@@ -3,6 +3,7 @@ import TopPageButton from './TopPageButton';
 import ChatButton from './ChatButton';
 import FileImport from './FileImport';
 import Logout from'./LogoutButton';
+import Projects from './ProjectsList';
 
 const Sidebar = () => {
   // サイドバーの表示状態を管理するための状態変数
@@ -23,6 +24,7 @@ const Sidebar = () => {
     <div className={`fixed top-12 left-0 w-60 bottom-12 bg-gray-300 z-50 bg-opacity-80 backdrop-blur-sm transition-transform duration-300 overflow-y-auto ${isVisible ? 'translate-x-0' : '-translate-x-full'} shadow-lg`}>
       <ul className="text-gray-600 py-5">
         <TopPageButton />
+        <Projects />
         <ChatButton />
         <FileImport />
         <Logout />

@@ -6,12 +6,10 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin';
-import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
-import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
 import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
-import { validateUrl } from "./lexical-plugin/validateUrl";
+import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
+import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
 
 interface EditorConfig {
     namespace: string;
@@ -42,7 +40,6 @@ const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
                         <HistoryPlugin />
                         <MarkdownPlugin />
                         <TabIndentationPlugin />
-                        <LinkPlugin validateUrl={validateUrl} />
                         <LexicalAutoLinkPlugin />
                         <ClickableLinkPlugin />
                     </div>
