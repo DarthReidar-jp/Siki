@@ -4,6 +4,7 @@ import Sort from './Sort';
 import PageList from './PageList';
 import { Page } from '../../utils/types';
 import { fetchPages } from '../../utils/fetchPages';
+import { FaSpinner } from 'react-icons/fa';
 
 const List: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
@@ -62,7 +63,9 @@ const List: React.FC = () => {
         setSort(e.target.value);
       }} />
       <PageList pages={pages} />
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <div className="flex justify-center items-center min-h-screen">
+        <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+      </div>}
     </div>
   );
 };

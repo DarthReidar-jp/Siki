@@ -1,9 +1,8 @@
-import { LinkNode } from '@lexical/link';
-import type { LexicalEditor } from 'lexical';
-import { $isLinkNode } from '@lexical/link';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getNearestNodeFromDOMNode, $getSelection, $isRangeSelection } from 'lexical';
 import { useEffect } from 'react';
+import type { LexicalEditor } from 'lexical';
+import { $getNearestNodeFromDOMNode, $getSelection, $isRangeSelection } from 'lexical';
+import { LinkNode ,$isLinkNode } from '@lexical/link';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
 // リンクをクリックした時の動作をカスタマイズするための関数型の型
 type LinkFilter = (event: MouseEvent, linkNode: LinkNode) => boolean;

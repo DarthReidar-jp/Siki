@@ -43,6 +43,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// APIへの直接アクセスを禁止するミドルウェア
+function blockDirectAPIAccess(req: Request, res: Response, next: NextFunction) {
+  if (req.headers['x-requested-with'] === 'XMLHttpRequest') {
+    next();
+  } else {
+    // エラーオブジェクトを作成し、次のミドルウェアに渡す
+    let err = createError(404, 'APIへの直接アクセスは許可されていません');
+    next(err);
+  }
+}
+
 //データベースの接続
 connectDB().then(() => { console.log('データベースへの接続が確立されました。'); }).catch((error) => {
   console.error('データベース接続に失敗しました:', error);
@@ -50,7 +61,7 @@ connectDB().then(() => { console.log('データベースへの接続が確立さ
 });
 
 // ルーターの設定
-app.use('/api', indexRouter);
+app.use('/api', blockDirectAPIAccess, indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
 app.use('/api/chat', chatRouter);

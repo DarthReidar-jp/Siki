@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { createEditor, LexicalEditor } from "lexical";
-import { theme } from "./Theme";
-import { nodes } from './nodes';
+import { theme } from "./lexical-plugin/Theme";
+import { nodes } from './lexical-plugin/nodes';
 import { loadEditorState } from "../../utils/LoadEditorState";
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import EditorBase from "./EditorBase";
-import "./Theme.scss";
+import "./lexical-plugin/Theme.scss";
 
 function onError(error: any) {
   console.error(error);
