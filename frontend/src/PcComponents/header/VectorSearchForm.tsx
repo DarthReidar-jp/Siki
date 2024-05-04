@@ -14,7 +14,7 @@ const SearchForm = () => {
   };
 
   return (
-    <form className='relative w-full max-w-lg bg-gray-300 rounded-full overflow-hidden' onSubmit={handleSearch}>
+    <form className='relative w-full max-w-lg bg-gray-300 rounded-lg overflow-hidden' onSubmit={handleSearch}>
       <input
         type="text"
         className="w-full h-10 pl-4 pr-10 text-base bg-transparent focus:outline-none"

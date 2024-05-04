@@ -8,7 +8,7 @@ interface PageListProps {
 }
 
 const PageList: React.FC<PageListProps> = ({ pages }) => (
-  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-5 p-5 px-12">
+  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 p-5 px-12">
     {pages.length ? (
       pages.map(page => (
         <PageItem key={page._id} page={page} />
