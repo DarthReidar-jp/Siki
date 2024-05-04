@@ -37,6 +37,7 @@ const Chat: React.FC = () => {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify({
           text: inputText,
@@ -59,6 +60,7 @@ const Chat: React.FC = () => {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         },
         body: JSON.stringify({
           chatId,

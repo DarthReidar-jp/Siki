@@ -16,6 +16,9 @@ const ChatButton = () => {
             const response = await fetch(`${backendUrl}chat`, { // URLの形式を確認してください
                 method: 'GET',
                 credentials: 'include',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+                  }
             });
             const data = await response.json();
             setChats(data);

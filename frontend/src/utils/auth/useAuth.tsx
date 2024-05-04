@@ -14,6 +14,9 @@ const useAuth = () => {
       const response = await fetch(`${backendUrl}auth/verify`, {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+        }
       });
       if (response.ok) {
         const data = await response.json();
@@ -33,6 +36,9 @@ const useAuth = () => {
       await fetch(`${backendUrl}auth/logout`, {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+        }
       });
       setIsLoggedIn(false);
     } catch (error) {

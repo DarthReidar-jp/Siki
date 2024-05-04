@@ -26,6 +26,7 @@ const LegacyChat: React.FC = () => {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
                 });
                 const data = await response.json();
@@ -65,6 +66,7 @@ const LegacyChat: React.FC = () => {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     text: inputText,

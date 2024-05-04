@@ -8,6 +8,9 @@ const DeleteButton = ({ id }: { id: any }) => {
       const response = await fetch(`${backendUrl}page/${id}`, {
         method: 'DELETE',
         credentials: 'include',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+        }
       });
       if (!response.ok) {
         throw new Error('ページの削除に失敗しました');
