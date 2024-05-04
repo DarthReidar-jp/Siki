@@ -61,7 +61,7 @@ connectDB().then(() => { console.log('データベースへの接続が確立さ
 });
 
 // ルーターの設定
-app.use('/api', blockDirectAPIAccess, indexRouter);
+app.use('/api', indexRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/page', pageRouter);
 app.use('/api/chat', chatRouter);
