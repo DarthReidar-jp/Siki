@@ -9,6 +9,9 @@ export const fetchSearchResults = async (query: string): Promise<Page[]> => {
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+      }
     });
     if (!response.ok) throw new Error('Failed to fetch search results');
 

@@ -4,6 +4,9 @@ export const loadEditorState = async (id: any) => {
   const response = await fetch(`${backendUrl}page/${id}`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+    }
   });
   if (!response.ok) {
     throw new Error('Failed to fetch page');

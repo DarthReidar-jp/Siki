@@ -12,6 +12,7 @@ const UpdateButton = ({ id }: { id: any }) => {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
             },
             body: JSON.stringify(serializedState),
         });

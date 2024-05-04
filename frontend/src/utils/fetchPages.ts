@@ -6,6 +6,9 @@ export const fetchPages = async (sort: string, page: number, pageSize: number = 
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+      }
     });
     if (!response.ok) {
       throw new Error('Failed to fetch pages');
