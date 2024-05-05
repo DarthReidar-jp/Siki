@@ -6,15 +6,15 @@ import { nodes } from './lexical-plugin/nodes';
 function onError(error: any) {
   console.error(error);
 }
-const editorConfig = {
-  namespace: "MyEditor",
+const initialEditorConfig = {
+  namespace: "NewEditor",
   theme: theme,
   onError,
   nodes: nodes
 };
 
 const NewPage = () => {
-  return <EditorBase initialConfig={editorConfig}>
+  return <EditorBase initialConfig={initialEditorConfig}>
     <SaveButton />
   </EditorBase>;
 };

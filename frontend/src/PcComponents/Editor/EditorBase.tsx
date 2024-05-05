@@ -11,7 +11,6 @@ import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
 import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
 import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
 
-
 interface EditorConfig {
     namespace: string;
     theme: any;
@@ -36,11 +35,11 @@ const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
                             placeholder={<div className="absolute text-gray-400 top-32 pb-1 left-96 pointer-events-none select-none">Enter some text...</div>}
                             ErrorBoundary={LexicalErrorBoundary}
                         />
+                        <TabIndentationPlugin />
                         <OnChangePlugin onChange={(editorState) => console.log(editorState)} />
                         <AutoFocusPlugin />
                         <HistoryPlugin />
                         <MarkdownPlugin />
-                        <TabIndentationPlugin />
                         <LexicalAutoLinkPlugin />
                         <ClickableLinkPlugin />
                     </div>
