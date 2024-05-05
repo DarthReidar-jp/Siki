@@ -25,6 +25,7 @@ const LexicalAutoLinkPlugin: FC = () => (
      const frontendUrlMatch = FRONTEND_URL_SEARCH_PATTERN.exec(text);
      if (frontendUrlMatch !== null) {
        const fullMatch = frontendUrlMatch[0];
+       console.log(fullMatch);
        const searchQuery = encodeURIComponent(frontendUrlMatch[1]);
        const frontendUrl = process.env.REACT_APP_FRONTEND_URL;
        return {

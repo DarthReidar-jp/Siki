@@ -1,3 +1,12 @@
+import { PromptTemplate,ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+
+
+// チャット履歴を基にクエリを生成するためのPromptを設定
+const HydePrompt = PromptTemplate.fromTemplate(
+'以下の質問をより具体的な質問と指示をする文章にして下ださい質問:{question}'
+);
+
+
 //検索文の生成プロンプト
 const searchSystemPrompt = `
 これまでの会話履歴を反映して、質問を言語化し、ベクトル検索に適した形に整えてください。
@@ -7,6 +16,14 @@ const searchSystemPrompt = `
 const searchcontentPrompt = `
 質問: "{input}" 
 `;
+
+// チャット履歴を基にクエリを生成するためのPromptを設定
+const historyAwarePrompt = ChatPromptTemplate.fromMessages([
+    ["system", searchSystemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", searchcontentPrompt],
+]);
+
 
 //RAGの生成プロンプト
 const RAGSystemPrompt = `
@@ -21,5 +38,11 @@ const RAGcontentPrompt = `
 
 `;
 
+// 検索結果を元に回答を生成するPromptを設定
+const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
+    ["system", RAGSystemPrompt],
+    new MessagesPlaceholder("chat_history"),
+    ["user", RAGcontentPrompt],
+]);
 
-export { searchSystemPrompt,searchcontentPrompt,RAGSystemPrompt, RAGcontentPrompt }
+export { HydePrompt,historyAwarePrompt,historyAwareRetrievalPrompt }
