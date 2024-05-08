@@ -10,8 +10,8 @@ import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
 import Chat from './chat/Chat';
 import LegacyChat from './chat/LegacyChat';
-import NewProject from './project/NewProject';
-import Project from './project/Project';
+
+
 
 
 interface PcComponentProps {
@@ -34,8 +34,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
                 <Route path="/page/:id" element={<UpdateEditor />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/chat/:chatId" element={<LegacyChat />}/>
-                <Route path="/project/new" element={<NewProject />}/>
-                <Route path="/:projectId" element={<Project />}/>
+
               </Routes>
             </main>
           </>

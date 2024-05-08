@@ -12,7 +12,6 @@ const List: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
-
   const { projectId } = useParams<{ projectId: string | undefined }>();
 
 
