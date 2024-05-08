@@ -1,4 +1,4 @@
-/* eslint-disable turbo/no-undeclared-env-vars */
+/* /* /* /* /* eslint-disable turbo/no-undeclared-env-vars 
 import mongoose from 'mongoose';
 import { MongoClient } from "mongodb";
 import {
@@ -70,3 +70,4 @@ async function query() {
     console.log(result.response);
     await client.close();
 }
+ */

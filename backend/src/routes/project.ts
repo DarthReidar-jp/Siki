@@ -80,13 +80,13 @@ router.get('/', async (req: Request, res: Response) => {
   });
 
 //ページ作成
-router.post('/newpage/:projectId', async (req: Request, res: Response) => {
+router.post('/newpage/:id', async (req: Request, res: Response) => {
   try {
     const decoded = verifyToken(req);
     if (!decoded) {
       return res.status(401).json({ message: 'No token provided or invalid token' });
     }
-    const projectId = req.params.projectId;
+    const projectId = req.params.id; // projectIdを正しく取得
     const userId = decoded.userId;
     const { root } = req.body;
     const lines = extractTexts(root.root);
@@ -147,7 +147,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     page.editorState = root;
     page.lines = extractTexts(rootNode);
     page.title =  page.lines.length > 0 ? page.lines[0] : 'デフォルトタイトル';
-    page.content = page.lines.join('');
+    page.content = page.lines.slice(1).join('');
     page.vector = await getPageVector(page.content);
     await page.save();
     res.json(page);
@@ -189,4 +189,29 @@ function handleError(error: any, req: Request, res: Response) {
   }
 }
 
-  export default router;
+//プロジェクトリストの取得
+router.get('/list', async (req, res) => {
+  const decodedToken = verifyToken(req);
+  if (!decodedToken) {
+      return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
+  }
+  const userId = decodedToken.userId; // TokenからuserIdを取得
+  try {
+      // 更新順に受け取るためのチャットデータの取得
+      const project = await Project.find({ createUserId: userId }).sort({ updatedAt: -1 });
+
+      // チャットのidとタイトルを更新順にフロントエンドへ渡す
+      const formattedProject = project.map(project => ({
+          id: project.projectId, // チャットのID
+          title: project.projectName // チャットのタイトル
+      }));
+      
+      // レスポンスの送信
+      res.status(200).json(formattedProject);
+  } catch (error) {
+      // エラーハンドリング
+      console.error('Error fetching chats:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+export default router;

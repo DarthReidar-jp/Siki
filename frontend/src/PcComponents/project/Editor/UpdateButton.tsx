@@ -2,7 +2,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { useNavigate } from 'react-router-dom';
 import { FaRegSave } from "react-icons/fa";
 
-const UpdateButton = ({ id }: { id: any }) => {
+const UpdateButton = ({ id, projectId }: { id: any; projectId: any }) => {
     const [editor] = useLexicalComposerContext();
     const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ const UpdateButton = ({ id }: { id: any }) => {
         });
         const result = await response.json();
         console.log('ページの更新:', result);
-        navigate(`/`);
+        navigate(`/${projectId}`);
     };
 
     const updateContent = () => {

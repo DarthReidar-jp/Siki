@@ -14,7 +14,7 @@ function onError(error: any) {
 }
 
 function UpdateEditor() {
-  const { id } = useParams();
+  const { projectId, id } = useParams();
   const [serializedEditorState, setSerializedEditorState] = useState<string>("");
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
 
@@ -67,7 +67,7 @@ function UpdateEditor() {
 
   return (
     <EditorBase initialConfig={initialConfig}>
-      <UpdateButton id={id} />
+      <UpdateButton id={id} projectId={projectId} />
       <DeleteButton id={id} />
     </EditorBase>
   );
