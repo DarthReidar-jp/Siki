@@ -18,7 +18,7 @@ const EditorActions = ({ projectId }: { projectId: any }) => {
             body: JSON.stringify(serializedState),
         });
         const result = await response.json();
-        navigate(`/${projectId}/${result.page._id}`);
+        navigate(`/project/editor/${projectId}/${result.page._id}`);
     };
 
     const saveContent = () => {

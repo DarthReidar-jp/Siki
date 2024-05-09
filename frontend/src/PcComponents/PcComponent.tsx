@@ -36,11 +36,16 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
                 <Route path="/new" element={<NewEditor />} />
                 <Route path="/page/:id" element={<UpdateEditor />} />
                 <Route path="/chat" element={<Chat />} />
-                <Route path="/chat/:chatId" element={<LegacyChat />}/>
-                <Route path="/project/new" element={<NewProject />}/>
-                <Route path="/:projectId" element={<Project />}/>
-                <Route path="/:projectId/new" element={<NewProjectEditor />}/>
-                <Route path="/:projectId/:id" element={<ProjectEditor />}/>
+                <Route path="/chat/:chatId" element={<LegacyChat />} />
+                <Route path="/project">
+                  <Route index element={<Project />} />
+                  <Route path="new" element={<NewProject />} />
+                  <Route path=":projectId">
+                    <Route index element={<Project />} />
+                    <Route path="editor/new" element={<NewProjectEditor />} />
+                    <Route path="editor/:id" element={<ProjectEditor />} />
+                  </Route>
+                </Route>
               </Routes>
             </main>
           </>

@@ -68,7 +68,7 @@ function UpdateEditor() {
   return (
     <EditorBase initialConfig={initialConfig}>
       <UpdateButton id={id} projectId={projectId} />
-      <DeleteButton id={id} />
+      <DeleteButton id={id} projectId={projectId} />
     </EditorBase>
   );
 };

@@ -35,49 +35,66 @@ router.post('/create', async(req,res) =>{
     }
 });
 
-// プロジェクトのページデータを取得
 router.get('/', async (req: Request, res: Response) => {
-    try {
-      const decoded = verifyToken(req);
-      if (!decoded) {
-        return res.status(401).json({ message: 'No token provided or invalid token' });
-      }
-      const sortOption = req.query.sort;
-      let sort = {};
-  
-      // ソートオプションの設定
-      switch (sortOption) {
-        case 'createdAsc':
-          sort = { createdAt: 1 };
-          break;
-        case 'updatedDesc':
-          sort = { updatedAt: -1 };
-          break;
-        case 'titleAsc':
-          sort = { title: 1 };
-          break;
-        case 'titleDesc':
-          sort = { title: -1 };
-          break;
-        default:
-          sort = { createdAt: -1 };
-      }
-      // ページネーションのパラメータ
-      const projectId = req.query.projectId as string; // projectId をクエリパラメータから取得
-      if (!projectId) {
-          return res.status(400).json({ message: 'Project ID is required' });
-      }
-      const page = parseInt(req.query.page as string || '1'); // デフォルトは1ページ目
-      const pageSize = parseInt(req.query.pageSize as string || '75'); // デフォルトのページサイズ
-      const pages: IPage[] = await Page.find({ projectId })
-        .sort(sort)
-        .skip((page - 1) * pageSize)
-        .limit(pageSize);
-  
-      res.json(pages);
-    } catch (e) {
+  try {
+    const decoded = verifyToken(req);
+    if (!decoded) {
+      return res.status(401).json({ message: 'No token provided or invalid token' });
     }
-  });
+    const sortOption = req.query.sort;
+    let sort = {};
+
+    switch (sortOption) {
+      case 'createdAsc':
+        sort = { createdAt: 1 };
+        break;
+      case 'updatedDesc':
+        sort = { updatedAt: -1 };
+        break;
+      case 'titleAsc':
+        sort = { title: 1 };
+        break;
+      case 'titleDesc':
+        sort = { title: -1 };
+        break;
+      default:
+        sort = { createdAt: -1 };
+    }
+
+    const projectId = req.query.projectId as string;
+    if (!projectId) {
+        return res.status(400).json({ message: 'Project ID is required' });
+    }
+    const userId = decoded.userId;
+    const project = await Project.findOne({ projectId });
+    if (!project) {
+        return res.status(404).json({ message: 'Project not found' });
+    }
+    const isMember = project.projectMemberUserIds.includes(userId);
+    const isPublic = project.isPublic; // isPublicの状態を取得
+
+    const page = parseInt(req.query.page as string || '1');
+    const pageSize = parseInt(req.query.pageSize as string || '75');
+    const pages: IPage[] = await Page.find({ projectId })
+      .sort(sort)
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    // メンバーであるかつ公開設定に応じて、表示するかどうかのフラグを設定
+    const shouldDisplay = (isPublic || isMember);
+
+    res.json({
+      isMember,
+      isPublic,
+      shouldDisplay, // フロントエンドに表示するかしないかのフラグ
+      pages // ページデータ
+    });
+  } catch (e) {
+    // エラー処理
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 //ページ作成
 router.post('/newpage/:id', async (req: Request, res: Response) => {

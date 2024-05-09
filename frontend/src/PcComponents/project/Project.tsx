@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';  // useParams フックをインポート
+import { useParams } from 'react-router-dom';
 import './list.scss';
 import Sort from './Sort';
 import PageList from './PageList';
@@ -12,43 +12,44 @@ const List: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
+  const [shouldDisplay, setShouldDisplay] = useState<boolean>(false);
   const { projectId } = useParams<{ projectId: string | undefined }>();
 
-
-  // スクロールイベントリスナーを設定
   useEffect(() => {
     const handleScroll = () => {
       const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
-      if (nearBottom && !isLoading && hasMoreData) { // データがない場合はリクエストを行わない
+      if (nearBottom && !isLoading && hasMoreData) {
         setCurrentPage(prev => prev + 1);
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [isLoading, hasMoreData]);
 
-  // ソートオプションが変わったときにページ番号をリセット
   useEffect(() => {
     setCurrentPage(1);
-    setHasMoreData(true); // ソートが変更された場合は、再びデータがあると仮定
+    setHasMoreData(true);
   }, [sort]);
 
   useEffect(() => {
     const fetchAndSetPages = async () => {
-      if (!hasMoreData || projectId === undefined) return;  // projectId が undefined の場合、フェッチをスキップ
-
+      if (!hasMoreData || projectId === undefined) return;
+      setIsLoading(true);
       try {
-        setIsLoading(true);
-        const fetchedPages = await fetchPages(projectId,sort,currentPage);
-        if (currentPage === 1) {
-          setPages(fetchedPages);
+        const response = await fetchPages(projectId, sort, currentPage);
+        setShouldDisplay(response.shouldDisplay);
+        if (response.shouldDisplay) {
+          if (currentPage === 1) {
+            setPages(response.pages);
+          } else {
+            setPages(prev => [...prev, ...response.pages]);
+          }
         } else {
-          setPages(prev => [...prev, ...fetchedPages]);
+          setPages([]); // データを表示しない
         }
-        setHasMoreData(fetchedPages.length > 0); // 返されたページの数が0なら、これ以上データはない
+        setHasMoreData(response.pages.length > 0);
       } catch (error) {
         console.error("Error fetching pages:", error);
       } finally {
@@ -57,7 +58,7 @@ const List: React.FC = () => {
     };
 
     fetchAndSetPages();
-  }, [sort, currentPage, hasMoreData,projectId]);
+  }, [sort, currentPage, hasMoreData, projectId]);
 
   if (!projectId) {
     return <div className="text-center">Project ID is required.</div>;
@@ -65,10 +66,12 @@ const List: React.FC = () => {
 
   return (
     <div className="px-20">
-      <Sort sort={sort} onSortChange={(e) => {
-        setSort(e.target.value);
-      }} />
-      <PageList pages={pages} projectId={projectId} />
+      <Sort sort={sort} onSortChange={(e) => setSort(e.target.value)} />
+      {shouldDisplay ? (
+        <PageList pages={pages} projectId={projectId} />
+      ) : (
+        <div className="text-center">You do not have permission to view these pages.</div>
+      )}
       {isLoading && <p>Loading...</p>}
     </div>
   );

@@ -19,7 +19,7 @@ const UpdateButton = ({ id, projectId }: { id: any; projectId: any }) => {
         });
         const result = await response.json();
         console.log('ページの更新:', result);
-        navigate(`/${projectId}`);
+        navigate(`project/editor/${projectId}`);
     };
 
     const updateContent = () => {

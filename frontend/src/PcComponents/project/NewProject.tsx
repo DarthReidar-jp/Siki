@@ -15,9 +15,9 @@ const NewProject: React.FC = () => {
             projectName,
             isPublic: isPublic === 'true' // 文字列を boolean に変換
         };
-
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
         try {
-            const response = await fetch('http://localhost:8000/api/project/create', {
+            const response = await fetch(`${backendUrl}project/create`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

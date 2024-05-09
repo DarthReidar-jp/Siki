@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const DeleteButton = ({ id }: { id: any }) => {
+const DeleteButton = ({ id, projectId }: { id: any; projectId: any }) => {
   const navigate = useNavigate();
   const handleDelete = async () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -16,7 +16,7 @@ const DeleteButton = ({ id }: { id: any }) => {
       if (!response.ok) {
         throw new Error('ページの削除に失敗しました');
       }
-      navigate('/');
+      navigate(`/project/${projectId}`);
     } catch (error) {
       console.error(error);
     }

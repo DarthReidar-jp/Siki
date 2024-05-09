@@ -9,7 +9,7 @@ interface PageItemProps {
 }
 
 const PageItem: React.FC<PageItemProps> = ({  page, projectId }) => (
-<Link to={`/${projectId}/${page._id}`} key={page._id}>
+<Link to={`/project/${projectId}/${page._id}`} key={page._id}>
     <div className="group relative flex flex-col bg-white border border-gray-200 transition-shadow duration-100 hover:bg-gray-200 aspect-square ">
       <div className="flex-1 p-2">
         <h3 className="text-xs font-bold mb-2 overflow-hidden line-clamp-2">{page.title}</h3>

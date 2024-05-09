@@ -8,7 +8,7 @@ import { OpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { HydeRetriever } from "langchain/retrievers/hyde";
 import { HydePrompt } from "../llm/promptUtils";
 import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
-import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
+//import { LLMChainExtractor } from "langchain/retrievers/document_compressors/chain_extract";
 import { CohereRerank } from "@langchain/cohere";
 
 const temperature = 0.8;
@@ -54,7 +54,7 @@ function initializeVectorStore(collection: any, userId: string) {
     const cohereRerank = new CohereRerank({
         apiKey: process.env.COHERE_API_KEY, // Default
         model: "rerank-english-v2.0", // Default
-        topN:2
+        topN:3
       });
     //ドキュメントを圧縮するやつ
     //const baseCompressor = LLMChainExtractor.fromLLM(llm);
