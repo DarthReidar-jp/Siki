@@ -4,7 +4,6 @@ import debugModule from 'debug';
 const debug = debugModule('backend:server');
 import http from 'http';
 import { Server } from 'socket.io';
-import path from 'path';
 
 /**
  * Get port from environment and store in Express.
@@ -32,14 +31,6 @@ io.on('connection', (socket) => {
 // Expressアプリケーションにsocket.ioインスタンスを追加
 app.set('io', io);
 
-// Reactアプリケーションの静的ファイルをサーブするための設定
-// ビルドされたReactアプリケーションのパスを指定する（例：'../client/build'）
-//app.use(express.static(path.join(__dirname, '../client/build')));
-
-// すべての未処理のリクエストをReactアプリケーションにルーティングする
-        //app.get('*', (req, res) => {
-        //    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-        //});
 
 /**
  * Listen on provided port, on all network interfaces.

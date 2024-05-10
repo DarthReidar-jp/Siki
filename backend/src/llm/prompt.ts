@@ -41,10 +41,10 @@ const RAGcontentPrompt = `
 `;
 
 // 検索結果を元に回答を生成するPromptを設定
-const historyAwareRetrievalPrompt = ChatPromptTemplate.fromMessages([
+const historyRetrievalPrompt = ChatPromptTemplate.fromMessages([
     ["system", RAGSystemPrompt],
     new MessagesPlaceholder("chat_history"),
     ["user", RAGcontentPrompt],
 ]);
 
-export { HydePrompt, historyAwarePrompt, historyAwareRetrievalPrompt }
+export { HydePrompt, historyAwarePrompt, historyRetrievalPrompt }

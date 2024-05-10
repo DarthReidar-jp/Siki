@@ -1,6 +1,5 @@
 import mongoose, { Document } from 'mongoose';
 
-// IMessageをプレーンなTypeScript型として定義
 type IMessage = {
   sender: 'user' | 'ai';
   text: string;

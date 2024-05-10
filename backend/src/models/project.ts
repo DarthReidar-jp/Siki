@@ -13,38 +13,13 @@ export interface IProject extends Document {
 
 // Mongooseスキーマを定義
 const ProjectSchema = new mongoose.Schema<IProject>({
-    projectId: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
-    },
-    projectName: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
-    },
-    createUserId: {
-        type: String,
-        required: true
-    },
-    isPublic: {
-        type: Boolean,
-        default: false
-    },
-    projectMemberUserIds: {
-        type: [String], // 文字列の配列として定義
-        default: []
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
+    projectId: { type: String,required: true,unique: true,trim: true},
+    projectName: {type: String,required: true,unique: true, trim: true},
+    createUserId: {type: String, required: true},
+    isPublic: { type: Boolean,  default: false},
+    projectMemberUserIds: {type: [String],default: []},
+    createdAt: { type: Date,default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 });
 
 // ミドルウェアでupdatedAtを更新

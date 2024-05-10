@@ -1,7 +1,6 @@
-// src/config/passportSetup.ts
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import User from '../models/user'; // IUserをインポート
+import User from '../models/user';
 
 passport.use(new GoogleStrategy.Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID!,
@@ -13,11 +12,16 @@ passport.use(new GoogleStrategy.Strategy({
     if (existingUser) {
       return done(null, existingUser);
     }
+    if (!profile.emails || !profile.emails[0]?.value) {
+      return done(new Error('No email associated with this account'));
+    }
+
     const newUser = await new User({
       googleId: profile.id,
       name: profile.displayName,
-      email: profile.emails?.[0]?.value ?? 'デフォルトメールアドレス'
+      email: profile.emails[0].value
     }).save();
+
     done(null, newUser);
 }));
 
@@ -30,4 +34,3 @@ passport.deserializeUser((id: any, done) => {
     done(null, user); 
   });
 });
-

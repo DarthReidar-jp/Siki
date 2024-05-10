@@ -5,7 +5,7 @@ import Display from './list/List';
 import Search from './list/SearchResults';
 import NewEditor from './Editor/NewEditor';
 import UpdateEditor from './Editor/UpdateEditor';
-import Header from './header/header';
+import Header from './header/Header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
 import Chat from './chat/Chat';

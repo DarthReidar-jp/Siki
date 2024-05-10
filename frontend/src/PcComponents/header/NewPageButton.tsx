@@ -7,7 +7,7 @@ const NewPageButton = () => {
   const path = location.pathname;
   
   // 正規表現を使用してURLからプロジェクトIDを抽出（末尾の/がなくても対応）
-  const match = /project\/([^\/]*)/.exec(path);
+  const match = /project\/([^/]*)/.exec(path);
   const projectId = match ? match[1] : null;
 
   // プロジェクトIDがある場合はそのIDに基づいたnewページのリンクを生成

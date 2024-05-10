@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { getQueryVector } from '../llm/openaiUtils';
+import { getQueryVector } from '../llm/openaiEmbedding';
 
-async function performVectorSearch(query: string, userId: string): Promise<any[]> {
+async function mongoDBAtlasVectorSearch(query: string, userId: string): Promise<any[]> {
   const queryVector = await getQueryVector(query);
   const collection = mongoose.connection.db.collection('pages'); // コレクションの取得
   const agg = [
@@ -28,11 +28,8 @@ async function performVectorSearch(query: string, userId: string): Promise<any[]
             '$sort': { 'score': -1 }
         }
     ];
-
-
-  const results = await collection.aggregate(agg).toArray(); // 集計とレスポンスの取得
-  console.log(results);
+  const results = await collection.aggregate(agg).toArray();
   return results;
 }
 
-export { performVectorSearch };
+export { mongoDBAtlasVectorSearch };

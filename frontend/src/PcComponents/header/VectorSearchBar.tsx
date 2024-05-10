@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrSearch } from "react-icons/gr";
 
-const SearchForm = () => {
+const VectorSearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -30,4 +30,4 @@ const SearchForm = () => {
   );
 };
 
-export default SearchForm;
+export default VectorSearchBar;
