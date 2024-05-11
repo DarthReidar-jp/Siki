@@ -1,32 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';  
+import React, { useState } from 'react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { fetchChatAiMessage, fetchSaveMessage,loadChatHistory } from '../../utils/fetch/fetchChatMessage';
+import { fetchChatAiMessage, fetchSaveMessage } from '../../utils/fetch/fetchChatMessage';
 import { Message } from '../../utils/types/types';
 
-
-const LegacyChat: React.FC = () => {
+const Chat: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const { chatId } = useParams<{ chatId: string }>();
-
-    useEffect(() => {
-        setIsLoading(true);
-        const fetchChatHistory = async () => {
-            try {
-                const chatHistory = await loadChatHistory(chatId);
-                setMessages(chatHistory.messages);
-            } catch (error) {
-                console.error('Failed to fetch chat history:', error);
-            }
-            setIsLoading(false);
-        };
-        if (chatId) {
-            fetchChatHistory();
-        }
-    }, [chatId]); 
+    const [chatId, setChatId] = useState<string | null>(null);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputText(event.target.value);
@@ -44,11 +26,14 @@ const LegacyChat: React.FC = () => {
         };
 
         setInputText('');
-        setMessages(prevMessages => [...prevMessages, messageToSend]);
+        setMessages([...messages, messageToSend]);
         try {
             const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend);
             setMessages((prevMessages) => [...prevMessages, aiMessages]);
-            await fetchSaveMessage(chatId, messageToSend, aiMessages);
+            const saveData = await fetchSaveMessage(chatId, messageToSend, aiMessages);
+            if (!chatId) {
+                setChatId(saveData.chatId);
+            }
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -68,4 +53,4 @@ const LegacyChat: React.FC = () => {
     );
 };
 
-export default LegacyChat;
+export default Chat;

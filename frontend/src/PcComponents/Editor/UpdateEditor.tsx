@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { createEditor, LexicalEditor } from "lexical";
 import { theme } from "./lexical-plugin/Theme";
 import { nodes } from './lexical-plugin/nodes';
-import { loadEditorState } from "../../utils/LoadEditorState";
+import { loadEditorState } from "../../utils/fetch/LoadEditorState";
 import UpdateButton from "./UpdateButton";
 import DeleteButton from "./DeleteButton";
 import EditorBase from "./EditorBase";

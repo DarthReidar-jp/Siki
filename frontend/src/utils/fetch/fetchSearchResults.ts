@@ -1,5 +1,4 @@
-//fetchSearchResults.ts
-import { Page } from './types';
+import { Page } from '../types/types';
 
 export const fetchSearchResults = async (query: string): Promise<Page[]> => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -10,7 +9,7 @@ export const fetchSearchResults = async (query: string): Promise<Page[]> => {
       method: 'GET',
       credentials: 'include',
       headers: {
-        'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+        'X-Requested-With': 'XMLHttpRequest'
       }
     });
     if (!response.ok) throw new Error('Failed to fetch search results');
@@ -19,6 +18,6 @@ export const fetchSearchResults = async (query: string): Promise<Page[]> => {
     return searchResults;
   } catch (error) {
     console.error("Error fetching search results:", error);
-    throw error; // エラーをコンポーネントに伝播させる
+    throw error; 
   }
 };

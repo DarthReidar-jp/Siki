@@ -1,42 +1,24 @@
 import React, { useState } from 'react';
+import { uploadJsonFile } from "../../utils/fetch/uploadJsonFile";
 
-const FileImport = () => {
-  // 進捗状況を管理するための状態変数
+const FileUploader = () => {
   const [progress, setProgress] = useState('');
 
-  // ファイル選択時の処理
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files[0]) {
       const file = files[0];
-
-      // ファイル形式がJSONかどうかをチェック
       if (!file.type.includes('json')) {
         alert('JSON形式のファイルを選択してください。');
         return;
       }
-
-      // ファイル内容を読み込み
       const reader = new FileReader();
       reader.onload = async (e) => {
         const text = e.target?.result;
         if (typeof text === 'string') {
           setProgress('ファイルを送信中...');
           try {
-            const backendUrl = process.env.REACT_APP_BACKEND_URL;
-            const response = await fetch(`${backendUrl}json`, {
-              method: 'POST',
-              credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ data: text }),
-            });
-
-            if (!response.ok) {
-              throw new Error('レスポンスが返ってきません');
-            }
-
+            await uploadJsonFile(text);
             setProgress('送信完了！');
           } catch (error) {
             console.error('ファイルの送信に失敗しました。', error);
@@ -56,11 +38,11 @@ const FileImport = () => {
           <input
             type="file"
             accept=".json"
-            onChange={handleFileChange}
+            onChange={handleFileUpload}
             className="opacity-0 absolute inset-0 w-full h-full cursor-pointer "
           />
           <div className="flex w-full h-full ">
-            <span className="text-gray-600 text-left">Choose a JSON file</span>
+            <span className="text-gray-600 text-left">import Scrapbox file</span>
           </div>
         </div>
       </label>
@@ -69,4 +51,4 @@ const FileImport = () => {
   );
 };
 
-export default FileImport;
+export default FileUploader;

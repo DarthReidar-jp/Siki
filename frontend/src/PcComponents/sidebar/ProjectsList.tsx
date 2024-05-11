@@ -1,11 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-type Project = {
-    id: string;
-    title: string;
-};
+import { Project } from '../../utils/types/types';
 
 const ProjectsList = () => {
     const [projects, setProjects] = useState<Project[]>([]);
@@ -14,7 +10,7 @@ const ProjectsList = () => {
     useEffect(() => {
         const fetchChats = async () => {
             const backendUrl = process.env.REACT_APP_BACKEND_URL;
-            const response = await fetch(`${backendUrl}project/list`, { // URLの形式を確認してください
+            const response = await fetch(`${backendUrl}project/list`, { 
                 method: 'GET',
                 credentials: 'include',
             });

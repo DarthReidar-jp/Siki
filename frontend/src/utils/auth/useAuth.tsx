@@ -15,7 +15,7 @@ const useAuth = () => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+          'X-Requested-With': 'XMLHttpRequest'
         }
       });
       if (response.ok) {
@@ -37,7 +37,7 @@ const useAuth = () => {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
+          'X-Requested-With': 'XMLHttpRequest'
         }
       });
       setIsLoggedIn(false);

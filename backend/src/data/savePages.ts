@@ -40,6 +40,7 @@ export async function saveProjectPage(page:any, userId: string, projectId:string
         title,
         editorState: root,
         content,
+        projectId,
         vector,
         createdAt: new Date(),
     });

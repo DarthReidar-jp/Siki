@@ -1,25 +1,22 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { PcComponentProps } from '../utils/types/types';
+
 import Display from './list/List';
 import Search from './list/SearchResults';
 import NewEditor from './Editor/NewEditor';
 import UpdateEditor from './Editor/UpdateEditor';
 import Header from './header/Header';
-import Sidebar from './sidebar/sidebar';
+import Sidebar from './sidebar/Sidebar';
 import Login from './Login/Login';
-import Chat from './chat/Chat';
+import NewChat from './chat/NewChat';
 import LegacyChat from './chat/LegacyChat';
 import NewProject from './project/NewProject';
 import Project from './project/Project';
 import NewProjectEditor from './project/Editor/NewEditor';
 import ProjectEditor from './project/Editor/UpdateEditor';
 
-
-
-interface PcComponentProps {
-  isLoggedIn: boolean;
-}
 
 const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
   return (
@@ -35,7 +32,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
                 <Route path="/search" element={<Search />} />
                 <Route path="/new" element={<NewEditor />} />
                 <Route path="/page/:id" element={<UpdateEditor />} />
-                <Route path="/chat" element={<Chat />} />
+                <Route path="/chat" element={<NewChat />} />
                 <Route path="/chat/:chatId" element={<LegacyChat />} />
                 <Route path="/project">
                   <Route index element={<Project />} />

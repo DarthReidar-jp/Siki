@@ -1,29 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchChatsList } from "../../utils/fetch/fetchChatsList";
+import { Chat } from '../../utils/types/types';
 
-type Chat = {
-    id: string;
-    title: string;
-};
-
-const ChatButton = () => {
+const ChatLink = () => {
     const [chats, setChats] = useState<Chat[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const fetchChats = async () => {
-            const backendUrl = process.env.REACT_APP_BACKEND_URL;
-            const response = await fetch(`${backendUrl}chat`, { // URLの形式を確認してください
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
-                  }
-            });
-            const data = await response.json();
-            setChats(data);
+            const chatsListData = await fetchChatsList()
+            setChats(chatsListData);
         };
-
         fetchChats();
     }, []);
 
@@ -58,4 +46,4 @@ const ChatButton = () => {
     );
 };
 
-export default ChatButton;
+export default ChatLink;

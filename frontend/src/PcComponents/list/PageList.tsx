@@ -1,11 +1,6 @@
-// PageList.tsx
 import React from 'react';
-import { Page } from '../../utils/types';
-import PageItem from './PageItem'; // 適切なパスに調整してください
-
-interface PageListProps {
-  pages: Page[];
-}
+import PageItem from './PageItem';
+import { PageListProps } from '../../utils/types/types';
 
 const PageList: React.FC<PageListProps> = ({ pages }) => (
   <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 p-5 px-12">

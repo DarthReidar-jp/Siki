@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import './list.scss';
 import Sort from './Sort';
 import PageList from './PageList';
-import { Page } from '../../utils/types';
+import { Page } from '../../utils/types/types';
 import { fetchPages } from './projectFetchPages';
 
 const List: React.FC = () => {

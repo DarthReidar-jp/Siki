@@ -1,11 +1,6 @@
-// PageItem.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Page } from '../../utils/types';
-
-interface PageItemProps {
-  page: Page;
-}
+import { PageItemProps } from '../../utils/types/types';
 
 const PageItem: React.FC<PageItemProps> = ({ page }) => (
 <Link to={`/page/${page._id}`} key={page._id}>

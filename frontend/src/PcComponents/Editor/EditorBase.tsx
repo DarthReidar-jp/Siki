@@ -1,4 +1,6 @@
 import React from 'react';
+import { EditorBaseProps } from '../../utils/types/types';
+
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -10,19 +12,6 @@ import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin
 import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
 import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
 import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
-
-interface EditorConfig {
-    namespace: string;
-    theme: any;
-    onError: (error: Error) => void;
-    nodes: any[];
-    editorState?: any;
-}
-
-interface EditorBaseProps {
-    initialConfig: EditorConfig;
-    children: React.ReactNode;
-}
 
 const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
     return (

@@ -1,10 +1,9 @@
-// SearchResults.tsx
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import PageList from './PageList';
-//import './list.scss';
-import { Page } from '../../utils/types';
-import { fetchSearchResults } from '../../utils/fetchSearchResults'; // 適切なパスに修正してください
+import './list.scss';
+import { Page } from '../../utils/types/types';
+import { fetchSearchResults } from '../../utils/fetch/fetchSearchResults'; // 適切なパスに修正してください
 
 const SearchResults: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
