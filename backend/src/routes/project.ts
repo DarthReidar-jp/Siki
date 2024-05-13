@@ -63,12 +63,32 @@ router.get('/', async (req: Request, res: Response) => {
     // メンバーであるかつ公開設定に応じて、表示するかどうかのフラグを設定
     const shouldDisplay = (isPublic || isMember);
 
-    res.json({
-      isMember,
-      isPublic,
-      shouldDisplay, // フロントエンドに表示するかしないかのフラグ
-      pages // ページデータ
-    });
+    res.json(pages);
+  } catch (e) {
+    // エラー処理
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+//プロジェクト表示許可
+router.get('/verify', async (req: Request, res: Response) => {
+  try {
+    const decoded = verifyAccessToken(req);
+    if (!decoded) {
+      return res.status(401).json({ message: 'No token provided or invalid token' });
+    }
+    const userId = decoded.userId;
+    const projectId = req.query.projectId as string;
+    console.log(projectId);
+    const project = await Project.findOne({ projectId });
+    if (!project) {
+        return res.status(404).json({ message: 'Project not found' });
+    }
+    const isMember = project.projectMemberUserIds.includes(userId);
+    const isPublic = project.isPublic; 
+    // メンバーであるかつ公開設定に応じて、表示するかどうかのフラグを設定
+    const shouldDisplay = (isPublic || isMember);
+
+    res.json({isMember,shouldDisplay});
   } catch (e) {
     // エラー処理
     res.status(500).json({ message: 'Internal server error' });
@@ -87,8 +107,8 @@ router.get('/list', async (req, res) => {
 
       // チャットのidとタイトルを更新順にフロントエンドへ渡す
       const formattedProject = project.map(project => ({
-          id: project.projectId, // チャットのID
-          title: project.projectName // チャットのタイトル
+          projectId: project.projectId, // チャットのID
+          projectName: project.projectName // チャットのタイトル
       }));
       
       // レスポンスの送信
@@ -107,6 +127,7 @@ router.post('/newpage/:id', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'No token provided or invalid token' });
     }
     const projectId = req.params.id;
+    console.log(projectId);
     const userId = decoded.userId;
     const { root } = req.body;
     const newPage = await saveProjectPage(root,userId,projectId);

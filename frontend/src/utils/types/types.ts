@@ -13,9 +13,11 @@ export interface Page {
 }
 export interface PageItemProps {
     page: Page;
+    projectId?: string;
   }
 export interface PageListProps {
     pages: Page[];
+    projectId?: string;
 }
 export interface FetchPagesError {
     message: string;
@@ -48,10 +50,6 @@ export interface MessageListProps {
 }
 
 //サイドバー
-export interface Project  {
-    id: string;
-    title: string;
-};
 export interface Chat  {
     id: string;
     title: string;
@@ -70,3 +68,10 @@ export interface EditorBaseProps {
     initialConfig: EditorConfig;
     children: React.ReactNode;
 }
+
+//プロジェクト系
+export interface Project  {
+    projectId: string;
+    projectName: string;
+    isPublic:boolean;
+};

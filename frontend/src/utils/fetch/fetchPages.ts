@@ -17,6 +17,7 @@ export const fetchPages = async (sort: string, page: number, pageSize: number = 
       throw new Error('Failed to fetch pages');
     }
     const pages = await response.json();
+    console.log(pages);
     return pages;
   } catch (error) {
     console.error("Error fetching pages:", error);

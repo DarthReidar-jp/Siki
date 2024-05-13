@@ -9,6 +9,7 @@ export interface IChat extends Document {
   userId: string;
   title:string;
   messages: IMessage[];
+  projectId:string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,7 @@ const ChatSchema = new mongoose.Schema<IChat>({
   userId: { type: String, required: true },
   title: {type: String, required:true },
   messages: [MessageSchema],
+  projectId:{type:String, default:''},
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

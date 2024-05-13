@@ -1,17 +1,11 @@
+// src/components/NewPageButton.tsx
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { GoPlus } from "react-icons/go";
 
-const NewPageButton = () => {
-  const location = useLocation();
-  const path = location.pathname;
-  
-  // 正規表現を使用してURLからプロジェクトIDを抽出（末尾の/がなくても対応）
-  const match = /project\/([^/]*)/.exec(path);
-  const projectId = match ? match[1] : null;
-
+const NewPageButton = ({ projectId }:{projectId?:String|null}) => {
   // プロジェクトIDがある場合はそのIDに基づいたnewページのリンクを生成
-  const newPageLink = projectId ? `/project/${projectId}/editor/new` : '/new';
+  const newPageLink = projectId ? `/project/${projectId}/new` : '/new';
 
   return (
     <div>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createNewProject } from "../../utils/fetch/fetchProject";
+import { Project } from "../../utils/types/types";
 
 const NewProject: React.FC = () => {
     const [projectId, setProjectId] = useState('');
@@ -10,28 +12,13 @@ const NewProject: React.FC = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        const projectData = {
-            projectId,
-            projectName,
+        const projectData:Project = {
+            projectId:projectId,
+            projectName:projectName,
             isPublic: isPublic === 'true' // 文字列を boolean に変換
         };
-        const backendUrl = process.env.REACT_APP_BACKEND_URL;
         try {
-            const response = await fetch(`${backendUrl}project/create`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(projectData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Something went wrong with the request.');
-            }
-
-            const responseData = await response.json();
-            console.log('プロジェクトを作成しました:', responseData);
+            const responseData = await createNewProject(projectData);
             navigate(`/${responseData.projectId}`);
         } catch (error) {
             console.error('エラーが発生しました:', error);

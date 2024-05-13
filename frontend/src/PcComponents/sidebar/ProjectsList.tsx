@@ -21,9 +21,11 @@ const ProjectsList = () => {
         fetchChats();
     }, []);
 
-    const formatTitle = (title: string) => {
-        return title.length > 10 ? `${title.substring(0, 10)}...` : title;
+    const formatTitle = (projectName: string) => {
+        if (!projectName) return "No Title";
+        return projectName.length > 10 ? `${projectName.substring(0, 10)}...` : projectName;
     };
+    
 
     return (
         <div>
@@ -40,9 +42,9 @@ const ProjectsList = () => {
                         </Link>
                     </li>
                     {projects.map((project) => (
-                        <li key={project.id} className="px-5 py-2  ps-10 hover:bg-gray-300 text-sm">
-                            <Link to={`/project/${project.id}`} className="block text-sm">
-                                {formatTitle(project.title)}
+                        <li key={project.projectId} className="px-5 py-2  ps-10 hover:bg-gray-300 text-sm">
+                            <Link to={`/project/${project.projectId}`} className="block text-sm">
+                                {formatTitle(project.projectName)}
                             </Link>
                         </li>
                     ))}

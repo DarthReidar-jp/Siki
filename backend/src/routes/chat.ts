@@ -37,9 +37,15 @@ router.get('/', async (req, res) => {
         return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
     }
     const userId = decodedToken.userId;
+    const projectId = req.query.projectId; // QueryからprojectIdを取得
+
     try {
+        // 検索条件の設定：projectIdがあればそれを使用し、なければuserIdを使用
+        const searchCriteria = projectId ? { userId:userId,projectId: projectId } : { userId: userId };
+        
         // 更新順に受け取るためのチャットデータの取得
-        const chats = await Chat.find({ userId: userId }).sort({ updatedAt: -1 });
+        const chats = await Chat.find(searchCriteria).sort({ updatedAt: -1 });
+        
         // チャットのidとタイトルを更新順にフロントエンドへ渡す
         const formattedChats = chats.map(chat => ({
             id: chat._id,
@@ -51,6 +57,7 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 // メッセージの保存用エンドポイント
 router.post('/save', async (req, res) => {
     try {

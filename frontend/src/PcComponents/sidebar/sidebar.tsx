@@ -4,10 +4,14 @@ import FileImport from './FileUploader';
 import Logout from'./Logout';
 import ProjectsList from './ProjectsList';
 import ChatLink from './ChatLink';
+import { useLocation } from 'react-router-dom';
+import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 
 const Sidebar = () => {
   // サイドバーの表示状態を管理するための状態変数
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const location = useLocation();
+  const projectId = extractProjectIdFromPath(location.pathname) || undefined;
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -26,8 +30,8 @@ const Sidebar = () => {
       <ul className="text-gray-600 py-5">
         <HomeLink />
         <ProjectsList />
-        <ChatLink />
-        <FileImport />
+        <ChatLink projectId={projectId} />
+        <FileImport projectId={projectId} />
         <Logout />
       </ul>
     </div>

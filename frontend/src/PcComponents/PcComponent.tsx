@@ -3,19 +3,16 @@ import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { PcComponentProps } from '../utils/types/types';
 
-import Display from './list/List';
+import List from './list/List';
 import Search from './list/SearchResults';
 import NewEditor from './Editor/NewEditor';
 import UpdateEditor from './Editor/UpdateEditor';
-import Header from './header/Header';
-import Sidebar from './sidebar/Sidebar';
+import Header from './header/header';
+import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
 import NewChat from './chat/NewChat';
 import LegacyChat from './chat/LegacyChat';
 import NewProject from './project/NewProject';
-import Project from './project/Project';
-import NewProjectEditor from './project/Editor/NewEditor';
-import ProjectEditor from './project/Editor/UpdateEditor';
 
 
 const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
@@ -28,19 +25,21 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
             <main className={`pc-content w-full mt-12`}>
               <Sidebar />
               <Routes>
-                <Route path="/" element={<Display />} />
+                <Route path="/" element={<List />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/new" element={<NewEditor />} />
                 <Route path="/page/:id" element={<UpdateEditor />} />
                 <Route path="/chat" element={<NewChat />} />
                 <Route path="/chat/:chatId" element={<LegacyChat />} />
                 <Route path="/project">
-                  <Route index element={<Project />} />
                   <Route path="new" element={<NewProject />} />
                   <Route path=":projectId">
-                    <Route index element={<Project />} />
-                    <Route path="editor/new" element={<NewProjectEditor />} />
-                    <Route path="editor/:id" element={<ProjectEditor />} />
+                    <Route index element={<List />} />
+                    <Route path="new" element={<NewEditor />} />
+                    <Route path=":id" element={<UpdateEditor />} />
+                    <Route path="search" element={<Search />} />
+                    <Route path="chat" element={<NewChat />} />
+                    <Route path="chat/:chatId" element={<LegacyChat />} />
                   </Route>
                 </Route>
               </Routes>

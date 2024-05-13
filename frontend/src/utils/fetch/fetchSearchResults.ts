@@ -1,10 +1,11 @@
 import { Page } from '../types/types';
 
-export const fetchSearchResults = async (query: string): Promise<Page[]> => {
+export const fetchSearchResults = async (query: string, projectId?: string|null): Promise<Page[]> => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  const url = `${backendUrl}search?query=${encodeURIComponent(query)}`;
-  
-  try {
+  // projectIdがある場合はURLに含める
+  const url = projectId
+    ? `${backendUrl}search?query=${encodeURIComponent(query)}&projectId=${projectId}`
+    : `${backendUrl}search?query=${encodeURIComponent(query)}`;
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',
@@ -16,8 +17,5 @@ export const fetchSearchResults = async (query: string): Promise<Page[]> => {
 
     const searchResults: Page[] = await response.json();
     return searchResults;
-  } catch (error) {
-    console.error("Error fetching search results:", error);
-    throw error; 
-  }
 };
+

@@ -34,11 +34,12 @@ router.get('/search', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'No token provided or invalid token' });
     }
     const userId = decoded.userId;
-    const { query } = req.query;
+    const { query, projectId } = req.query;
     if (typeof query !== 'string') {
       return res.status(400).json({ message: 'Query must be a string.' });
     }
-    const searchResults = await mongoDBAtlasVectorSearch(query, userId);
+    const identifier = projectId || userId; // projectIdがあればそれを、なければuserIdを使用
+    const searchResults = await mongoDBAtlasVectorSearch(query, identifier, !!projectId);
     res.json(searchResults);
   } catch (e) {
     console.error('Search error:', e);
@@ -52,9 +53,16 @@ router.post('/json', async (req: Request, res: Response) => {
     return res.status(401).json({ message: 'No token provided or invalid token' });
   }
   const userId = decoded.userId;
-  const jsonData = JSON.parse(req.body.data);
+
+  let jsonData = JSON.parse(req.body.data);
+  let projectId: string | undefined;
+
+  // req.query.projectId が文字列の場合のみ projectId を設定
+  if (typeof req.query.projectId === 'string') {
+    projectId = req.query.projectId;
+  }
   const pages = createEditorState(jsonData);
-  await savePages(pages,userId);
+  await savePages(pages, userId, projectId);
   res.status(201).json({ message: 'All pages saved successfully' });
 });
 // エラーハンドリング関数
