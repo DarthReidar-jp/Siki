@@ -40,6 +40,8 @@ const createEditorState = (json: any) => {
 
         };
     });
+    console.log(JSON.stringify(editorStates, null, 2));
+
     return editorStates;
 }
 

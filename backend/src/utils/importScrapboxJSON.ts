@@ -17,13 +17,17 @@ const cleanAndSplitScrapboxJSON = (json: any): Page[] => {
         console.error('Invalid input: json is undefined or pages property is not an array');
         return []; 
     }
+    console.log(json.pages);
     const pages = processPages(json.pages);
+    console.log(pages);
+    
     return pages;
 };
 
 // ページの処理と分割を行う
 const processPages = (pages: any[]): Page[] => {
     const cleanedPages = cleanScrapboxPages(pages);
+    console.log(cleanedPages);
     return splitScrapboxPagesIfNeeded(cleanedPages);
 };
 
@@ -34,9 +38,6 @@ const cleanScrapboxPages = (pages: any[]): Page[] => {
 
 // 単一ページをクリーニングする
 const cleanScrapboxPage = (page: any): Page => {
-    delete page.id;
-    delete page.created;
-    delete page.updated;
     const normalizedLines = page.lines.map((line: string) => line.replace(/\t/g, ''));
     return {
         title: page.title,
