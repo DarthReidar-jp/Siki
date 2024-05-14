@@ -8,21 +8,22 @@ const SearchForm = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(searchQuery.trim()) { // 空白のみの検索を防ぐ
+    if (searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
   return (
-    <form className='search-container' onSubmit={handleSearch}>
+    <form className='relative w-full max-w-lg bg-gray-400 rounded-full overflow-hidden' onSubmit={handleSearch}>
       <input
         type="text"
-        placeholder="Search..." // プレースホルダーの追加でユーザーエクスペリエンス向上
+        className="w-full h-10 pl-4 pr-10 text-base bg-transparent focus:outline-none"
+        placeholder="Search..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        aria-label="Search" // アクセシビリティ向上のためにaria-labelを追加
+        aria-label="Search"
       />
-      <button type="submit" aria-label="Submit search"> {/* アクセシビリティ向上のためにaria-labelを追加 */}
+      <button type="submit" className="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-white bg-transparent hover:text-gray-300 transition duration-300" aria-label="Submit search">
         <GrSearch />
       </button>
     </form>

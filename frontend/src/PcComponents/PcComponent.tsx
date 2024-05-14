@@ -1,43 +1,56 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Display from './list/List';
+import { PcComponentProps } from '../utils/types/types';
+
+import List from './list/List';
 import Search from './list/SearchResults';
 import NewEditor from './Editor/NewEditor';
-import Editor from './Editor/Editor';
+import UpdateEditor from './Editor/UpdateEditor';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
+import NewChat from './chat/NewChat';
+import LegacyChat from './chat/LegacyChat';
+import NewProject from './project/NewProject';
 
-// isLoggedInを受け取れるように型定義を追加
-interface PcComponentProps {
-  isLoggedIn: boolean;
-}
 
-// Propsを受け取るように関数コンポーネントを定義
 const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
   return (
     <Router>
-      {isLoggedIn ? (
-        <div className='pc-app'>
-          <Header />
-          <main className='pc-content'>
-            <Sidebar />
-            <Routes>
-              <Route path="/" element={<Display />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/new" element={<NewEditor />} />
-              <Route path="/:id" element={<Editor />} />
-            </Routes>
-          </main>
-        </div>
-      ) : (
-        <div className='pc-app'>
+      <div className={`pc-app flex flex-col h-screen`}>
+        {isLoggedIn ? (
+          <>
+            <Header />
+            <main className={`pc-content w-full mt-12`}>
+              <Sidebar />
+              <Routes>
+                <Route path="/" element={<List />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/new" element={<NewEditor />} />
+                <Route path="/page/:id" element={<UpdateEditor />} />
+                <Route path="/chat" element={<NewChat />} />
+                <Route path="/chat/:chatId" element={<LegacyChat />} />
+                <Route path="/project">
+                  <Route path="new" element={<NewProject />} />
+                  <Route path=":projectId">
+                    <Route index element={<List />} />
+                    <Route path="new" element={<NewEditor />} />
+                    <Route path=":id" element={<UpdateEditor />} />
+                    <Route path="search" element={<Search />} />
+                    <Route path="chat" element={<NewChat />} />
+                    <Route path="chat/:chatId" element={<LegacyChat />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </main>
+          </>
+        ) : (
           <Routes>
             <Route path="/" element={<Login />} />
           </Routes>
-        </div>
-      )}
+        )}
+      </div>
     </Router>
   );
 };

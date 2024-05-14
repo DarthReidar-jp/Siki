@@ -1,20 +1,15 @@
-// PageList.tsx
 import React from 'react';
-import { Page } from '../../utils/types';
-import PageItem from './PageItem'; // 適切なパスに調整してください
+import PageItem from './PageItem';
+import { PageListProps } from '../../utils/types/types';
 
-interface PageListProps {
-  pages: Page[];
-}
-
-const PageList: React.FC<PageListProps> = ({ pages }) => (
-  <div className='page-display'>
+const PageList: React.FC<PageListProps> = ({ pages,projectId }) => (
+  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 p-5 px-12">
     {pages.length ? (
       pages.map(page => (
-        <PageItem key={page._id} page={page} />
+        <PageItem key={page._id} page={page} projectId={projectId}  />
       ))
     ) : (
-      <div className="no-pages">
+      <div className="col-span-full text-center">
         <p>No pages found.</p>
       </div>
     )}

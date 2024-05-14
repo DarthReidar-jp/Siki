@@ -1,7 +1,7 @@
 import mongoose, { Document,ObjectId } from 'mongoose';
 
 export interface IUser extends Document {
-  _id: ObjectId; // または string でも構わないが、ObjectId の方が明示的
+  _id: ObjectId;
   email: string;
   name: string;
   googleId: string;

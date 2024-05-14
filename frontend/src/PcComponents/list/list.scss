@@ -1,81 +1,13 @@
-@charset "UTF-8";
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 
-.pc-app {
-
-  /* メインコンテンツのスタイル */
-  .page-display {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    grid-gap: 20px;
-    padding: 20px 50px;
-  }
-
-  /* ソートコンテナのスタイル */
-  .sort-container {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 50px 20px 50px;
-  }
-
-  /* リンクのスタイルを調整する */
-  a {
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-  /* メモスタイル */
-  .page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 0.25rem;
-    transition: 0.3s;
-    aspect-ratio: 1 / 1.03;
-    /* 正方形の形状を維持 */
-  }
-
-  .page:hover {
-    box-shadow: 0 4px 8px rgba(143, 143, 143, 0.2);
-  }
-
-  .page .page-body {
-    flex: 1 1 auto;
-    padding: 0.4rem 0.4rem;
-  }
-
-  .page .page-title {
-    font-size: 0.8rem;
-    text-decoration: bold;
-    margin: 0.2rem;
-    font-weight: bold;
-  }
-
-  .page .page-content {
-    font-size: 0.7rem;
-    /* テキストのフォントサイズ */
-    margin: 0.2rem;
-    color: #636363;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 7;
-    /* 表示される最大行数を5行に設定 */
-    line-height: 1.4;
-    /* 行の高さ */
-    max-height: 10em;
-    /* line-height * line-clamp の値 */
-  }
-
-  .page .page-content.score {
-    font-weight: bold;
-    color: #007bff;
-    /* スコアの色 */
-  }
-
+.line-clamp-6 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
 }

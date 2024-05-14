@@ -1,26 +1,22 @@
-import React from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useNavigate } from 'react-router-dom';
+import { FaRegSave } from "react-icons/fa";
+import { updateEditorState } from '../../utils/fetch/LoadEditorState';
 
-// 引数として{id}オブジェクトを受け取るように変更
-const UpdateButton = ({ id }: { id: any }) => {
+const UpdateButton = ({ id, projectId }: { id: any; projectId?: any }) => {
     const [editor] = useLexicalComposerContext();
     const navigate = useNavigate();
 
     const updateEditorContent = async (serializedState: any) => {
-        const backendUrl = process.env.REACT_APP_BACKEND_URL;
-        const response = await fetch(`${backendUrl}page/${id}`, {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(serializedState),
-        });
-        const result = await response.json();
-        console.log('Page updated:', result); // ログのメッセージを「Page created」から「Page updated」に変更
-        console.log(JSON.stringify(serializedState));
-        navigate(`/`);
+        const response = await updateEditorState(serializedState,id);
+        console.log('ページの更新:', response);
+        if (projectId) {
+            // Navigate to the project-specific page when projectId is provided
+            navigate(`/project/${projectId}`);
+          } else {
+            // Navigate to the home page when no projectId is provided
+            navigate(`/`);
+          }
     };
 
     const updateContent = () => {
@@ -33,7 +29,7 @@ const UpdateButton = ({ id }: { id: any }) => {
     };
 
     return (
-        <button className='button' onClick={updateContent}>更新</button>
+        <button className='button' onClick={updateContent}><FaRegSave /></button>
     );
 };
 
