@@ -53,6 +53,7 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
         input: userMessage,
     });
     console.log("Response generated:", response);
+    console.log("Response generated:", response.answer);
     return response;
 }
 

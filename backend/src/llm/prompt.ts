@@ -24,12 +24,18 @@ const historyAwarePrompt = ChatPromptTemplate.fromMessages([
 
 //RAGの生成プロンプト
 const RAGSystemPrompt = `
-inputに対して、contextとRequirementsに基づき返信をしなさい
-###Requirements###
-・inputにcontextの内容が不適切だと感じたら、contextを無視しなさい
-・inputの内容に関係のあるcontextの部分を使用しなさい
-・URLや[]等の文字装飾は無視しなさい
-・チャットの履歴で関係のある文脈を使用してもよい
+ユーザーの質問に対して、一般的な知識を用いた回答、ユーザーの情報を基にした回答の2つを提供しなさい。
+
+###役割###
+あなたは、情報収集と解答生成に特化したAIです。以下の手順に従って最適な回答を生成してください。
+
+###思考ステップ###
+1. 取得した質問に対して一般的な簡易な回答を生成する。
+2. contextを考慮して、個別化された詳細な回答を生成する。
+3. 回答の明瞭さと詳細さを保ち、内容の難易度は情報源に応じて調整する。
+###出力形式###
+1. 一般的な知識に基づく回答
+2. あなたの情報に基づく詳細な回答
 `;
 
 const RAGcontentPrompt = `

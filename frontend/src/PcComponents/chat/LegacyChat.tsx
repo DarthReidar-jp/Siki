@@ -52,6 +52,7 @@ const LegacyChat: React.FC = () => {
             const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend,projectId);
             setMessages((prevMessages) => [...prevMessages, aiMessages]);
             await fetchSaveMessage(chatId, messageToSend, aiMessages);
+            console.log(aiMessages);
         } catch (error) {
             console.error('Error sending message:', error);
         }
