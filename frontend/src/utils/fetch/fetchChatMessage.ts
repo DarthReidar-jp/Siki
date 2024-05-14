@@ -1,7 +1,30 @@
 import { Message } from "../types/types";
 
+interface ChatRequest {
+    text: string;
+    chatHistory: Message[];
+    projectId?: string; // オプショナルなプロパティとして追加
+}
+
+interface SaveRequest {
+    chatId: string | null | undefined;
+    messages: Message[];
+    projectId?: string;  // オプショナルなプロパティ
+}
+
+
 const backendUrl = process.env.REACT_APP_BACKEND_URL
-export const fetchChatAiMessage = async (inputText: string, messages: Message[], messageToSend: Message) => {
+export const fetchChatAiMessage = async (inputText: string, messages: Message[], messageToSend: Message,projectId?:string) => {
+    const requestBody: ChatRequest = {
+        text: inputText,
+        chatHistory: messages.length > 0 ? [...messages, messageToSend] : []
+    };
+
+    // プロジェクトIDが存在する場合、リクエストボディに追加
+    if (projectId) {
+        requestBody.projectId = projectId;
+    }
+
     const response = await fetch(`${backendUrl}chat`, {
         method: 'POST',
         credentials: 'include',
@@ -9,10 +32,7 @@ export const fetchChatAiMessage = async (inputText: string, messages: Message[],
             'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-            text: inputText,
-            chatHistory: messages.length > 0 ? [...messages, messageToSend] : []
-        }),
+        body: JSON.stringify(requestBody),
     });
 
     const responseData = await response.json();
@@ -25,22 +45,32 @@ export const fetchChatAiMessage = async (inputText: string, messages: Message[],
     return aiMessages;
 };
 
-export const fetchSaveMessage = async (chatId: string | null| undefined,messageToSend: Message,aiMessages:Message) => {
+export const fetchSaveMessage = async (chatId: string | null | undefined, messageToSend: Message, aiMessages: Message, projectId?: string) => {
+    // SaveRequestインターフェースに基づいたオブジェクトを作成
+    const saveRequestBody: SaveRequest = {
+        chatId,
+        messages: [messageToSend, aiMessages]
+    };
+
+    // プロジェクトIDが提供された場合、それをリクエストボディに追加
+    if (projectId) {
+        saveRequestBody.projectId = projectId;
+    }
+
     const saveResponse = await fetch(`${backendUrl}chat/save`, {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         },
-        body: JSON.stringify({
-          chatId,
-          messages: [messageToSend, aiMessages]
-        })
-      });
-      const saveData = await saveResponse.json();
-      return saveData;
+        body: JSON.stringify(saveRequestBody)
+    });
+
+    const saveData = await saveResponse.json();
+    return saveData;
 };
+
 
 export const loadChatHistory = async (chatId: string|undefined) => {
     try {

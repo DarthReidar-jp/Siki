@@ -3,12 +3,16 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { fetchChatAiMessage, fetchSaveMessage } from '../../utils/fetch/fetchChatMessage';
 import { Message } from '../../utils/types/types';
+import { useLocation } from 'react-router-dom';
+import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 
 const Chat: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [chatId, setChatId] = useState<string | null>(null);
+    const location = useLocation();
+    const projectId = extractProjectIdFromPath(location.pathname) || undefined;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setInputText(event.target.value);
@@ -28,9 +32,9 @@ const Chat: React.FC = () => {
         setInputText('');
         setMessages([...messages, messageToSend]);
         try {
-            const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend);
+            const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend,projectId);
             setMessages((prevMessages) => [...prevMessages, aiMessages]);
-            const saveData = await fetchSaveMessage(chatId, messageToSend, aiMessages);
+            const saveData = await fetchSaveMessage(chatId, messageToSend, aiMessages,projectId);
             if (!chatId) {
                 setChatId(saveData.chatId);
             }

@@ -18,11 +18,11 @@ const chatModel = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY
 });
 
-async function generateResponseUsingRAGandHistory(chat_history: Message[], userId: string, userMessage: string) {
+async function generateResponseUsingRAGandHistory(chat_history: Message[], userId: string, userMessage: string, projectId?:string) {
 
     const chatHistory = transformMessages(chat_history);
     const collection = await setupMongoDBCollection();
-    const retriever = await initializeRetriever(collection, userId);
+    const retriever = await initializeRetriever(collection, userId, projectId);
 
     if (userMessage === undefined) {
         console.error("Error: ユーザーメッセージがありません.");

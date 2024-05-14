@@ -34,13 +34,19 @@ router.get('/:id', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'No token provided or invalid token' });
     }
     const userId = decoded.userId;
+    const projectId = req.query.projectId;
     const pageId = req.params.id;
-    const page: IPage | null = await Page.findOne({ userId, _id: pageId });
+    const query = projectId ? { projectId, _id: pageId } : { userId, _id: pageId };
+    const page: IPage | null = await Page.findOne(query);
+    if (!page) {
+      return res.status(404).json({ message: 'Page not found' });
+    }
     res.json(page);
   } catch (e) {
     handleError(e, req, res);
   }
 });
+
 //ページ更新
 router.put('/:id', async (req: Request, res: Response) => {
   try {

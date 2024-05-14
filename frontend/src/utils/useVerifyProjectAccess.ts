@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-export const useVerifyProjectAccess = (projectId:string|undefined) => {
+export const useVerifyProjectAccess = (projectId:string|undefined|null) => {
   const [access, setAccess] = useState({ isMember: false, shouldDisplay: false, loading: true });
 
   useEffect(() => {

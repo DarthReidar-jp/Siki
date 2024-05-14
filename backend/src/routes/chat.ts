@@ -10,7 +10,7 @@ interface Message {
 }
 const router = express.Router();
 
-// メッセージを受け取るエンドポイント
+// メッセージを受け取り、AIメッセージの返信エンドポイント
 router.post('/', async (req, res) => {
     try {
         const decodedToken = verifyAccessToken(req);
@@ -18,12 +18,13 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
         }
         const userId = decodedToken.userId;
+        const projectId = req.body.projectId;
         const userMessage = req.body.text;
         const chat_history = req.body.chatHistory;
         if (!userMessage) {
             return res.status(400).json({ error: 'Bad Request: No message provided.' });
         }
-        const response = await generateResponseUsingRAGandHistory(chat_history, userId, userMessage);
+        const response = await generateResponseUsingRAGandHistory(chat_history, userId, userMessage,projectId);
         res.json({ answer: response.answer });
     } catch (error) {
         console.error('Server Error: Error processing the message:', error);
@@ -67,7 +68,7 @@ router.post('/save', async (req, res) => {
         }
 
         const userId = decodedToken.userId;
-        const { messages, chatId } = req.body; 
+        const { messages, chatId, projectId } = req.body; 
 
         let chat: IChat | null = null; 
         if (chatId) {
@@ -81,6 +82,7 @@ router.post('/save', async (req, res) => {
             const firstMessageText = messages.length > 0 ? messages[0].text : "チャット";
             chat = new Chat({
                 userId,
+                projectId,
                 title: firstMessageText,
                 messages: [] 
             });

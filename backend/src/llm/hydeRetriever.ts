@@ -10,7 +10,12 @@ const llm = new OpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY
 });
 
-function hydeRetriever(vectorStore: any, userId: string) {
+function hydeRetriever(vectorStore: any, userId: string, projectId?: string) {
+
+    // projectIdが与えられた場合は、それをフィルターに追加
+    const filter = projectId ? {projectId: projectId} : {userId: userId};
+    // 選択されたインデックス名をコンソールに表示
+    console.log(`Using filter name: ${filter}`);
     const hydeRetriever = new HydeRetriever({
         vectorStore,
         llm,
@@ -18,9 +23,7 @@ function hydeRetriever(vectorStore: any, userId: string) {
         k: 10,
         searchType: "similarity",
         filter: {
-            preFilter: {
-                userId: userId
-            }
+            preFilter:filter
         }
     });
     return hydeRetriever;

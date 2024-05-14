@@ -6,12 +6,14 @@ import ProjectsList from './ProjectsList';
 import ChatLink from './ChatLink';
 import { useLocation } from 'react-router-dom';
 import { extractProjectIdFromPath } from "../../utils/extractProjectId";
+import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
 
 const Sidebar = () => {
   // サイドバーの表示状態を管理するための状態変数
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const location = useLocation();
   const projectId = extractProjectIdFromPath(location.pathname) || undefined;
+  const access = useVerifyProjectAccess(projectId);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -31,7 +33,7 @@ const Sidebar = () => {
         <HomeLink />
         <ProjectsList />
         <ChatLink projectId={projectId} />
-        <FileImport projectId={projectId} />
+        {access.isMember &&<FileImport projectId={projectId} />}
         <Logout />
       </ul>
     </div>

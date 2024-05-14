@@ -4,13 +4,16 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { fetchChatAiMessage, fetchSaveMessage,loadChatHistory } from '../../utils/fetch/fetchChatMessage';
 import { Message } from '../../utils/types/types';
-
+import { useLocation } from 'react-router-dom';
+import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 
 const LegacyChat: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { chatId } = useParams<{ chatId: string }>();
+    const location = useLocation();
+    const projectId = extractProjectIdFromPath(location.pathname) || undefined;
 
     useEffect(() => {
         setIsLoading(true);
@@ -46,7 +49,7 @@ const LegacyChat: React.FC = () => {
         setInputText('');
         setMessages(prevMessages => [...prevMessages, messageToSend]);
         try {
-            const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend);
+            const aiMessages = await fetchChatAiMessage(inputText, messages, messageToSend,projectId);
             setMessages((prevMessages) => [...prevMessages, aiMessages]);
             await fetchSaveMessage(chatId, messageToSend, aiMessages);
         } catch (error) {

@@ -11,30 +11,40 @@ import { updatePages } from "../data/updatePages";
 const router = express.Router();
 
 //プロジェクトの作成
-router.post('/create', async(req,res) =>{
-    const decoded = verifyAccessToken(req);
-    if (!decoded) {
+router.post('/create', async (req, res) => {
+  const decoded = verifyAccessToken(req);
+  if (!decoded) {
       return res.status(401).json({ message: 'No token provided or invalid token' });
-    }
-    const userId = decoded.userId;
-    const { projectId, projectName, isPublic } = req.body;
-    try {
-        const newProject = new Project({
-            projectId,
-            projectName,
-            createUserId:userId,
-            isPublic,
-            projectMemberUserIds: userId,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        });
+  }
+  const userId = decoded.userId;
+  const { projectId, projectName, isPublic } = req.body;
+  try {
+      const newProject = new Project({
+          projectId,
+          projectName,
+          createUserId: userId,
+          isPublic,
+          projectMemberUserIds: [userId],
+          createdAt: new Date(),
+          updatedAt: new Date()
+      });
 
-        const savedProject = await newProject.save();
-        res.status(201).json(savedProject);
-    } catch (error) {
-        res.status(400).json({ message: 'プロジェクトの作成に失敗しました', error });
-    }
+      const savedProject = await newProject.save();
+      res.status(201).json(savedProject);
+    } catch (error: unknown) {  // ここで `error` を `unknown` 型として宣言
+      // エラーが具体的にどのような型であるかのチェックを行う
+      if (error instanceof Error) {
+          if ('code' in error && (error as any).code === 11000) {
+              res.status(409).json({ message: 'このプロジェクトIDは既に使用されています。別のIDを選んでください。' });
+          } else {
+              res.status(500).json({ message: 'プロジェクトの作成に失敗しました。', error: error.message });
+          }
+      } else {
+          res.status(500).json({ message: '予期せぬエラーが発生しました。' });
+      }
+  }
 });
+
 //プロジェクトのページの表示
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -137,21 +147,6 @@ router.post('/newpage/:id', async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'トークンが検証できません' });
     }
     handleError(error, req, res);
-  }
-});
-// メモの詳細を表示
-router.get('/:projectId/:id', async (req: Request, res: Response) => {
-  try {
-    const decoded = verifyAccessToken(req);
-    if (!decoded) {
-      return res.status(401).json({ message: 'No token provided or invalid token' });
-    }
-    const { projectId } = req.body
-    const pageId = req.params.id;
-    const page: IPage | null = await Page.findOne({ projectId, _id: pageId });
-    res.json(page);
-  } catch (e) {
-    handleError(e, req, res);
   }
 });
 //ページ更新

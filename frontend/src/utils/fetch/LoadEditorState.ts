@@ -49,8 +49,11 @@ export const deletePage = async (id: any) => {
   }
 }
 
-export const loadEditorState = async (id: any) => {
-  const response = await fetch(`${backendUrl}page/${id}`, {
+export const loadEditorState = async (id: any, projectId?: string) => {
+  const url = projectId 
+      ? `${backendUrl}page/${id}?projectId=${projectId}` 
+      : `${backendUrl}page/${id}`;
+  const response = await fetch(url, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -61,6 +64,6 @@ export const loadEditorState = async (id: any) => {
     throw new Error('Failed to fetch page');
   }
   const jsonData = await response.json();
-  const editorStateString = JSON.stringify(jsonData.editorState)
+  const editorStateString = JSON.stringify(jsonData.editorState);
   return editorStateString;
 };
