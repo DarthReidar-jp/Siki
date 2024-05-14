@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import  { Request } from 'express';
 
-function verifyToken(req: Request): jwt.JwtPayload | null {
+function verifyAccessToken(req: Request): jwt.JwtPayload | null {
     const token = req.cookies['access_token'];
     if (!token) {
       return null;
@@ -14,4 +14,4 @@ function verifyToken(req: Request): jwt.JwtPayload | null {
     }
   }
   
-export { verifyToken };
+export { verifyAccessToken };

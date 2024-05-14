@@ -1,10 +1,6 @@
 import React from 'react';
 import { FaSort } from "react-icons/fa";
-
-interface SortSelectProps {
-    sort: string;
-    onSortChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+import { SortSelectProps } from '../../utils/types/types';
 
 const Sort: React.FC<SortSelectProps> = ({ sort, onSortChange }) => (
     <div className="flex justify-end px-12 pt-5">

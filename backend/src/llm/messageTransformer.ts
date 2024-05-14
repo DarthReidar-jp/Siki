@@ -6,8 +6,8 @@ interface Message {
     sender: 'user' | 'ai';
 }
 
-function transformMessages(chat_history: Message[]) {
-    return chat_history.map((msg: Message) => {
+function transformMessages(chatHistory: Message[]) {
+    return chatHistory.map((msg: Message) => {
         if (msg.sender === 'user') {
             return new HumanMessage(msg.text);
         } else if (msg.sender === 'ai') {

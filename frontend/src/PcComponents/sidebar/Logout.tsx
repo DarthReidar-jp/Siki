@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../utils/auth/useAuth'; // 正確なパスに注意
+import useAuth from '../../utils/auth/useAuth';
 
 const LogoutButton = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const LogoutButton = () => {
 
     return (
         <li onClick={handleLogout} className="px-5 py-3 hover:bg-gray-400 transition duration-300 cursor-pointer">
-            ログアウト
+            Logout
         </li>
     );
 };

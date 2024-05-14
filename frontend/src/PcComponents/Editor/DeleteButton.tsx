@@ -1,28 +1,25 @@
 import { useNavigate } from 'react-router-dom';
 import { FaRegTrashAlt } from "react-icons/fa";
+import { deletePage } from '../../utils/fetch/LoadEditorState'; // Adjust the path as necessary
 
-const DeleteButton = ({ id }: { id: any }) => {
+const DeleteButton = ({ id, projectId }: { id: any; projectId?: any }) => {
   const navigate = useNavigate();
+  
   const handleDelete = async () => {
-    const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    try {
-      const response = await fetch(`${backendUrl}page/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest' // このヘッダーを追加
-        }
-      });
-      if (!response.ok) {
-        throw new Error('ページの削除に失敗しました');
-      }
-      navigate('/');
-    } catch (error) {
-      console.error(error);
+    await deletePage(id);
+    if (projectId) {
+      // Navigate to the project-specific page when projectId is provided
+      navigate(`/project/${projectId}`);
+    } else {
+      // Navigate to the home page when no projectId is provided
+      navigate(`/`);
     }
   };
+
   return (
-    <button className='button' onClick={handleDelete}><FaRegTrashAlt /></button>
+    <button className='button' onClick={handleDelete}>
+      <FaRegTrashAlt />
+    </button>
   );
 };
 

@@ -1,24 +1,21 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { useNavigate } from 'react-router-dom';
 import { FaRegSave } from "react-icons/fa";
+import { saveEditorState } from '../../utils/fetch/LoadEditorState'; // Adjust the path as necessary
 
-const EditorActions = () => {
+const EditorActions = ({ projectId }: { projectId?: any }) => {
     const [editor] = useLexicalComposerContext();
     const navigate = useNavigate();
 
     const saveEditorContent = async (serializedState: any) => {
-        const backendUrl = process.env.REACT_APP_BACKEND_URL;
-        const response = await fetch(`${backendUrl}page/`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest' 
-            },
-            body: JSON.stringify(serializedState),
-        });
-        const result = await response.json();
-        navigate(`/page/${result.page._id}`);
+        const response = await saveEditorState(serializedState, projectId);
+        if (projectId) {
+            // Navigate to project-specific page when projectId is provided
+            navigate(`/project/${projectId}/${response.page._id}`);
+        } else {
+            // Navigate to general page when no projectId is provided
+            navigate(`/page/${response.page._id}`);
+        }
     };
 
     const saveContent = () => {
@@ -31,7 +28,9 @@ const EditorActions = () => {
     };
 
     return (
-        <button className='button' onClick={saveContent}><FaRegSave /></button>
+        <button className='button' onClick={saveContent}>
+            <FaRegSave />
+        </button>
     );
 };
 

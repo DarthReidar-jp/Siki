@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './list.scss';
 import Sort from './Sort';
 import PageList from './PageList';
-import { Page } from '../../utils/types';
-import { fetchPages } from '../../utils/fetchPages';
+import { Page } from '../../utils/types/types';
+import { fetchPages } from '../../utils/fetch/fetchPages';
 
 const List: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);

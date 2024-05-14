@@ -2,14 +2,22 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrSearch } from "react-icons/gr";
 
-const SearchForm = () => {
+interface VectorSearchBarProps {
+  projectId?: string;
+}
+
+const VectorSearchBar: React.FC<VectorSearchBarProps> = ({ projectId }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      // projectIdがある場合は、そのIDをクエリに追加
+      const url = projectId
+        ? `/project/${projectId}/search?query=${encodeURIComponent(searchQuery)}`
+        : `/search?query=${encodeURIComponent(searchQuery)}`;
+      navigate(url);
     }
   };
 
@@ -30,4 +38,4 @@ const SearchForm = () => {
   );
 };
 
-export default SearchForm;
+export default VectorSearchBar;

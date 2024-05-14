@@ -1,24 +1,21 @@
+import { fetchProjectPages } from '../../utils/fetch/fetchProjectPages';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom'; // projectId を取得するために使用
 import { useInfiniteQuery, InfiniteQueryObserverResult } from 'react-query';
 import './list.scss';
 import Sort from './Sort';
 import PageList from './PageList';
-import { Page } from '../../utils/types';
-import { fetchPages } from '../../utils/fetchPages';
+import { Page } from '../../utils/types/types';
+import { fetchPages} from '../../utils/fetch/fetchPages'; // 適切な関数をインポート
 import { FaSpinner } from 'react-icons/fa';
-
-interface FetchPagesError {
-  message: string;
-}
-
-interface InitialData {
-  pages: Page[][];
-  pageParams: number[];
-}
+import { FetchPagesError, InitialData } from '../../utils/types/types';
+import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
 
 const List: React.FC = () => {
-  const [sort, setSort] = useState<string>('UpdateAsc');
+  const [sortOrder, setSortOrder] = useState<string>('UpdateAsc');
   const [initialData, setInitialData] = useState<InitialData | undefined>(undefined);
+  const { projectId } = useParams<{ projectId?: string }>();
+  const access = useVerifyProjectAccess(projectId);
 
   const {
     isLoading,
@@ -28,57 +25,65 @@ const List: React.FC = () => {
     hasNextPage,
     fetchNextPage,
   }: InfiniteQueryObserverResult<Page[], FetchPagesError> = useInfiniteQuery<Page[], FetchPagesError>(
-    ['pages', sort],
-    ({ pageParam = 1 }) => fetchPages(sort, pageParam),
+    ['pages', projectId, sortOrder], // キーに projectId を含める
+    ({ pageParam = 1 }) => projectId ? fetchProjectPages(projectId, sortOrder, pageParam) : fetchPages(sortOrder, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
         const hasMoreData = lastPage.length > 0;
-        if (!hasMoreData) return undefined;
-        return allPages.length + 1;
+        return hasMoreData ? allPages.length + 1 : undefined;
       },
-      initialData: initialData,
+      initialData,
     }
   );
 
   const handleScroll = useCallback(() => {
-    const nearBottom =
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 100;
-    if (nearBottom && !isLoading && !isFetching && hasNextPage) {
+    const totalPageHeight = document.documentElement.scrollHeight;
+    const currentScrollPosition = window.innerHeight + window.scrollY;
+    const threshold = 100;
+    const isNearBottomOfPage = currentScrollPosition >= totalPageHeight - threshold;
+    const shouldFetchNextPage = isNearBottomOfPage && !isLoading && !isFetching && hasNextPage;
+    if (shouldFetchNextPage) {
       fetchNextPage();
     }
   }, [isLoading, isFetching, hasNextPage, fetchNextPage]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
   useEffect(() => {
-    // ページ読み込み時のみデータをフェッチ
     if (!data && !error) {
       fetchNextPage({ pageParam: 1 });
     }
-  }, [sort, fetchNextPage, data, error]);
-  
+  }, [sortOrder, fetchNextPage, data, error]);
+
   useEffect(() => {
     if (data) {
       setInitialData({ pages: data.pages, pageParams: data.pageParams as number[] });
     }
   }, [data]);
-  
+
+  const renderLoadingIndicator = () => (
+    <div className="flex justify-center items-center min-h-screen">
+      <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+    </div>
+  );
+
+  const renderError = () => (
+    <div>Error: {error?.message}</div>
+  );
+
+  if (!access.shouldDisplay) {
+    return <div>非公開プロジェクトです。</div>;
+  }
+
   return (
     <div className="px-20">
-      <Sort sort={sort} onSortChange={(e) => setSort(e.target.value)} />
-      <PageList pages={data ? data.pages.flat() : []} />
-      {(isLoading || isFetching) && (
-        <div className="flex justify-center items-center min-h-screen">
-          <FaSpinner className="text-4xl text-blue-500 animate-spin" />
-        </div>
-      )}
-      {error && <div>Error: {error.message}</div>}
+      <Sort sort={sortOrder} onSortChange={(e) => setSortOrder(e.target.value)} />
+      <PageList pages={data ? data.pages.flat() : []} projectId={projectId} />
+      {(isLoading || isFetching) && renderLoadingIndicator()}
+      {error && renderError()}
     </div>
   );
 };

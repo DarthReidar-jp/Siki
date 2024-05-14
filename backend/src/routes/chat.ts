@@ -1,6 +1,6 @@
 import express from 'express';
-import { verifyToken } from '../utils/verifyToken';
-import { generateResponseUsingRAGandHistory } from '../llm/retrieverChatHistory';
+import { verifyAccessToken } from '../utils/verifyAccessToken';
+import { generateResponseUsingRAGandHistory } from '../llm/generateChatHistoryRAG';
 import Chat, { IChat } from '../models/chat';
 
 interface Message {
@@ -10,49 +10,50 @@ interface Message {
 }
 const router = express.Router();
 
-// メッセージを受け取るエンドポイント
+// メッセージを受け取り、AIメッセージの返信エンドポイント
 router.post('/', async (req, res) => {
     try {
-        const decodedToken = verifyToken(req);
+        const decodedToken = verifyAccessToken(req);
         if (!decodedToken) {
             return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
         }
         const userId = decodedToken.userId;
+        const projectId = req.body.projectId;
         const userMessage = req.body.text;
         const chat_history = req.body.chatHistory;
         if (!userMessage) {
             return res.status(400).json({ error: 'Bad Request: No message provided.' });
         }
-
-        const response = await generateResponseUsingRAGandHistory(chat_history, userId, userMessage);
+        const response = await generateResponseUsingRAGandHistory(chat_history, userId, userMessage,projectId);
         res.json({ answer: response.answer });
     } catch (error) {
         console.error('Server Error: Error processing the message:', error);
         res.status(500).json({ error: 'Server Error: Unable to process your message.' });
     }
 });
-
 // チャットIDの取得
 router.get('/', async (req, res) => {
-    const decodedToken = verifyToken(req);
+    const decodedToken = verifyAccessToken(req);
     if (!decodedToken) {
         return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
     }
-    const userId = decodedToken.userId; // TokenからuserIdを取得
-    try {
-        // 更新順に受け取るためのチャットデータの取得
-        const chats = await Chat.find({ userId: userId }).sort({ updatedAt: -1 });
+    const userId = decodedToken.userId;
+    const projectId = req.query.projectId; // QueryからprojectIdを取得
 
+    try {
+        // 検索条件の設定：projectIdがあればそれを使用し、なければuserIdを使用
+        const searchCriteria = projectId ? { userId:userId,projectId: projectId } : { userId: userId };
+        
+        // 更新順に受け取るためのチャットデータの取得
+        const chats = await Chat.find(searchCriteria).sort({ updatedAt: -1 });
+        
         // チャットのidとタイトルを更新順にフロントエンドへ渡す
         const formattedChats = chats.map(chat => ({
-            id: chat._id, // チャットのID
-            title: chat.title // チャットのタイトル
+            id: chat._id,
+            title: chat.title 
         }));
-        
-        // レスポンスの送信
         res.status(200).json(formattedChats);
     } catch (error) {
-        // エラーハンドリング
         console.error('Error fetching chats:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -61,15 +62,15 @@ router.get('/', async (req, res) => {
 // メッセージの保存用エンドポイント
 router.post('/save', async (req, res) => {
     try {
-        const decodedToken = verifyToken(req);
+        const decodedToken = verifyAccessToken(req);
         if (!decodedToken) {
             return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
         }
 
         const userId = decodedToken.userId;
-        const { messages, chatId } = req.body;  // 複数メッセージとchatIdを受け取る
+        const { messages, chatId, projectId } = req.body; 
 
-        let chat: IChat | null = null;  // IChat型をchatに割り当て
+        let chat: IChat | null = null; 
         if (chatId) {
             // 既存のチャットセッションを検索
             chat = await Chat.findOne({ _id: chatId, userId: userId });
@@ -81,8 +82,9 @@ router.post('/save', async (req, res) => {
             const firstMessageText = messages.length > 0 ? messages[0].text : "チャット";
             chat = new Chat({
                 userId,
+                projectId,
                 title: firstMessageText,
-                messages: []  // 最初は空のメッセージ配列で始める
+                messages: [] 
             });
         }
 
@@ -91,27 +93,26 @@ router.post('/save', async (req, res) => {
             chat!.messages.push({
                 text: message.text,
                 sender: message.sender,
-                timestamp: new Date(message.timestamp)  // タイムスタンプを適切に処理
+                timestamp: new Date(message.timestamp)
             });
         });
 
-        await chat.save();  // ドキュメントを保存または更新
+        await chat.save();
         res.status(201).json({ message: 'Messages saved successfully.', chatId: chat._id });
     } catch (error) {
         console.error('Server Error: Error saving the messages:', error);
         res.status(500).json({ error: 'Server Error: Unable to save your messages.' });
     }
 });
-
 // チャット履歴取得エンドポイント
 router.get('/:chatId', async (req, res) => {
     try {
-        const { chatId } = req.params; // URLからchatIdを取得
-        const decodedToken = verifyToken(req);
+        const { chatId } = req.params;
+        const decodedToken = verifyAccessToken(req);
         if (!decodedToken) {
             return res.status(401).json({ message: 'Unauthorized: No valid token provided.' });
         }
-        const userId = decodedToken.userId; // TokenからuserIdを取得
+        const userId = decodedToken.userId;
 
         // ユーザーIDとチャットIDでチャット履歴を検索
         const chat = await Chat.findOne({ _id: chatId, userId: userId });
@@ -126,7 +127,5 @@ router.get('/:chatId', async (req, res) => {
         res.status(500).json({ error: 'Server Error: Unable to fetch chat history.' });
     }
 });
-
-
 
 export default router;
