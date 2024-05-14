@@ -23,7 +23,7 @@ const NewProject: React.FC = () => {
 
         try {
             const responseData = await createNewProject(projectData);
-            navigate(`/${responseData.projectId}`);
+            navigate(`/project/${responseData.projectId}`);
         } catch (error: unknown) {
             console.error('エラーが発生しました:', error);
         }

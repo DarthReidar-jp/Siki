@@ -38,6 +38,7 @@ const Chat: React.FC = () => {
             if (!chatId) {
                 setChatId(saveData.chatId);
             }
+            console.log(aiMessages);
         } catch (error) {
             console.error('Error sending message:', error);
         }
