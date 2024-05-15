@@ -11,6 +11,7 @@ import { setupMongoDBCollection } from "./initializeVectorStore";
 import { initializeRetriever } from "./initializeRetriever";
 import { transformMessages, Message } from "./messageTransformer";
 
+
 const temperature = 0.8;
 const chatModel = new ChatOpenAI({
     modelName: process.env.OPENAI_CHAT_MODEL,
