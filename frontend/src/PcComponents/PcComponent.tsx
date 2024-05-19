@@ -10,12 +10,12 @@ import UpdateEditor from './Editor/UpdateEditor';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import Login from './Login/Login';
-import NewChat from './chat/NewChat';
-import LegacyChat from './chat/LegacyChat';
 import NewProject from './project/NewProject';
+import ChatButton from './chatWindow/ChatButton';
 
 
 const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
+  
   return (
     <Router>
       <div className={`pc-app flex flex-col h-screen`}>
@@ -24,13 +24,12 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
             <Header />
             <main className={`pc-content w-full mt-12`}>
               <Sidebar />
+              <ChatButton />
               <Routes>
                 <Route path="/" element={<List />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/new" element={<NewEditor />} />
                 <Route path="/page/:id" element={<UpdateEditor />} />
-                <Route path="/chat" element={<NewChat />} />
-                <Route path="/chat/:chatId" element={<LegacyChat />} />
                 <Route path="/project">
                   <Route path="new" element={<NewProject />} />
                   <Route path=":projectId">
@@ -38,8 +37,6 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
                     <Route path="new" element={<NewEditor />} />
                     <Route path=":id" element={<UpdateEditor />} />
                     <Route path="search" element={<Search />} />
-                    <Route path="chat" element={<NewChat />} />
-                    <Route path="chat/:chatId" element={<LegacyChat />} />
                   </Route>
                 </Route>
               </Routes>

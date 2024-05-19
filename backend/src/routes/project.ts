@@ -1,12 +1,11 @@
 import express, { Request, Response } from 'express';
-import Project from '../models/project';  // ここで定義した Mongoose モデルをインポート
+import Project from '../models/project';  
 import { verifyAccessToken } from '../utils/verifyAccessToken';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import Page, { IPage } from '../models/page';
 import { parseSortOption } from "../utils/pageSortOption";
-import { saveProjectPage } from "../data/savePages";
-import { updatePages } from "../data/updatePages";
+import { savePage } from "../data/savePages";
 
 const router = express.Router();
 
@@ -44,7 +43,6 @@ router.post('/create', async (req, res) => {
       }
   }
 });
-
 //プロジェクトのページの表示
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -130,7 +128,7 @@ router.get('/list', async (req, res) => {
   }
 });
 //ページ作成
-router.post('/newpage/:id', async (req: Request, res: Response) => {
+router.post('/:id', async (req: Request, res: Response) => {
   try {
     const decoded = verifyAccessToken(req);
     if (!decoded) {
@@ -140,45 +138,13 @@ router.post('/newpage/:id', async (req: Request, res: Response) => {
     console.log(projectId);
     const userId = decoded.userId;
     const { root } = req.body;
-    const newPage = await saveProjectPage(root,userId,projectId);
+    const newPage = await savePage(root,userId,projectId);
     res.status(201).json({ message: 'ページの作成が成功しました', page: newPage });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({ message: 'トークンが検証できません' });
     }
     handleError(error, req, res);
-  }
-});
-//ページ更新
-router.put('/:id', async (req: Request, res: Response) => {
-  try {
-    const decoded = verifyAccessToken(req);
-    if (!decoded) {
-      return res.status(401).json({ message: 'No token provided or invalid token' });
-    }
-    const userId = decoded.userId;
-    const { root } = req.body;  
-    const pageId = req.params.id;
-    const page = await Page.findOne({ _id: pageId, userId });
-    const updatePage = await updatePages(page,root)
-    res.json(updatePage);
-  } catch (e) {
-    handleError(e, req, res);
-  }
-});
-//ページ削除
-router.delete('/:id', async (req: Request, res: Response) => {
-  try {
-    const decoded = verifyAccessToken(req);
-    if (!decoded) {
-      return res.status(401).json({ message: 'No token provided or invalid token' });
-    }
-    const { projectId } = req.body
-    const pageId = req.params.id;
-    await Page.findOneAndDelete({ _id: pageId, projectId });
-    res.json({ message: 'Page deleted successfully' });
-  } catch (e) {
-    handleError(e, req,res);
   }
 });
 //エラーハンドリング

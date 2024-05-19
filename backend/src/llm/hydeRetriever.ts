@@ -19,7 +19,6 @@ function hydeRetriever(vectorStore: any, userId: string, projectId?: string) {
     const hydeRetriever = new HydeRetriever({
         vectorStore,
         llm,
-        promptTemplate: HydePrompt,
         k: 10,
         searchType: "similarity",
         filter: {

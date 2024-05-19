@@ -35,8 +35,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));//URLにエンコ
 app.use(cookieParser());//クッキーの解析とreq.cookiesへの保存
 app.use(session({
   secret: process.env.SESSION_SECRET_KEY!,
-  resave: true,
-  saveUninitialized: true
+  resave: false,
+  saveUninitialized: false
 }));//セッション管理のミドルウェア
 app.use(passport.initialize());
 app.use(passport.session());
@@ -47,6 +47,7 @@ connectDB().then(() => { console.log('データベースへの接続が確立さ
   console.error('データベース接続に失敗しました:', error);
   process.exit(1);
 });
+
 
 // ルーターの設定
 app.use('/api', indexRouter);

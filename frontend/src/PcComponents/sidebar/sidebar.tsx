@@ -3,7 +3,6 @@ import HomeLink from './HomeLink';
 import FileImport from './FileUploader';
 import Logout from'./Logout';
 import ProjectsList from './ProjectsList';
-import ChatLink from './ChatLink';
 import { useLocation } from 'react-router-dom';
 import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
@@ -32,7 +31,6 @@ const Sidebar = () => {
       <ul className="text-gray-600 py-5">
         <HomeLink />
         <ProjectsList />
-        <ChatLink projectId={projectId} />
         {access.isMember &&<FileImport projectId={projectId} />}
         <Logout />
       </ul>

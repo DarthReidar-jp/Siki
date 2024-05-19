@@ -5,11 +5,12 @@ import { verifyAccessToken } from '../utils/verifyAccessToken';
 import { createEditorState } from '../utils/linesToEditorState';
 import { parseSortOption } from "../utils/pageSortOption";
 import { savePages } from "../data/savePages";
+import { verifyConnectSid } from "../utils/verifyConnectSid";
 
 const router = express.Router();
 
 // ユーザーに関連するページデータを取得
-router.get('/', async (req: Request, res: Response) => {
+router.get('/',  async (req: Request, res: Response) => {
   try {
     const decoded = verifyAccessToken(req);
     if (!decoded) {
