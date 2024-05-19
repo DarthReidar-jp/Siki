@@ -12,6 +12,7 @@ const useAuth = () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     try {
       const response = await fetch(`${backendUrl}auth/verify`, {
+        mode: 'cors',
         method: 'GET',
         credentials: 'include',
         headers: {

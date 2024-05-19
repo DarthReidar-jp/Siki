@@ -44,6 +44,12 @@ export interface MessageInputProps {
     onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (event: React.FormEvent) => void;
 }
+export interface MessageTextAreaProps {
+    inputText: string;
+    isLoading: boolean;
+    onInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+    onSubmit: (event: React.FormEvent) => void;
+}
 export interface MessageListProps {
     messages: Message[];
     isLoading: boolean;

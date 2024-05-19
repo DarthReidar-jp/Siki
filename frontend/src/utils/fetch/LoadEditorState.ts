@@ -4,7 +4,7 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 export const saveEditorState = async (serializedState: any, projectId?: string) => {
   let url = `${backendUrl}page/`;
   if (projectId) {
-    url = `${backendUrl}project/newpage/${projectId}`;
+    url = `${backendUrl}project/${projectId}`;
   }
 
   const response = await fetch(url, {

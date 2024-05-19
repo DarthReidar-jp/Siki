@@ -9,7 +9,7 @@ interface Page {
     lines: string[];
 }
 
-const MAX_CHARACTERS_PER_PAGE = 1000;
+const MAX_CHARACTERS_PER_PAGE = 800;
 
 // エントリーポイント関数: JSONを検証し、処理する
 const cleanAndSplitScrapboxJSON = (json: any): Page[] => {
