@@ -64,25 +64,26 @@ const List: React.FC = () => {
     }
   }, [data]);
 
-  const renderLoadingIndicator = () => (
-    <div className="flex justify-center items-center min-h-screen">
-      <FaSpinner className="text-4xl text-blue-500 animate-spin" />
-    </div>
-  );
+  if (isLoading || isFetching) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+      </div>
+    );
+  }
 
   const renderError = () => (
     <div>Error: {error?.message}</div>
   );
 
   if (!access.shouldDisplay) {
-    return <div>非公開プロジェクトです。</div>;
+    return <div className="text-center mt-20">非公開プロジェクトです。</div>;
   }
 
   return (
     <div className="px-20">
       <Sort sort={sortOrder} onSortChange={(e) => setSortOrder(e.target.value)} />
       <PageList pages={data ? data.pages.flat() : []} projectId={projectId} />
-      {(isLoading || isFetching) && renderLoadingIndicator()}
       {error && renderError()}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { uploadJsonFile } from "../../utils/fetch/uploadJsonFile";
 
-const FileUploader = ({ projectId }: { projectId?: string }) => {
+const Import = ({ projectId }: { projectId?: string|null|undefined }) => {
   const [progress, setProgress] = useState('');
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +19,9 @@ const FileUploader = ({ projectId }: { projectId?: string }) => {
           console.log("読み込まれたファイルの内容:", text);  // ファイル内容のログ出力
           setProgress('ファイルを送信中...');
           try {
-            await uploadJsonFile(text, projectId); 
+            const projectIdToSend = projectId ?? undefined;
+            await uploadJsonFile(text, projectIdToSend); 
+            setProgress('送信完了！');
             setProgress('送信完了！');
           } catch (error) {
             console.error('ファイルの送信に失敗しました。', error);
@@ -33,7 +35,7 @@ const FileUploader = ({ projectId }: { projectId?: string }) => {
 
 
   return (
-    <li className="px-5 py-3 hover:bg-gray-400 transition duration-300 cursor-pointer">
+    <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
       <label className="flex w-full cursor-pointer">
         <div className="relative w-full">
           <input
@@ -48,8 +50,8 @@ const FileUploader = ({ projectId }: { projectId?: string }) => {
         </div>
       </label>
       <p className="text-xs mt-1 text-gray-400">{progress}</p>
-    </li>
+    </div>
   );
 };
 
-export default FileUploader;
+export default Import;

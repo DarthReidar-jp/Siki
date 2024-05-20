@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchChatsList } from "../../utils/fetch/fetchChatsList";
 import { Chat } from '../../utils/types/types';
 
-const ChatLink = ({ projectId, onSelectChat }: { projectId?: string, onSelectChat: (chatId: string) => void }) => {
+const ChatHistoryList = ({ projectId, onSelectChat }: { projectId?: string, onSelectChat: (chatId: string) => void }) => {
     const [chats, setChats] = useState<Chat[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -26,15 +26,15 @@ const ChatLink = ({ projectId, onSelectChat }: { projectId?: string, onSelectCha
     return (
         <div className="relative">
             <button
-                className="text-xxxs bg-gray-200 hover:bg-gray-300 rounded-full px-4 py-1 shadow-sm "
+                className="text-xxxs bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 chat履歴
             </button>
             {isOpen && (
-                <ul className="z-50 absolute top-full left-0 min-w-max bg-white shadow-lg mt-1 max-h-36 overflow-y-auto border rounded-lg border-gray-200">
+                <ul className="z-50 absolute top-full left-0 min-w-max max-w-36 bg-white mt-1 py-2 max-h-48 overflow-y-auto rounded">
                     {chats.map((chat) => (
-                        <li key={chat.id} className="px-3 py-2 hover:bg-gray-100 text-xs whitespace-nowrap">
+                        <li key={chat.id} className="px-2 py-1 hover:bg-gray-100 text-xxxs whitespace-nowrap">
                             <button onClick={() => handleSelectChat(chat.id)}>
                                 {formatTitle(chat.title)}
                             </button>
@@ -46,4 +46,4 @@ const ChatLink = ({ projectId, onSelectChat }: { projectId?: string, onSelectCha
     );
 };
 
-export default ChatLink;
+export default ChatHistoryList;

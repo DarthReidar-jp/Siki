@@ -73,7 +73,7 @@ function UpdateEditor() {
   };
 
   return (
-    <EditorBase initialConfig={initialConfig}>
+    <EditorBase initialConfig={initialConfig} projectId={projectId}>
       {access.isMember && (
         <>
           <UpdateButton id={id} projectId={projectId} />

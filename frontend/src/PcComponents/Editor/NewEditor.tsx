@@ -20,7 +20,7 @@ const NewPage = () => {
   console.log(projectId);
 
   return (
-    <EditorBase initialConfig={initialEditorConfig}>
+    <EditorBase initialConfig={initialEditorConfig} projectId={projectId}>
       <SaveButton projectId={projectId} />
     </EditorBase>
   );

@@ -46,7 +46,6 @@ router.get('/:id', async (req: Request, res: Response) => {
     handleError(e, req, res);
   }
 });
-
 //ページ更新
 router.put('/:id', async (req: Request, res: Response) => {
   try {

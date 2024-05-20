@@ -13,7 +13,8 @@ import MarkdownPlugin from './lexical-plugin/MarkdownPlugin';
 import LexicalAutoLinkPlugin from "./lexical-plugin/LexicalAutoLinkPlugin";
 import ClickableLinkPlugin from "./lexical-plugin/ClickableLinkPlugin";
 
-const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
+const EditorBase = ({ initialConfig, projectId,children }: EditorBaseProps) => {
+
     return (
         <div className="flex justify-center p-4 mt-8">  
             <div className="w-full max-w-xl bg-white p-4 border rounded ">
@@ -29,7 +30,7 @@ const EditorBase = ({ initialConfig, children }: EditorBaseProps) => {
                         <AutoFocusPlugin />
                         <HistoryPlugin />
                         <MarkdownPlugin />
-                        <LexicalAutoLinkPlugin />
+                        <LexicalAutoLinkPlugin projectId={projectId} />
                         <ClickableLinkPlugin />
                     </div>
                     <div className="fixed right-72 top-28 flex flex-col gap-4 text-gray-400">
