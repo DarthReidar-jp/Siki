@@ -6,7 +6,7 @@ import { Message } from '../../utils/types/types';
 import { useLocation } from 'react-router-dom';
 import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 
-const NewChat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId }) => {
+const Chat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId }) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -80,4 +80,4 @@ const NewChat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId })
     );
 };
 
-export default NewChat;
+export default Chat;

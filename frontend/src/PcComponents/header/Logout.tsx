@@ -1,7 +1,8 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../utils/auth/useAuth';
 
-const LogoutButton = () => {
+const Logout = () => {
     const navigate = useNavigate();
     const { logout } = useAuth();
 
@@ -12,10 +13,10 @@ const LogoutButton = () => {
     };
 
     return (
-        <li onClick={handleLogout} className="px-5 py-3 hover:bg-gray-400 transition duration-300 cursor-pointer">
+        <div onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
             Logout
-        </li>
+        </div>
     );
 };
 
-export default LogoutButton;
+export default Logout;

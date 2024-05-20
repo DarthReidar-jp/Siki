@@ -14,7 +14,7 @@ const PageItem: React.FC<PageItemProps> = ({ page, projectId }) => {
             dangerouslySetInnerHTML={{ __html: page.content }}
           />
           {typeof page.score === 'number' && page.score > 0 && (
-            <p className="mt-2 text-blue-500">
+            <p className="text-xxxs text-blue-500">
               Score: {page.score.toFixed(5)}
             </p>
           )}

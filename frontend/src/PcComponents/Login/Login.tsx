@@ -7,9 +7,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white shadow-lg rounded-lg">
-        <h1 className="text-2xl font-bold text-center mb-4">Googleでログインしてください</h1>
+    <div className="flex items-center justify-center min-h-screen bg-slate-200 ">
+      <div className="p-8 bg-white shadow-lg rounded-lg bg-opacity-60 backdrop-blur-sm">
+        <h1 className="text-2xl font-bold text-center mb-4">ログインしてください</h1>
         <button 
           className="w-full h-12 px-6 text-white font-semibold bg-black rounded-md hover:bg-gray-800 transition duration-300"
           onClick={handleGoogleLogin}

@@ -6,6 +6,7 @@ export const fetchSearchResults = async (query: string, projectId?: string|null)
   const url = projectId
     ? `${backendUrl}search?query=${encodeURIComponent(query)}&projectId=${projectId}`
     : `${backendUrl}search?query=${encodeURIComponent(query)}`;
+    console.log(url);
     const response = await fetch(url, {
       method: 'GET',
       credentials: 'include',

@@ -3,6 +3,11 @@ export interface PcComponentProps {
     isLoggedIn: boolean;
 }
 
+//ヘッダー
+export interface PageListButtonProps {
+    projectId?: string | null | undefined; 
+  }
+
 
 //List系
 export interface Page {
@@ -73,6 +78,7 @@ export interface EditorConfig {
 export interface EditorBaseProps {
     initialConfig: EditorConfig;
     children: React.ReactNode;
+    projectId?: string;
 }
 
 //プロジェクト系
@@ -81,3 +87,4 @@ export interface Project  {
     projectName: string;
     isPublic:boolean;
 };
+

@@ -18,7 +18,7 @@ const PcComponent: React.FC<PcComponentProps> = ({ isLoggedIn }) => {
   
   return (
     <Router>
-      <div className={`pc-app flex flex-col h-screen`}>
+      <div className={`pc-app flex flex-col h-screen `}>
         {isLoggedIn ? (
           <>
             <Header />
