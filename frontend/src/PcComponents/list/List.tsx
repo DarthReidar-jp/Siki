@@ -64,13 +64,11 @@ const List: React.FC = () => {
     }
   }, [data]);
 
-  if (isLoading || isFetching) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <FaSpinner className="text-4xl text-blue-500 animate-spin" />
-      </div>
-    );
-  }
+  const renderLoadingIndicator = () => (
+    <div className="flex justify-center items-center min-h-screen">
+      <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+    </div>
+  );
 
   const renderError = () => (
     <div>Error: {error?.message}</div>
@@ -84,6 +82,7 @@ const List: React.FC = () => {
     <div className="px-20">
       <Sort sort={sortOrder} onSortChange={(e) => setSortOrder(e.target.value)} />
       <PageList pages={data ? data.pages.flat() : []} projectId={projectId} />
+      {(isLoading || isFetching) && renderLoadingIndicator()}
       {error && renderError()}
     </div>
   );
