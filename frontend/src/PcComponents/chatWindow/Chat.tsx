@@ -15,13 +15,11 @@ const Chat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId }) =>
     const projectId = extractProjectIdFromPath(location.pathname) || undefined;
 
     useEffect(() => {
-        setChatId(initialChatId ?? null);  // undefined が来た場合は null をセット
+        setChatId(initialChatId ?? null); 
     }, [initialChatId]);
 
-    // chatIdの変更を検知してチャット履歴をロードする
     useEffect(() => {
         const loadMessages = async () => {
-            console.log('Current chatId:', chatId);
             if (chatId) {
                 setIsLoading(true);
                 try {
@@ -34,9 +32,9 @@ const Chat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId }) =>
             }
         };
         loadMessages();
-    }, [chatId]);  // chatIdが変わるたびに履歴をロード
+    }, [chatId]); 
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {  // ここを変更
+    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setInputText(event.target.value);
     };
 
@@ -60,7 +58,6 @@ const Chat: React.FC<{ initialChatId?: string | null }> = ({ initialChatId }) =>
             if (!chatId) {
                 setChatId(saveData.chatId);
             }
-            console.log(aiMessages);
         } catch (error) {
             console.error('Error sending message:', error);
         }

@@ -2,7 +2,6 @@ import { Page } from '../types/types';
 
 export const fetchSearchResults = async (query: string, projectId?: string|null): Promise<Page[]> => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  // projectIdがある場合はURLに含める
   const url = projectId
     ? `${backendUrl}search?query=${encodeURIComponent(query)}&projectId=${projectId}`
     : `${backendUrl}search?query=${encodeURIComponent(query)}`;

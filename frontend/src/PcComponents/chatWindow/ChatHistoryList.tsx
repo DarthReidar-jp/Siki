@@ -15,12 +15,11 @@ const ChatHistoryList = ({ projectId, onSelectChat }: { projectId?: string, onSe
     }, [projectId]);
 
     const formatTitle = (title: string) => {
-        return title.length > 10 ? `${title.substring(0, 10)}...` : title;
+        return title.length > 20 ? `${title.substring(0, 20)}...` : title;
     };
     const handleSelectChat = (chatId: string) => {
-        console.log(chatId);
         onSelectChat(chatId);
-        setIsOpen(false);  // メニューを閉じる
+        setIsOpen(false);  
     };
 
     return (

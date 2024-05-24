@@ -25,9 +25,10 @@ export default function ClickableLinkPlugin({
       if (linkDomNode === null) {
         return;
       }
-
+      console.log(linkDomNode);
       const href = linkDomNode.getAttribute('href');
-
+      const title = linkDomNode.getAttribute('text');
+      console.log("クリックされた",title);
       // コンテンツ編集可能でない場合や href が存在しない場合は処理を終了
       if (linkDomNode.getAttribute('contenteditable') === 'false' || href === undefined) {
         return;

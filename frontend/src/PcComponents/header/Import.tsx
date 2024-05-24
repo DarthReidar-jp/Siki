@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { uploadJsonFile } from "../../utils/fetch/uploadJsonFile";
+import { ProjectIdProps } from '../../utils/types/types';
 
-const Import = ({ projectId }: { projectId?: string|null|undefined }) => {
+const Import:React.FC<ProjectIdProps> = ({ projectId }) => {
   const [progress, setProgress] = useState('');
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +17,7 @@ const Import = ({ projectId }: { projectId?: string|null|undefined }) => {
       reader.onload = async (e) => {
         const text = e.target?.result;
         if (typeof text === 'string') {
-          console.log("読み込まれたファイルの内容:", text);  // ファイル内容のログ出力
+          console.log("読み込まれたファイルの内容:", text); 
           setProgress('ファイルを送信中...');
           try {
             const projectIdToSend = projectId ?? undefined;

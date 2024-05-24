@@ -13,8 +13,10 @@ const SearchProject = () => {
 
     return (
         <div className="px-5 pt-1">
-            <form onSubmit={handleSearch} className="">
-                <label htmlFor="projectName" className="text-gray-700 text-xs">プロジェクト検索</label>
+            <form onSubmit={handleSearch}>
+                <label htmlFor="projectName" className="text-gray-700 text-sm">
+                    Search Projects
+                </label>
                 <div className='flex items-center gap-2'>
                     <input
                         type="text"
@@ -27,7 +29,6 @@ const SearchProject = () => {
                         <GrSearch />
                     </button>
                 </div>
-
             </form>
         </div>
     );

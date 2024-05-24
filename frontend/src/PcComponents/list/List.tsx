@@ -1,15 +1,14 @@
-import { fetchProjectPages } from '../../utils/fetch/fetchProjectPages';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom'; // projectId を取得するために使用
+import { useParams } from 'react-router-dom'; 
 import { useInfiniteQuery, InfiniteQueryObserverResult } from 'react-query';
-import './list.scss';
+import { FaSpinner } from 'react-icons/fa';
+import { fetchPages} from '../../utils/fetch/fetchPages'; 
+import { fetchProjectPages } from '../../utils/fetch/fetchProject';
+import { Page, FetchPagesError, InitialData } from '../../utils/types/types';
+import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
 import Sort from './Sort';
 import PageList from './PageList';
-import { Page } from '../../utils/types/types';
-import { fetchPages} from '../../utils/fetch/fetchPages'; // 適切な関数をインポート
-import { FaSpinner } from 'react-icons/fa';
-import { FetchPagesError, InitialData } from '../../utils/types/types';
-import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
+import './list.scss';
 
 const List: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<string>('UpdateAsc');
@@ -25,7 +24,7 @@ const List: React.FC = () => {
     hasNextPage,
     fetchNextPage,
   }: InfiniteQueryObserverResult<Page[], FetchPagesError> = useInfiniteQuery<Page[], FetchPagesError>(
-    ['pages', projectId, sortOrder], // キーに projectId を含める
+    ['pages', projectId, sortOrder], 
     ({ pageParam = 1 }) => projectId ? fetchProjectPages(projectId, sortOrder, pageParam) : fetchPages(sortOrder, pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {

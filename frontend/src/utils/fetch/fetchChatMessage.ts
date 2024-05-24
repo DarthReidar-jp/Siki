@@ -3,13 +3,13 @@ import { Message } from "../types/types";
 interface ChatRequest {
     text: string;
     chatHistory: Message[];
-    projectId?: string; // オプショナルなプロパティとして追加
+    projectId?: string; 
 }
 
 interface SaveRequest {
     chatId: string | null | undefined;
     messages: Message[];
-    projectId?: string;  // オプショナルなプロパティ
+    projectId?: string; 
 }
 
 
@@ -46,13 +46,11 @@ export const fetchChatAiMessage = async (inputText: string, messages: Message[],
 };
 
 export const fetchSaveMessage = async (chatId: string | null | undefined, messageToSend: Message, aiMessages: Message, projectId?: string) => {
-    // SaveRequestインターフェースに基づいたオブジェクトを作成
     const saveRequestBody: SaveRequest = {
         chatId,
         messages: [messageToSend, aiMessages]
     };
 
-    // プロジェクトIDが提供された場合、それをリクエストボディに追加
     if (projectId) {
         saveRequestBody.projectId = projectId;
     }
@@ -83,9 +81,9 @@ export const loadChatHistory = async (chatId: string|undefined) => {
             },
         });
         const chatHistory = await response.json();
-        return chatHistory; // chatHistoryがmessagesプロパティを含むことを確認する
+        return chatHistory; 
     } catch (error) {
         console.error('Failed to fetch chat history:', error);
-        return null; // エラーが発生した場合はnullを返す
+        return null;
     }
 };

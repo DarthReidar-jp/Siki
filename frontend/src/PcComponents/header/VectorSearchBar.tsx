@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrSearch } from "react-icons/gr";
+import { ProjectIdProps } from '../../utils/types/types';
 
-interface VectorSearchBarProps {
-  projectId?: string | null;
-}
-
-const VectorSearchBar: React.FC<VectorSearchBarProps> = ({ projectId }) => {
+const VectorSearchBar: React.FC<ProjectIdProps> = ({ projectId }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 

@@ -7,7 +7,6 @@ export const useVerifyProjectAccess = (projectId:string|undefined|null) => {
 
   useEffect(() => {
     if (!projectId) {
-      // projectIdがなければすぐにローディングを終了し、表示を制御しない
       setAccess({ isMember: true, shouldDisplay: true, loading: false });
       return;
     }
@@ -24,7 +23,7 @@ export const useVerifyProjectAccess = (projectId:string|undefined|null) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json(); // Correctly parsing the JSON response
+        const data = await response.json(); 
         setAccess({ ...data, loading: false });
       } catch (error) {
         console.error('Access verification failed:', error);

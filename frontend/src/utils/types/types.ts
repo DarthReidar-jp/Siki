@@ -3,11 +3,10 @@ export interface PcComponentProps {
     isLoggedIn: boolean;
 }
 
-//ヘッダー
-export interface PageListButtonProps {
-    projectId?: string | null | undefined; 
-  }
 
+export interface ProjectIdProps{
+    projectId?: string | null | undefined;
+}
 
 //List系
 export interface Page {
