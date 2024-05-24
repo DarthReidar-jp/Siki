@@ -21,8 +21,8 @@ const MessageInput: React.FC<MessageTextAreaProps> = ({
   }, [inputText]);
 
   return (
-    <div className="w-full px-2">
-      <form onSubmit={onSubmit} className="flex items-center">
+    <div className="w-full px-2 bg-transparent">
+      <form onSubmit={onSubmit} className="flex items-center bg-transparent">
         <textarea
           ref={textareaRef}
           value={inputText}

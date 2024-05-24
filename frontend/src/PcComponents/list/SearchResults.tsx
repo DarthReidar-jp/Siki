@@ -3,18 +3,18 @@ import { useLocation } from 'react-router-dom';
 import PageList from './PageList';
 import './list.scss';
 import { Page } from '../../utils/types/types';
-import { fetchSearchResults } from '../../utils/fetch/fetchSearchResults'; // 適切なパスに修正してください
+import { fetchSearchResults } from '../../utils/fetch/fetchSearchResults'; 
 
 const SearchResults: React.FC = () => {
   const [pages, setPages] = useState<Page[]>([]);
   const location = useLocation();
-  const [projectId, setProjectId] = useState<string | undefined>(undefined); // projectIdの初期状態をnullで設定
+  const [projectId, setProjectId] = useState<string | undefined>(undefined); 
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const query = queryParams.get('query');
     const projId = queryParams.get('projectId') || undefined;
-    setProjectId(projId); // 状態更新
+    setProjectId(projId); 
 
     async function performSearch() {
       if (!query) return;
@@ -27,7 +27,7 @@ const SearchResults: React.FC = () => {
     }
 
     performSearch();
-  }, [location.search]); // location.searchが変わったときに検索を再実行
+  }, [location.search]); 
 
   return (
     <div className="px-20">

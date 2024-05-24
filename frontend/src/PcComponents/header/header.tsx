@@ -1,9 +1,9 @@
 import React from 'react';
-import NewPageButton from './NewPageButton';
-import VectorSearchBar from './VectorSearchBar';
 import { useLocation } from 'react-router-dom';
 import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
+import NewPageButton from './NewPageButton';
+import VectorSearchBar from './VectorSearchBar';
 import PageListButton from './PageListButton';
 import SettingsButton from './SettingsButton';
 

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { IoSettingsSharp } from "react-icons/io5";
 import Logout from './Logout';
-import { PageListButtonProps } from '../../utils/types/types';
+import { ProjectIdProps } from '../../utils/types/types';
 import Import from './Import';
 import { useVerifyProjectAccess } from "../../utils/useVerifyProjectAccess";
 
-
-
-const SettingsButton: React.FC<PageListButtonProps> = ({ projectId }) => {
+const SettingsButton: React.FC<ProjectIdProps> = ({ projectId }) => {
     const [isOpen, setIsOpen] = useState(false);
     const access = useVerifyProjectAccess(projectId);
 

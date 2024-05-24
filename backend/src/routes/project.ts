@@ -67,8 +67,6 @@ router.get('/', async (req: Request, res: Response) => {
       .sort(sort)
       .skip((page - 1) * pageSize)
       .limit(pageSize);
-
-    // メンバーであるかつ公開設定に応じて、表示するかどうかのフラグを設定
     const shouldDisplay = (isPublic || isMember);
 
     res.json(pages);

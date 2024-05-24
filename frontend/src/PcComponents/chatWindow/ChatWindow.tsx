@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { extractProjectIdFromPath } from "../../utils/extractProjectId";
 import ChatHistoryList from './ChatHistoryList';
 import Chat from './Chat';
+import { IoIosCloseCircleOutline } from "react-icons/io";
+
 
 const ChatWindow: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const location = useLocation();
@@ -14,7 +16,9 @@ const ChatWindow: React.FC<{ onClose: () => void }> = ({ onClose }) => {
              style={{ resize: 'both', overflow: 'hidden', minWidth: '320px', minHeight: '200px', maxWidth: '600px', maxHeight: '500px' }}>
             <div className="flex justify-between items-center  pb-1">
                 <ChatHistoryList projectId={projectId} onSelectChat={setSelectedChatId}/>
-                <button className="text-xl leading-none px-3 py-1 bg-transparent" onClick={onClose}>×</button>
+                <button className="ps-3 pb-1" onClick={onClose}>
+                    <IoIosCloseCircleOutline />
+                </button>
             </div>
             <Chat initialChatId={selectedChatId} />
         </div>

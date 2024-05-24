@@ -1,6 +1,5 @@
 export async function fetchChatsList(projectId?: string) {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
-    // Construct the URL based on whether projectId is provided
     const url = projectId ? `${backendUrl}chat?projectId=${projectId}` : `${backendUrl}chat`;
 
     const response = await fetch(url, {

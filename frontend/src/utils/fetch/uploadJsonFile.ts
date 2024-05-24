@@ -1,6 +1,5 @@
 export async function uploadJsonFile(uploadJsonData: string, projectId?: string) {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
-  // Construct the URL based on whether projectId is provided
   const url = projectId ? `${backendUrl}json?projectId=${projectId}` : `${backendUrl}json`;
 
   const response = await fetch(url, { 

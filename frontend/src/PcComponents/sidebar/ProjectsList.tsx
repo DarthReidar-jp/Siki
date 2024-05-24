@@ -25,11 +25,11 @@ const ProjectsList = () => {
     };
 
     return (
-        <div className="h-full overflow-auto px-5 py-3">
-            <h5 className="mb-1 text-xs text-gray-800">プロジェクト一覧</h5>
-            <ul >
+        <div className="px-5 py-3">
+            <p className="mb-1 text-sm text-gray-800">Project List</p>
+            <ul>
                 {projects.map((project) => (
-                    <li key={project.projectId} className="px-4 py-1 hover:bg-gray-300">
+                    <li key={project.projectId} className="px-4 py-1 hover:bg-gray-400 transition duration-300 cursor-pointer">
                         <Link to={`/project/${project.projectId}`} className="block text-xxs">
                             {formatTitle(project.projectName)}
                         </Link>
@@ -41,13 +41,3 @@ const ProjectsList = () => {
 };
 
 export default ProjectsList;
-
-
-
-/* {projects.map((project) => (
-    <li key={project.id} className="px-5 py-2  ps-10 hover:bg-gray-300 text-sm">
-        <Link to={`/chat/${project.id}`} className="block text-sm">
-            {formatTitle(project.title)}
-        </Link>
-    </li>
-))} */

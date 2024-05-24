@@ -3,6 +3,7 @@ import SaveButton from "./SaveButton";
 import { useParams } from 'react-router-dom';
 import { theme } from './lexical-plugin/Theme';
 import { nodes } from './lexical-plugin/nodes';
+import "./lexical-plugin/Theme.scss";
 
 function onError(error: any) {
   console.error(error);
