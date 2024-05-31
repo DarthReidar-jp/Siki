@@ -2,6 +2,8 @@
 クエリと類似度が高い文章をMongoDBから取得
 それら文章を元に回答を生成するのはこちら */
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatAnthropic } from "@langchain/anthropic";
+
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
@@ -17,6 +19,11 @@ const chatModel = new ChatOpenAI({
     modelName: process.env.OPENAI_CHAT_MODEL,
     temperature: temperature,
     openAIApiKey: process.env.OPENAI_API_KEY
+});
+const anthropicChatModel = new ChatAnthropic({
+    modelName: 'claude-3-opus-20240229',
+    temperature: temperature,
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY
 });
 
 async function generateResponseUsingRAGandHistory(chat_history: Message[], userId: string, userMessage: string, projectId?:string) {

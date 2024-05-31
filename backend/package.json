@@ -45,6 +45,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@langchain/anthropic": "^0.1.21",
     "@langchain/cohere": "^0.0.7",
     "@langchain/mongodb": "^0.0.1",
     "@langchain/openai": "^0.0.25",

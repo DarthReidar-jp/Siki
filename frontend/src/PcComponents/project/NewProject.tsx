@@ -12,7 +12,7 @@ const NewProject: React.FC = () => {
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        if (!/^[a-zA-Z]+$/.test(projectId)) {
+        if (!/^[A-Za-z0-9-_.]+$/.test(projectId)) {
             setError('プロジェクトIDは英語のみで入力してください。');
             return;
         }
@@ -46,8 +46,8 @@ const NewProject: React.FC = () => {
                         value={projectId}
                         onChange={(e) => setProjectId(e.target.value)}
                         className="w-full p-3 border border-solid border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
-                        pattern="[A-Za-z]+"
-                        title="英語の文字のみを入力してください"
+                        pattern="[A-Za-z0-9-_.]+"
+                        title="英語の文字、数字、ハイフンを入力してください"
                     />
                 </div>
         
