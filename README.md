@@ -1,7 +1,19 @@
 # Siki（セマンティックナレッジツール）
 
+# 仕様ツール
+- MongoDB Atlas
+- Google Cloud 
+    - Google Oauth
 
-環境変数をいい感じに設定すればだれでも自分のPCで使えます。
+# ライブラリ、フレームワーク
+- Node.js
+- Express
+- React
+- tailwindcss
+- Langchain
+- llamaIndex
+
+# 環境変数
 バックエンド
 ```
 //OpenAI系
