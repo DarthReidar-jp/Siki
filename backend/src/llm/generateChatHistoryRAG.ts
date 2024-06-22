@@ -1,9 +1,9 @@
 /* チャット履歴と質問文のクエリ文章を生成して
 クエリと類似度が高い文章をMongoDBから取得
-それら文章を元に回答を生成するのはこちら */
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatAnthropic } from "@langchain/anthropic";
+それら文章を元に回答を生成する */
 
+import { ChatOpenAI } from "@langchain/openai";
+//import { ChatAnthropic } from "@langchain/anthropic";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
@@ -15,16 +15,19 @@ import { transformMessages, Message } from "./messageTransformer";
 
 
 const temperature = 0.7;
+
 const chatModel = new ChatOpenAI({
     modelName: process.env.OPENAI_CHAT_MODEL,
     temperature: temperature,
     openAIApiKey: process.env.OPENAI_API_KEY
 });
-const anthropicChatModel = new ChatAnthropic({
+
+/* const anthropicChatModel = new ChatAnthropic({
     modelName: 'claude-3-opus-20240229',
     temperature: temperature,
     anthropicApiKey: process.env.ANTHROPIC_API_KEY
 });
+ */
 
 async function generateResponseUsingRAGandHistory(chat_history: Message[], userId: string, userMessage: string, projectId?:string) {
 
@@ -38,18 +41,20 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
         console.log("Query text:", userMessage);
     }
 
-    //チャット履歴を考慮したドキュメント検索のchain
+    //チャット履歴を考慮したドキュメント検索
     const historyAwareRetrieverChain = await createHistoryAwareRetriever({
         llm: chatModel,
         retriever: retriever,
         rephrasePrompt: historyAwarePrompt,
     });
-    //ドキュメントのリストを受け取り、それを言語モデルに渡して処理を行うためのチェーンを作成する関数
+
+    //ドキュメントのリストを受け取り、それを言語モデルに渡して処理を行う
     const historyCombineDocsChain = await createStuffDocumentsChain({
         llm: chatModel,
         prompt: historyRetrievalPrompt,
         outputParser: new StringOutputParser(),
     });
+
     //　チャット履歴を考慮した検索とドキュメントをもとにした文章生成のchain
     const conversationalRetrievalChain = await createRetrievalChain({
         retriever: historyAwareRetrieverChain,
@@ -60,6 +65,7 @@ async function generateResponseUsingRAGandHistory(chat_history: Message[], userI
         chat_history: chatHistory,
         input: userMessage,
     });
+    
     console.log("Response generated:", response);
     console.log("Response generated:", response.answer);
     return response;

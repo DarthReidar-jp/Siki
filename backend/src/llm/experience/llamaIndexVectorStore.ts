@@ -1,4 +1,7 @@
-/* /* /* /* /* eslint-disable turbo/no-undeclared-env-vars 
+//llamaIndexを使ってRAGを行う試験
+
+
+/*  eslint-disable turbo/no-undeclared-env-vars 
 import mongoose from 'mongoose';
 import { MongoClient } from "mongodb";
 import {
@@ -65,7 +68,7 @@ async function query() {
     const retriever = index.asRetriever({ similarityTopK: 20 });
     const queryEngine = index.asQueryEngine({ retriever });
     const result = await queryEngine.query({
-        query: "未来社会と意味の境界について教えて",
+        query: "ぬるぬる",
     });
     console.log(result.response);
     await client.close();

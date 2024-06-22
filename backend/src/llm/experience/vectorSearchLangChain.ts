@@ -1,8 +1,10 @@
+//タスク 
+//Langchainを使ってMongoDB AtlasVectorSearchを導入する試験
+
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
 import mongoose from 'mongoose';
 import { OpenAIEmbeddings } from "@langchain/openai";
 
-/* LangChainをつかってMongoDBのベクトル検索をする試みはこちら */
 function setupMongoDBCollection() {
     const collection = mongoose.connection.db.collection('pages');
     return collection;
@@ -25,7 +27,7 @@ async function similaritySearchMongoDB(userId: string,query:string) {
     const vectorStore = initializeVectorSearch(setupMongoDBCollection(),userId)
     const resultOne = await vectorStore.maxMarginalRelevanceSearch(query, {
         k: 4,
-        fetchK: 20, // The number of documents to return on initial fetch
+        fetchK: 20, 
         filter: {
             preFilter: {
                 userId: userId

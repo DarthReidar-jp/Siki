@@ -5,11 +5,18 @@ import { initializeVectorStore } from "./initializeVectorStore";
 
 function initializeRetriever(collection: any, userId: string, projectId?:string) {
     const vectorStore = initializeVectorStore(collection,projectId);
-    const hydeBaseRetriever = hydeRetriever(vectorStore,userId,projectId);
-    const compressor = cohereRerank();
+
+    //select Retriever
+    //const baseRetriever = vectorStore.asRetriever();
+    const baseRetriever = hydeRetriever(vectorStore,userId,projectId);
+    
+    // select Compressor
+    const compressor = cohereRerank(); 
+
+    // create compression retriever
     const retriever = new ContextualCompressionRetriever({
         baseCompressor: compressor,
-        baseRetriever: hydeBaseRetriever,
+        baseRetriever: baseRetriever,
     });
     
     return retriever;

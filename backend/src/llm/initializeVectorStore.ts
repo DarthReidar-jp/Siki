@@ -15,10 +15,8 @@ const openAIEmbeddingConfig = {
 
 
 function initializeVectorStore(collection: any, projectId?: string) {
-    // 条件によって使用するインデックス名を選択
+
     const indexName = projectId ? "project_vector_index" : "vector_index";
-    
-    // 選択されたインデックス名をコンソールに表示
     console.log(`Using index name: ${indexName}`);
 
     const vectorStore = new MongoDBAtlasVectorSearch(new OpenAIEmbeddings(openAIEmbeddingConfig), {

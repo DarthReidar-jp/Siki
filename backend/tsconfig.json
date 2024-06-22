@@ -7,8 +7,8 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": [] // 必要に応じて、プロジェクトで使用する型定義を指定
+    "types": [] 
   },
-  "include": ["src/**/*"], // @typesディレクトリも含めるように変更
+  "include": ["src/**/*"], 
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
